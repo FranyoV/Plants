@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using PlantsAPI.Configuration;
 using PlantsAPI.Data;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text.Json.Serialization;
@@ -8,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddDbContext<PlantsDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("PlantsDatabase")));
-//builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddHttpContextAccessor();
 

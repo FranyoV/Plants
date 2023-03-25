@@ -1,12 +1,21 @@
-﻿namespace PlantsAPI.Models
+﻿using System.Text.Json.Serialization;
+
+namespace PlantsAPI.Models
 {
     public class User
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public string PasswordHash { get; set; }
-        public IEnumerable<Plants> Plants { get; set; }
-        public IEnumerable<Post> Posts { get; set; }
-        public IEnumerable<Reply> Replies { get; set; }
+
+
+        [JsonIgnore]
+        public IEnumerable<Plant>? Plants { get; set; }
+
+        [JsonIgnore]
+        public IEnumerable<Post>? Posts { get; set; }
+
+        [JsonIgnore]
+        public IEnumerable<Reply>? Replies { get; set; }
     }
 }

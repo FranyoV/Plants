@@ -1,13 +1,21 @@
-﻿namespace PlantsAPI.Models
+﻿using System.Text.Json.Serialization;
+
+namespace PlantsAPI.Models
 {
     public class Post
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Title { get; set; }
         public string Content   { get; set; }
-        public DateTime DateOfCreation { get; set; }   
+        public DateTime DateOfCreation { get; set; }
 
-        public virtual User User { get; set; }
-        public virtual IEnumerable<Reply> Replies { get; set; }
+
+        public Guid UserId { get; set; }
+
+        [JsonIgnore]
+        public virtual User? User { get; set; }
+
+        [JsonIgnore]
+        public IEnumerable<Reply>? Replies { get; set; }        
     }
 }

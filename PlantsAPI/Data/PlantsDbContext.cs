@@ -9,17 +9,38 @@ namespace PlantsAPI.Data
         {
         }
 
-        public virtual DbSet<User> Users { get; set; } = null;
-        public virtual DbSet<Post> Posts { get; set; } = null;
-        public virtual DbSet<Reply> Replies { get; set; } = null;
-        public virtual DbSet<Plants> Plants { get; set; } = null;
-        
+        public virtual DbSet<User> Users { get; set; } = null!;
+        public virtual DbSet<Post> Posts { get; set; } = null!;
+        public virtual DbSet<Reply> Replies { get; set; } = null!;
+        public virtual DbSet<Plant> Plants { get; set; } = null!;
+
+
+        //TODO: finish configuration of modelbuilder for all entities
+
         protected override void OnModelCreating(ModelBuilder modelbuilder)
         {
             base.OnModelCreating(modelbuilder);
 
-            //TODO: finish configuration of modelbuilder for all entities
-            modelbuilder.Entity<User>().ToTable("Users").HasMany(p=>p.Posts);
+
+            modelbuilder.Entity<User>().ToTable("Users")
+                .HasMany(p => p.Posts);
+
+            modelbuilder.Entity<User>().HasMany(u => u.Replies);
+
+            modelbuilder.Entity<User>().HasMany(u => u.Plants);
+
+            modelbuilder.Entity<Post>().ToTable("Posts")
+                .HasOne(p => p.User)
+                .WithMany(p => p.Posts);
+                
+
+            modelbuilder.Entity<Reply>().ToTable("Replies")
+                .HasOne(r => r.Post);
+
+            modelbuilder.Entity<Plant>().ToTable("Plants")
+                .HasOne(p => p.User)
+                .WithMany(u => u.Plants);
+                
         }
     }
 }
