@@ -1,0 +1,39 @@
+
+<div class="container d-flex justify-content-center align-items-center ">
+
+  <div>
+  <form [formGroup]="editForm">
+    <div >
+      <label for="exampleFormControlInput1">Name</label>
+      <input type="text" formControlName="Name" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+    </div>
+
+    <div >
+      <label for="exampleFormControlTextarea1">Description</label>
+      <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+    </div>
+
+    <div >
+      <label for="exampleFormControlSelect1">Maintenance</label>
+      <select class="form-control" id="exampleFormControlSelect1">
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5</option>
+      </select>
+    </div>
+   
+    <div >
+      <label for="exampleFormControlInput1">Image</label>
+      <input type="email" class="form-control" id="UploadImage" placeholder="name@example.com">
+    </div>
+ 
+  
+    <button type="submit" class="btn btn-primary gy-3">Save</button>
+    <a href="plants" class="btn btn-primary">Cancel</a>
+  </form>
+</div>
+</div>
+
+<router-outlet></router-outlet>

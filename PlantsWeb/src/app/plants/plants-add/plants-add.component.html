@@ -1,0 +1,55 @@
+
+<div class="container d-flex justify-content-center align-items-center ">
+
+    <div>
+    <form [formGroup]="addForm">
+
+      <div>
+        <label for="exampleFormControlInput1">Name</label>
+        <input 
+        class="input-group" 
+        type="text" 
+        formControlName="name" 
+        class="form-control"
+        placeholder="Name">
+      </div>
+  
+      <div>
+        <label for="description">Description</label>
+        <textarea 
+        class="input-group" 
+        type="text"
+        formControlName="description"
+        placeholder="Add description"
+        rows="3"></textarea>
+      </div>
+  
+      <div >
+        <label for="exampleFormControlSelect1">Maintenance</label>
+        <select class="form-control" id="exampleFormControlSelect1">
+          <option>1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+        </select>
+      </div>
+     
+      <div >
+        <label for="image">Image</label>
+        <button class="btn btn-info">Upload</button>
+        <input 
+        type="text" 
+        formControlName="imageUrl"
+        id="UploadImage" 
+        placeholder="imageurlvagyvalami">
+      </div>
+   
+    
+      <button type="submit" class="btn btn-primary gy-3" (click)="addPlant()">Save</button>
+      <a href="plants" class="btn btn-primary">Cancel</a>
+    </form>
+  </div>
+  </div>
+  
+  <router-outlet></router-outlet>

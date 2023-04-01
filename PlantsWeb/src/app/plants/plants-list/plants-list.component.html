@@ -1,0 +1,114 @@
+<h2 class="text-center my-5">My plants</h2>
+
+<div class="addButtonRow my-3">
+  <button type="button" class="btn btn-info" href="plantsadd" (click)="goToAddPlantPage()" >Add Plant</button>
+</div>
+
+
+<div class="container">
+  <div class="row gy-3">
+   
+
+      <div class="col-md-4" *ngFor="let plant of testData">
+
+        <div class="card h-100">
+          <img src="">
+          <img class="card-img-top" src="..." alt="Card image cap">
+          <div class="card-body ">
+            <h5 class="card-title">{{plant.name}}</h5>
+            <p class="card-text">{{plant.description}}</p>
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">maintenance..</li>
+          
+            <a type="button" class="btn btn-primary" href="plantedit" >Edit</a>
+          </ul>
+        </div>
+
+      </div>
+    
+  </div>
+  
+  <router-outlet></router-outlet>
+
+      <!--div class="col-md-4">
+      <div class="card h-100" >
+        <img class="card-img-top" src="..." alt="Card image cap">
+        <div class="card-body">
+          <h5 class="card-title">{{testData[1].name}}</h5>
+          <p class="card-text">{{testData[1].description}}</p>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">Cras justo odio</li>
+          <li class="list-group-item">Dapibus ac facilisis in</li>
+          <a type="button" class="btn btn-primary" href="plantedit" >Edit</a>
+        </ul>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card h-100">
+        <img class="card-img-top" src="..." alt="Card image cap">
+        <div class="card-body">
+          <h5 class="card-title">{{testData[2].name}}</h5>
+          <p class="card-text">{{testData[2].description}}</p>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">Cras justo odio</li>
+          <li class="list-group-item">Dapibus ac facilisis in</li>
+          <a type="button" class="btn btn-primary" href="plantedit" >Edit</a>
+        </ul>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card h-100" >
+        <img class="card-img-top" src="..." alt="Card image cap">
+        <div class="card-body">
+          <h5 class="card-title">{{testData[3].name}}</h5>
+          <p class="card-text">{{testData[3].description}}</p>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">Cras justo odio</li>
+          <li class="list-group-item">Dapibus ac facilisis in</li>
+          <a type="button" class="btn btn-primary" href="plantedit" >Edit</a>
+        </ul>
+      </div> 
+    </div>
+
+    <div class="col-md-4">
+      <div class="card h-100" >
+        <img class="card-img-top" src="..." alt="Card image cap">
+        <div class="card-body">
+          <h5 class="card-title">{{testData[4].name}}</h5>
+          <p class="card-text">{{testData[4].description}}</p>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">Cras justo odio</li>
+          <li class="list-group-item">Dapibus ac facilisis in</li>
+          <a type="button" class="btn btn-primary" href="plantedit" >Edit</a>
+        </ul>
+      </div> 
+    </div-->
+    
+
+<!--div *ngFor="let plant of testData">
+ 
+
+  <div class="card" style="width: 18rem;">
+    <img class="card-img-top" src="..." alt="Card image cap">
+    <div class="card-body">
+      <h5 class="card-title">{{plant.title}}</h5>
+      <p class="card-text">{{plant.content}}</p>
+    </div>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">Cras justo odio</li>
+      <li class="list-group-item">Dapibus ac facilisis in</li>
+      <button type="button" class="btn btn-primary" >Edit</button>
+    </ul>
+    <div class="card-body">
+      <a href="#" class="card-link">Card link</a>
+      <a href="#" class="card-link">Another link</a>
+    </div>
+  </div>
+</div-->

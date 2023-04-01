@@ -1,0 +1,22 @@
+.card {
+    transition: all 0.3s;
+    padding: 5px;
+    
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+.card-body {
+display: flex !important;
+flex-direction: column !important;
+}
+
+.card .btn {
+margin-top: auto !important;
+}
+
+.col-md-4 {
+    margin-bottom: 10px;
+}
