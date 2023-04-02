@@ -8,8 +8,9 @@ namespace PlantsAPI.Models
         public string Name { get; set; }
         public string? Description { get; set; } 
         public string? ImageUrl { get; set; }  
-        public Maintenance Maintenance { get; set; }
-        
+
+        [JsonIgnore]
+        public Maintenance? Maintenance { get; set; }
 
         public Guid UserId { get; set; }
 

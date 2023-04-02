@@ -4,7 +4,7 @@ using PlantsAPI.Models;
 
 namespace PlantsAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/posts")]
     [ApiController]
     public class PostsController : ControllerBase
     {
@@ -16,7 +16,6 @@ namespace PlantsAPI.Controllers
         }
 
         [HttpGet]
-        [Route("posts")]
         public async Task<ActionResult<IEnumerable<Post>>> GetPosts()
         {
 
@@ -25,7 +24,7 @@ namespace PlantsAPI.Controllers
         }
 
         [HttpGet]
-        [Route("post")]
+        [Route("{id}")]
         public async Task<ActionResult<Post>> GetPostById(Guid id)
         {
             var post = await unitOfWork.Posts.GetPostById(id);
@@ -33,7 +32,6 @@ namespace PlantsAPI.Controllers
         }
 
         [HttpPost]
-        [Route("post")]
         public async Task<ActionResult<Post>> PostPost(Post post)
         {
             var newPost = await unitOfWork.Posts.AddPost(post);
@@ -42,8 +40,8 @@ namespace PlantsAPI.Controllers
         }
 
         [HttpPut]
-        [Route("post")]
-        public async Task<ActionResult<Post>> PutPost(Post post)
+        [Route("{id}")]
+        public async Task<ActionResult<Post>> PutPost([FromBody] Post post, [FromQuery] Guid id)
         {
             var modifiedPost = await unitOfWork.Posts.EditPost(post);
             await unitOfWork.SaveChangesAsync();
@@ -51,7 +49,7 @@ namespace PlantsAPI.Controllers
         }
 
         [HttpDelete]
-        [Route("post")]
+        [Route("{id}")]
         public async Task<ActionResult<bool>> DeletePost(Guid id)
         {
             var result = await unitOfWork.Posts.DeletePost(id);

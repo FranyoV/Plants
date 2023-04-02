@@ -1,7 +1,6 @@
 .card {
-    transition: all 0.3s;
+    transition: all 0.5s;
     padding: 5px;
-    
 }
 
 .card:hover {
@@ -19,4 +18,8 @@ margin-top: auto !important;
 
 .col-md-4 {
     margin-bottom: 10px;
+}
+
+.addButtonRow{
+    text-align: right;
 }

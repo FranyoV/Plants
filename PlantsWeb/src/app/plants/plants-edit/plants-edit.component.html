@@ -2,35 +2,42 @@
 <div class="container d-flex justify-content-center align-items-center ">
 
   <div>
-  <form [formGroup]="editForm">
-    <div >
-      <label for="exampleFormControlInput1">Name</label>
-      <input type="text" formControlName="Name" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+  <form [formGroup]="editForm" (ngSubmit)="editPlant()">
+
+    <div>
+      <label for="name">Name</label>
+      <input 
+      class="input-group" 
+      type="text" 
+      formControlName="name" 
+      class="form-control"
+      placeholder="Name">
+    </div>
+
+    <div>
+      <label for="description">Description</label>
+      <textarea 
+      class="input-group" 
+      type="text"
+      formControlName="description"
+      class="form-control"
+      placeholder="Add description"
+      rows="3"></textarea>
     </div>
 
     <div >
-      <label for="exampleFormControlTextarea1">Description</label>
-      <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-    </div>
-
-    <div >
-      <label for="exampleFormControlSelect1">Maintenance</label>
-      <select class="form-control" id="exampleFormControlSelect1">
-        <option>1</option>
-        <option>2</option>
-        <option>3</option>
-        <option>4</option>
-        <option>5</option>
-      </select>
-    </div>
-   
-    <div >
-      <label for="exampleFormControlInput1">Image</label>
-      <input type="email" class="form-control" id="UploadImage" placeholder="name@example.com">
+      <label for="image">Image</label>
+      <button class="btn btn-info">Upload</button>
+      <input 
+      class="input-group"
+      type="text" 
+      formControlName="imageUrl"
+      class="form-control"
+      placeholder="imageurlvagyvalami">
     </div>
  
   
-    <button type="submit" class="btn btn-primary gy-3">Save</button>
+    <button type="submit" class="btn btn-primary gy-3" >Save</button>
     <a href="plants" class="btn btn-primary">Cancel</a>
   </form>
 </div>

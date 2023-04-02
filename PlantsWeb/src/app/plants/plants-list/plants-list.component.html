@@ -1,29 +1,50 @@
-<h2 class="text-center my-5">My plants</h2>
-
-<div class="addButtonRow my-3">
-  <button type="button" class="btn btn-info" href="plantsadd" (click)="goToAddPlantPage()" >Add Plant</button>
-</div>
-
 
 <div class="container">
+  <h2 class="text-center my-3">My plants</h2>
+
+  <div class="addButtonRow my-3">
+    <button mat-raised-button href="plantsadd" (click)="goToAddPlantPage()" >Add Plant</button>
+  </div>
+
+
   <div class="row gy-3">
    
 
-      <div class="col-md-4" *ngFor="let plant of testData">
+      <div class="col-md-4" *ngFor="let plant of plants">
 
-        <div class="card h-100">
-          <img src="">
-          <img class="card-img-top" src="..." alt="Card image cap">
+        <mat-card class="card h-100">
+          <mat-card-header>
+            <mat-card-title-group>
+              <mat-card-title>{{plant.name}}</mat-card-title>
+              <mat-card-subtitle>Small</mat-card-subtitle>
+              <img mat-card-sm-image src="assets/plant-icon.avif" >
+            </mat-card-title-group>
+          </mat-card-header>
+          <mat-card-content>
+            {{plant.description}}
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-stroked-button (click)="goToEditPlantPage(plant.id)" >Edit</button>
+              <button mat-stroked-button (click)="openDialog('0ms', '0ms')">Delete</button>
+            
+          </mat-card-actions>
+        </mat-card>
+
+        <!--div class="card h-100">
+          <img class="card-img-top" src="assets/plant-icon.avif" alt="Card image cap">
           <div class="card-body ">
             <h5 class="card-title">{{plant.name}}</h5>
             <p class="card-text">{{plant.description}}</p>
           </div>
           <ul class="list-group list-group-flush">
             <li class="list-group-item">maintenance..</li>
-          
-            <a type="button" class="btn btn-primary" href="plantedit" >Edit</a>
+
+              <button mat-stroked-button (click)="goToEditPlantPage(plant.id)" >Edit</button>
+              <button mat-stroked-button (click)="openDialog('0ms', '0ms')">Delete</button>
+            
+             
           </ul>
-        </div>
+        </div-->
 
       </div>
     
@@ -31,6 +52,7 @@
   
   <router-outlet></router-outlet>
 
+  
       <!--div class="col-md-4">
       <div class="card h-100" >
         <img class="card-img-top" src="..." alt="Card image cap">

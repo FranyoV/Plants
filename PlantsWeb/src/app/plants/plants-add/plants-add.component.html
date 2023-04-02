@@ -1,8 +1,61 @@
 
 <div class="container d-flex justify-content-center align-items-center ">
+  <div>
 
-    <div>
-    <form [formGroup]="addForm">
+    <h2 class="text-center">Add plant</h2>
+    <div class="row">
+      <div class="col">
+        <img src="assets/plant-icon.avif" alt="">
+      </div>
+
+
+    <div class="col">
+    <form [formGroup]="addForm" (ngSubmit)="addPlant()">
+      <mat-form-field  appearance="fill">
+        <mat-label >Name</mat-label>
+        <input  
+        MatFormFieldControl
+        class="input-group form-control" 
+        type="text" 
+        formControlName="name" 
+        placeholder="Name" matInput>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Description</mat-label>
+        <textarea 
+        class="input-group form-control" 
+        type="text"
+        formControlName="description"
+        placeholder="Add description"
+        rows="3"
+        matInput></textarea>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Image</mat-label>
+        <input 
+        class="form-control"
+        type="text" 
+        formControlName="imageUrl"
+        id="UploadImage" 
+        placeholder="imageurlvagyvalami"
+        matInput>
+      </mat-form-field>
+
+      <div class="button-row">
+        <button mat-stroked-button type="submit" class="btn btn-primary gy-3" >Save</button>
+        <a mat-stroked-button href="plants" class="btn btn-primary">Cancel</a>
+  
+      </div>
+
+    </form>
+  </div>
+</div>
+  </div>
+
+
+    <!--form [formGroup]="addForm" (ngSubmit)="addPlant()">
 
       <div>
         <label for="exampleFormControlInput1">Name</label>
@@ -46,10 +99,9 @@
       </div>
    
     
-      <button type="submit" class="btn btn-primary gy-3" (click)="addPlant()">Save</button>
+      <button type="submit" class="btn btn-primary gy-3" >Save</button>
       <a href="plants" class="btn btn-primary">Cancel</a>
     </form>
-  </div>
-  </div>
-  
+  </div-->
+    
   <router-outlet></router-outlet>

@@ -48,7 +48,7 @@ namespace PlantsAPI.Data
 
             //modelbuilder.Entity<Plant>().
             //MAINTENANCE
-            modelbuilder.Entity<Maintenance>().ToTable("Maintenance")
+            modelbuilder.Entity<Maintenance>().ToTable("Maintenances")
                 .HasOne(m => m.Plant)
                 .WithOne(m => m.Maintenance);
                 

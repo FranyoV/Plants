@@ -4,7 +4,7 @@ using PlantsAPI.Models;
 
 namespace PlantsAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/plants")]
     [ApiController]
     public class PlantsController : ControllerBase
     {
@@ -16,7 +16,6 @@ namespace PlantsAPI.Controllers
         }
 
         [HttpGet]
-        [Route("plants")]
         public async Task<ActionResult<IEnumerable<Plant>>> GetPlants()
         {
 
@@ -25,15 +24,23 @@ namespace PlantsAPI.Controllers
         }
 
         [HttpGet]
-        [Route("plant")]
+        [Route("{id}")]
         public async Task<ActionResult<Plant>> GetPlantById(Guid id)
         {
             var plant = await unitOfWork.Plants.GetPlantById(id);
             return Ok(plant);
         }
+       
+
+        [HttpGet]
+        [Route("user/{userId}")]
+        public async Task<ActionResult<IEnumerable<Plant>>> GetPlantsOfUser([FromRoute] Guid userId)
+        {
+            var plants = await unitOfWork.Plants.GetPlantsOfUser(userId);
+            return Ok(plants);
+        }
 
         [HttpPost]
-        [Route("plant")]
         public async Task<ActionResult<Plant>> PostPlant(Plant plant)
         {
             var newPlant = await unitOfWork.Plants.AddPlant(plant);
@@ -42,8 +49,8 @@ namespace PlantsAPI.Controllers
         }
 
         [HttpPut]
-        [Route("plant")]
-        public async Task<ActionResult<Plant>> PutPlant(Plant plant)
+        [Route("{id}")]
+        public async Task<ActionResult<Plant>> PutPlant( Plant plant)
         {
             var modifiedPlant = await unitOfWork.Plants.EditPlant(plant);
             await unitOfWork.SaveChangesAsync();
@@ -51,7 +58,7 @@ namespace PlantsAPI.Controllers
         }
 
         [HttpDelete]
-        [Route("plant")]
+        [Route("{id}")]
         public async Task<ActionResult<bool>> DeletePlant(Guid id)
         {
             var result = await unitOfWork.Plants.DeletePlant(id);

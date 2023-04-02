@@ -6,7 +6,7 @@ using PlantsAPI.Repositories;
 
 namespace PlantsAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/users")]
     [ApiController]
     public class UsersController : ControllerBase
     {
@@ -18,7 +18,6 @@ namespace PlantsAPI.Controllers
         }
 
         [HttpGet]
-        [Route("users")]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
             
@@ -27,7 +26,7 @@ namespace PlantsAPI.Controllers
         }
 
         [HttpGet]
-        [Route("user")]
+        [Route("{id}")]
         public async Task<ActionResult<User>> GetUser(Guid id)
         {
             var user = await unitOfWork.Users.GetUserById(id);
@@ -35,7 +34,6 @@ namespace PlantsAPI.Controllers
         }
 
         [HttpPost]
-        [Route("user")]
         public async Task<ActionResult<User>> PostUser(User user)
         {
             var newUser = await unitOfWork.Users.AddUser(user);
@@ -44,7 +42,7 @@ namespace PlantsAPI.Controllers
         }
 
         [HttpPut]
-        [Route("user")]
+        [Route("{id}")]
         public async Task<ActionResult<User>> PutUser(User user)
         {
             var modifiedUser = await unitOfWork.Users.EditUser(user);
@@ -53,7 +51,7 @@ namespace PlantsAPI.Controllers
         }
 
         [HttpDelete]
-        [Route("user")]
+        [Route("{id}")]
         public async Task<ActionResult<User>> DeleteUser(Guid id)
         {
             var result = await unitOfWork.Users.DeleteUser(id);

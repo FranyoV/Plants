@@ -25,11 +25,20 @@ namespace PlantsAPI.Repositories
             return result;
         }
 
+        public async Task<IEnumerable<Plant>> GetPlantsOfUser(Guid userId)
+        {
+            if (userId == Guid.Empty ) throw new ArgumentNullException(nameof(userId));
+
+            var result = await dbSet.Where(p => p.UserId == userId).ToListAsync();
+            return result;
+
+        }
+
 
         public async Task<Plant> AddPlant(Plant plant)
         {
             if (plant == null) throw new ArgumentNullException(nameof(plant));
-
+            plant.Id = Guid.NewGuid();
             var result = dbSet.Add(plant);
             return result.Entity;
         }

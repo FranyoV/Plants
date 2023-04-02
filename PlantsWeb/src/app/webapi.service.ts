@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Plant } from './models/Plant';
 import { Post } from './models/Post';
 import { Reply } from './models/Reply';
+import { Guid } from 'guid-typescript';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ import { Reply } from './models/Reply';
 export class WebApiService {
 
   //todo: check localhost port on backend appsettings/launchsettings
-  baseUrl: string = "https://localhost:7272";
+  baseUrl: string = "https://localhost:7050";
   httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'})};
 
   constructor(public http: HttpClient) { }
@@ -39,9 +40,14 @@ export class WebApiService {
     return this.http.get<Plant[]>(url);
   }
 
-  getPlantById(id: string): Observable<Plant> {
+  getPlantById(id: Guid): Observable<Plant> {
     let url = `${this.baseUrl}/api/plants/${id}`;
     return this.http.get<Plant>(url);
+  }
+
+  getPlantsOfUser(userId: Guid): Observable<Plant[]> {
+    let url = `${this.baseUrl}/api/plants/user/${userId}`;
+    return this.http.get<Plant[]>(url);
   }
 
   addPlant(plant: Plant): Observable<Plant> {
@@ -49,12 +55,12 @@ export class WebApiService {
     return this.http.post<Plant>(url, plant, this.httpOptions);
   }
 
-  updatePlant(id: string, plant: Plant): Observable<any> {
+  editPlant(id: Guid, plant: Plant): Observable<any> {
     let url = `${this.baseUrl}/api/plants/${id}`;
     return this.http.put(url, plant, this.httpOptions);
   }
 
-  deletePlant(id: string): Observable<Plant> {
+  deletePlant(id: Guid): Observable<Plant> {
     let url = `${this.baseUrl}/api/plants/${id}`;
     return this.http.delete<Plant>(url, this.httpOptions);
   }
@@ -65,7 +71,7 @@ export class WebApiService {
     return this.http.get<Post[]>(url);
   }
 
-  getPostById(id: string): Observable<Post> {
+  getPostById(id: Guid): Observable<Post> {
     let url = `${this.baseUrl}/api/posts/${id}`;
     return this.http.get<Post>(url);
   }
@@ -75,12 +81,12 @@ export class WebApiService {
     return this.http.post<Post>(url, post, this.httpOptions);
   }
 
-  updatePost(id: string, post: Post): Observable<any> {
+  updatePost(id: Guid, post: Post): Observable<any> {
     let url = `${this.baseUrl}/api/posts/${id}`;
     return this.http.put(url, post, this.httpOptions);
   }
 
-  deletePost(id: string): Observable<Post> {
+  deletePost(id: Guid): Observable<Post> {
     let url = `${this.baseUrl}/api/posts/${id}`;
     return this.http.delete<Post>(url, this.httpOptions);
   }
@@ -91,7 +97,7 @@ export class WebApiService {
     return this.http.get<Reply[]>(url);
   }
 
-  getRepliesById(id: string): Observable<Reply> {
+  getRepliesById(id: Guid): Observable<Reply> {
     let url = `${this.baseUrl}/api/replies/${id}`;
     return this.http.get<Reply>(url);
   }
@@ -101,12 +107,12 @@ export class WebApiService {
     return this.http.post<Reply>(url, reply, this.httpOptions);
   }
 
-  updateReply(id: string, reply: Reply): Observable<any> {
+  updateReply(id: Guid, reply: Reply): Observable<any> {
     let url = `${this.baseUrl}/api/replies/${id}`;
     return this.http.put(url, reply, this.httpOptions);
   }
 
-  deleteReply(id: string): Observable<Reply> {
+  deleteReply(id: Guid): Observable<Reply> {
     let url = `${this.baseUrl}/api/replies/${id}`;
     return this.http.delete<Reply>(url, this.httpOptions);
   }

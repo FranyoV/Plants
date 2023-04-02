@@ -4,7 +4,7 @@ using PlantsAPI.Models;
 
 namespace PlantsAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/replies")]
     [ApiController]
     public class RepliesController : ControllerBase
     {
@@ -16,8 +16,7 @@ namespace PlantsAPI.Controllers
         }
 
         [HttpGet]
-        [Route("replies")]
-        public async Task<ActionResult<IEnumerable<Reply>>> GetPlants()
+        public async Task<ActionResult<IEnumerable<Reply>>> GetReply()
         {
 
             var replies = await unitOfWork.Replies.GetReplies();
@@ -25,16 +24,15 @@ namespace PlantsAPI.Controllers
         }
 
         [HttpGet]
-        [Route("reply")]
-        public async Task<ActionResult<Reply>> GetPlantById(Guid id)
+        [Route("{id}")]
+        public async Task<ActionResult<Reply>> GetReplyById(Guid id)
         {
             var reply = await unitOfWork.Replies.GetReplyById(id);
             return Ok(reply);
         }
 
         [HttpPost]
-        [Route("reply")]
-        public async Task<ActionResult<Reply>> PostPlant(Reply reply)
+        public async Task<ActionResult<Reply>> PostReply(Reply reply)
         {
             var newReply = await unitOfWork.Replies.AddReply(reply);
             await unitOfWork.SaveChangesAsync();
@@ -42,8 +40,8 @@ namespace PlantsAPI.Controllers
         }
 
         [HttpPut]
-        [Route("reply")]
-        public async Task<ActionResult<Reply>> PutPlant(Reply reply)
+        [Route("{id}")]
+        public async Task<ActionResult<Reply>> PutReply(Reply reply)
         {
             var modifiedReply = await unitOfWork.Replies.EditReply(reply);
             await unitOfWork.SaveChangesAsync();
@@ -51,8 +49,8 @@ namespace PlantsAPI.Controllers
         }
 
         [HttpDelete]
-        [Route("reply")]
-        public async Task<ActionResult<bool>> DeletePlant(Guid id)
+        [Route("{id}")]
+        public async Task<ActionResult<bool>> DeleteReply(Guid id)
         {
             var result = await unitOfWork.Replies.DeleteReply(id);
             await unitOfWork.SaveChangesAsync();

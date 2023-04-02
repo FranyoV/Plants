@@ -1,42 +1,43 @@
+import { Guid } from "guid-typescript";
 import { Maintenance } from "./Maintenance";
 import { Plant } from "./Plant"
  
 const testData : Plant[] =[
     {
-        id: "1",
+        id: Guid.create(),
         name: "Kaktusz", 
         description: "Bárhol megél, ha teheted, hagyd a napon.",
-        maintenance: new Maintenance(),
+       // maintenance: new Maintenance(),
         imageUrl: "http://imageurl.comsmdnk",
-        userId: "9"},
+        userId: Guid.create()},
     {
-        id: "2",
+        id: Guid.create(),
         name: "Anyósnyelv", 
         description: "Ne legyen tűző napon.",
-        maintenance: new Maintenance(),
+       // maintenance: new Maintenance(),
         imageUrl: "http://imageurl.comsmdnk",
-        userId: "9"},
+        userId: Guid.create()},
     {
-        id: "3",
+        id: Guid.create(),
         name: "Orchidea", 
         description: "Ne legyen tűző napon.aaaaaaaaaaaaaaaaaaaaaa vNe legyen tűző napon.aaaaaaaaaaaaaaaaaaaaaa Ne legyen tűző napon.aaaaaaaaaaaaaaaaaaaaaa Ne legyen tűző napon.aaaaaaaaaaaaaaaaaaaaaa",
-        maintenance: new Maintenance(),
+       // maintenance: new Maintenance(),
         imageUrl: "http://imageurl.comsmdnk",
-        userId: "9"},
+        userId: Guid.create()},
     {
-        id: "4",
+        id: Guid.create(),
         name: "Nyíllevél", 
         description: "Ne legyen.",
-        maintenance: new Maintenance(),
+        //maintenance: new Maintenance(),
         imageUrl: "http://imageurl.comsmdnk",
-        userId: "9"},
+        userId: Guid.create()},
     {
-        id: "5",
+        id: Guid.create(),
         name: "Orchidea2", 
         description: "Ne legyen tűző napon.aaaaaaaaaaaaaaaaaaaaaa vNe legyen tűző napon.aaaaaaaaaaaaaaaaaaaaaa Ne legyen tűző napon.aaaaaaaaaaaaaaaaaaaaaa Ne legyen tűző napon.aaaaaaaaaaaaaaaaaaaaaa",
-        maintenance: new Maintenance(),
+       // maintenance: new Maintenance(),
         imageUrl: "http://imageurl.comsmdnk",
-        userId: "9"},
+        userId: Guid.create()},
         
     ]
 
