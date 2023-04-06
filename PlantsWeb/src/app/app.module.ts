@@ -9,6 +9,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 import { AppComponent } from './app.component';
 import { MainPageComponent } from './main-page/main-page.component';
@@ -18,6 +21,9 @@ import { PlantsAddComponent } from './plants/plants-add/plants-add.component';
 import { PlantsEditComponent } from './plants/plants-edit/plants-edit.component';
 import { ProfileComponent } from './profile/profile.component';
 import { DialogComponent } from './dialog/dialog.component';
+import { PostFilterPipe } from './post-filter.pipe';
+import { ReplyAddComponent } from './reply-add/reply-add.component';
+import { PostAddComponent } from './post-add/post-add.component';
 
 
 @NgModule({
@@ -29,7 +35,10 @@ import { DialogComponent } from './dialog/dialog.component';
     PlantsAddComponent,
     PlantsEditComponent,
     ProfileComponent,
-    DialogComponent
+    DialogComponent,
+    PostFilterPipe,
+    ReplyAddComponent,
+    PostAddComponent
   ],
   imports: [
     BrowserModule,
@@ -42,7 +51,10 @@ import { DialogComponent } from './dialog/dialog.component';
     MatButtonModule,
     MatCardModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatToolbarModule,
+    MatButtonToggleModule,
+    MatPaginatorModule
   ],
   providers: [],
   bootstrap: [AppComponent]

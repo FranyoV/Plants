@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Guid } from 'guid-typescript';
 import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/data.service';
@@ -32,22 +32,31 @@ export class PlantsEditComponent implements OnInit, OnDestroy{
     private formBuilder: FormBuilder,
     private data: DataService,
     private router: Router,
+    private route: ActivatedRoute,
     private webApi: WebApiService
   ){}
 
 
   ngOnInit(){
-    this.subscription = this.data.currentPlantId.subscribe(
-      plantId => this.currentPlantId = plantId);
 
-    this.webApi.getPlantById(this.currentPlantId).subscribe({
-      next: (result) => {
-         this.currentPlant = result; console.log("currentplant:", this.currentPlant);
-         this.editForm.controls['name'].setValue(this.currentPlant.name);
-         this.editForm.controls['description'].setValue(this.currentPlant.description);
-         this.editForm.controls['imageUrl'].setValue(this.currentPlant.imageUrl )},
-      error: (error) => { console.error("No plants with this id.", error)}
-    });
+    this.route.paramMap.subscribe( (params) => {
+      const id = params.get("plantId");
+      this.currentPlantId = Guid.parse(id!);})
+
+  /*  this.subscription = this.data.currentPlantId.subscribe(
+      plantId => this.currentPlantId = plantId);
+*/
+      if(this.currentPlant == null){
+        this.webApi.getPlantById(this.currentPlantId).subscribe({
+          next: (result) => {
+             this.currentPlant = result; console.log("currentplant:", this.currentPlant);
+             this.editForm.controls['name'].setValue(this.currentPlant.name);
+             this.editForm.controls['description'].setValue(this.currentPlant.description);
+             this.editForm.controls['imageUrl'].setValue(this.currentPlant.imageUrl )},
+          error: (error) => { console.error("No plants with this id.", error)}
+        });
+      }
+
 
     console.log("currentplant outside of get:", this.currentPlant);
    
@@ -67,21 +76,22 @@ export class PlantsEditComponent implements OnInit, OnDestroy{
       this.editForm.value.imageUrl!,
       this.currentPlant.userId
       );
-
+      console.log(modifiedPlant);
       if (modifiedPlant == null){
         //snackbar -> unsuccesful add
       }else{
         console.log("modifiedplant:", modifiedPlant);
         this.webApi.editPlant(this.currentPlantId, modifiedPlant).subscribe({
-          next: () => {
+          next: () => {  let index = this.plants.findIndex(p => p.id = modifiedPlant.id);
+            this.plants.splice(index, 1, modifiedPlant);
+            this.data.updateData(this.plants);}, 
             
-      let index = this.plants.findIndex(p => p.id = modifiedPlant.id);
-      this.plants.splice(index, 1, modifiedPlant);
-      this.data.updateData(this.plants);
-
-},
           error: (error) => {console.log('Adding failed', error)}
         });
+
+        let index = this.plants.findIndex(p => p.id = modifiedPlant.id);
+            this.plants.splice(index, 1, modifiedPlant);
+            this.data.updateData(this.plants);
       }
 
       this.router.navigate(['plants']);

@@ -5,7 +5,7 @@ using PlantsAPI.Models;
 namespace PlantsAPI.Controllers
 {
     [Route("api/plants")]
-    [ApiController]
+    //[ApiController]
     public class PlantsController : ControllerBase
     {
         private readonly IUnitOfWork unitOfWork;
@@ -41,7 +41,8 @@ namespace PlantsAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Plant>> PostPlant(Plant plant)
+
+        public async Task<ActionResult<Plant>> PostPlant([FromBody] Plant plant)
         {
             var newPlant = await unitOfWork.Plants.AddPlant(plant);
             await unitOfWork.SaveChangesAsync();

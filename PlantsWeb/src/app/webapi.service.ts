@@ -5,6 +5,8 @@ import { Plant } from './models/Plant';
 import { Post } from './models/Post';
 import { Reply } from './models/Reply';
 import { Guid } from 'guid-typescript';
+import { PlantDto } from './models/PlantDto';
+import { User } from './models/User';
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +35,11 @@ export class WebApiService {
     let url = `${this.baseUrl}/api/auth`;
     return this.http.get(url, {responseType: 'text'});
   }*/
+  async getUserById(id: Guid): Promise<Observable<User>> {
+    let url = `${this.baseUrl}/api/users/${id}`;
+    return this.http.get<User>(url);
+  }
+
 
   //PLANTS
   getPlants(): Observable<Plant[]>{
@@ -50,9 +57,9 @@ export class WebApiService {
     return this.http.get<Plant[]>(url);
   }
 
-  addPlant(plant: Plant): Observable<Plant> {
+  addPlant(plant: PlantDto): Observable<Plant> {
     let url = `${this.baseUrl}/api/plants`;
-    return this.http.post<Plant>(url, plant, this.httpOptions);
+    return this.http.post<Plant>(url, plant);
   }
 
   editPlant(id: Guid, plant: Plant): Observable<any> {
@@ -66,7 +73,7 @@ export class WebApiService {
   }
 
   //POSTS
-  getPosT(): Observable<Post[]>{
+  getPosts(): Observable<Post[]>{
     const url = `${this.baseUrl}/api/posts`;
     return this.http.get<Post[]>(url);
   }

@@ -13,9 +13,12 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddHttpContextAccessor();
 
+builder.Services.AddControllers();
+
 builder.Services.AddControllers().AddJsonOptions(options =>
 { 
  options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+   
 });
 
 

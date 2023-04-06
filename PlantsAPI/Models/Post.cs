@@ -9,7 +9,7 @@ namespace PlantsAPI.Models
         public string Content   { get; set; }
         public DateTime DateOfCreation { get; set; }
 
-
+       // public UserDto UserDto { get; set; }
         public Guid UserId { get; set; }
 
         [JsonIgnore]

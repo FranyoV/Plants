@@ -1,5 +1,116 @@
 
+
 <div class="container d-flex justify-content-center align-items-center ">
+  <div>
+
+    <h2 class="text-center">Add plant</h2>
+    <div class="row">
+      <div class="col">
+        <img src="assets/plant-icon.avif" alt="">
+      </div>
+
+
+    <div class="col">
+    <form [formGroup]="editForm" (ngSubmit)="editPlant()">
+      <mat-form-field  appearance="fill">
+        <mat-label >Name</mat-label>
+
+        <input  
+        
+        class="input-group form-control" 
+        type="text" 
+        formControlName="name" 
+        placeholder="Name" matInput>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Description</mat-label>
+        <textarea 
+        class="input-group form-control" 
+        type="text"
+        formControlName="description"
+        placeholder="Add description"
+        rows="3"
+        matInput></textarea>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Image</mat-label>
+        <input 
+        class="form-control"
+        type="text" 
+        formControlName="imageUrl"
+        id="UploadImage" 
+        placeholder="imageurlvagyvalami"
+        matInput>
+      </mat-form-field>
+
+      <div class="button-row">
+        <button mat-stroked-button type="submit" class="btn btn-primary gy-3" >Save</button>
+        <a mat-stroked-button href="plants" class="btn btn-primary">Cancel</a>
+  
+      </div>
+
+    </form>
+  </div>
+</div>
+  </div>
+
+
+    <!--form [formGroup]="addForm" (ngSubmit)="addPlant()">
+
+      <div>
+        <label for="exampleFormControlInput1">Name</label>
+        <input 
+        class="input-group" 
+        type="text" 
+        formControlName="name" 
+        class="form-control"
+        placeholder="Name">
+      </div>
+  
+      <div>
+        <label for="description">Description</label>
+        <textarea 
+        class="input-group" 
+        type="text"
+        formControlName="description"
+        placeholder="Add description"
+        rows="3"></textarea>
+      </div>
+  
+      <div >
+        <label for="exampleFormControlSelect1">Maintenance</label>
+        <select class="form-control" id="exampleFormControlSelect1">
+          <option>1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+        </select>
+      </div>
+     
+      <div >
+        <label for="image">Image</label>
+        <button class="btn btn-info">Upload</button>
+        <input 
+        type="text" 
+        formControlName="imageUrl"
+        id="UploadImage" 
+        placeholder="imageurlvagyvalami">
+      </div>
+   
+    
+      <button type="submit" class="btn btn-primary gy-3" >Save</button>
+      <a href="plants" class="btn btn-primary">Cancel</a>
+    </form>
+  </div-->
+    
+  <router-outlet></router-outlet>
+
+
+
+<!--div class="container d-flex justify-content-center align-items-center ">
 
   <div>
   <form [formGroup]="editForm" (ngSubmit)="editPlant()">
@@ -43,4 +154,4 @@
 </div>
 </div>
 
-<router-outlet></router-outlet>
+<router-outlet></router-outlet-->

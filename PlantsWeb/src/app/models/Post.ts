@@ -1,8 +1,15 @@
-export class Post {
-    id! : string;
-    title! : string;
-    content! : string;
-    dateOfCreation! : Date;
+import { Guid } from "guid-typescript";
+import { User } from "./User";
 
-    userId! : string;
+export class Post {
+
+    constructor(
+        public id : Guid,
+        public title : string,
+        public content : string ,
+        public imageUrl : string | null,
+        public dateOfCreation : Date,
+        public userId : Guid,
+        public user : User | null | undefined
+        ){}
 }

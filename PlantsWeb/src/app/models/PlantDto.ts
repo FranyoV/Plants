@@ -1,14 +1,14 @@
 import { Guid } from "guid-typescript";
 import { Maintenance } from "./Maintenance";
 
-export class Plant {
+export class PlantDto {
 
     constructor(
-        public id : Guid,
+        public id : string,
         public name : string,
         public description : string | null,
         //public maintenance: Maintenance,
         public imageUrl: string | null,
-        public userId: Guid){
+        public userId: string){
     }
 }

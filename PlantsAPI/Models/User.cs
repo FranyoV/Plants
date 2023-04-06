@@ -8,6 +8,7 @@ namespace PlantsAPI.Models
         public string Name { get; set; }
         public string PasswordHash { get; set; }
 
+       // public string EmailAddress { get; set; }    
 
         [JsonIgnore]
         public IEnumerable<Plant>? Plants { get; set; }

@@ -65,12 +65,12 @@ export class PlantsListComponent implements OnInit, OnDestroy {
   goToEditPlantPage(plantId: Guid){
     console.log(plantId);
     this.data.sendPlantId(plantId);
-    this.router.navigate(['plantedit']);
+    this.router.navigate([`plants/${plantId}`]);
 
   }
 
   goToAddPlantPage(){
-    this.router.navigate(['plantadd']);
+    this.router.navigate(['plant/new']);
   }
 
   openDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
