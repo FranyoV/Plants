@@ -27,9 +27,10 @@ export class PlantsAddComponent implements OnInit,OnDestroy{
     id : "",
     name : "",
     description : "",
-    maintenance: new Maintenance(),
     imageUrl: "" ,
-    userId: "0"
+    interval: 0,
+    note: "",
+    lastNotification: Date
   })
 
 
@@ -42,7 +43,7 @@ export class PlantsAddComponent implements OnInit,OnDestroy{
 
 
   ngOnInit(){
-    this.subscription = this.data.currentData.subscribe(
+    this.subscription = this.data.currentPlants.subscribe(
       plants => this.plants = plants)
   }
 
@@ -51,12 +52,16 @@ export class PlantsAddComponent implements OnInit,OnDestroy{
   }
 
   addPlant(){
-    const newPlant: PlantDto = new PlantDto(
+    const newPlant: Plant = new Plant(
       "00000000-0000-0000-0000-000000000000",
       this.addForm.value.name!,
       this.addForm.value.description!,
-      //this.addForm.value.maintenance!,
       this.addForm.value.imageUrl!,
+      this.addForm.value.note!,
+      this.addForm.value.interval!,
+      null,
+      null,
+      null,
       "3fa85f64-5717-4562-b3fc-2c963f66afa6"
       );
 
@@ -66,12 +71,15 @@ export class PlantsAddComponent implements OnInit,OnDestroy{
         //snackbar -> unsuccesful add
       }else{
         this.webApi.addPlant(newPlant).subscribe({
-          next: () => {},
+          next: (result) => {
+            this.plants.push(newPlant), 
+            this.data.updatePlantsList(this.plants);
+            console.log("new plant added:" , result)},
           error: (error) => { console.error("Adding plant to database failed.", error)}
         });
 
-       // this.plants.push(newPlant);
-        this.data.updateData(this.plants);
+        this.plants.push(newPlant);
+        this.data.updatePlantsList(this.plants);
        
       }
       this.router.navigate(['plants']);

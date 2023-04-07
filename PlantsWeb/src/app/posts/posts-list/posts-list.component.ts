@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Post } from '../models/Post';
-import { WebApiService } from '../webapi.service';
+import { Post } from '../../models/Post';
+import { WebApiService } from '../../webapi.service';
 import { Guid } from 'guid-typescript';
 import { PageEvent } from '@angular/material/paginator';
 
 @Component({
-  selector: 'app-main-page',
-  templateUrl: './main-page.component.html',
-  styleUrls: ['./main-page.component.css']
+  selector: 'app-posts-list',
+  templateUrl: './posts-list.component.html',
+  styleUrls: ['./posts-list.component.css']
 })
-export class MainPageComponent implements OnInit{
+export class PostsListComponent implements OnInit{
 
   posts : Post[] = [];
   searchText!: string;
@@ -32,32 +32,23 @@ export class MainPageComponent implements OnInit{
         
         this.posts = result,
         console.log("before",this.posts);
-        //this.getUsers(),
-       // console.log("after", this.posts);
+
       },
       error: (error) => {console.error("Can't get posts from api.", error)}
     })
   }
 
-  async getUsers(){
-    for ( let post of this.posts){
-      (await this.webApi.getUserById(post.userId)).subscribe({
-        next: (result) => { post.user = result },
-        error: (error) => { console.error("no user found for this post", error)}
-       })
-    }
-  }
 
-
-  goToPostDetails(postId: Guid){
+  goToPostDetails(postId: string){
     this.router.navigate([`post/${postId}`]);
   }
 
   goToAddPostPage(){
-    this.router.navigate([``]);
+    this.router.navigate([`post/new`]);
   }
 
 
+  //PAGINATOR EVENTHANDLER
   OnPageEvent(event: PageEvent){
       console.log(event);
       const startIndex = event.pageIndex * event.pageSize;

@@ -54,6 +54,13 @@ namespace PlantsAPI.Repositories
                 originalPlant.ImageUrl = plant.ImageUrl;
                 originalPlant.Name = plant.Name;
                 originalPlant.Description = plant.Description;
+                originalPlant.ImageUrl = plant.ImageUrl;
+                originalPlant.Note = plant.Note;
+                originalPlant.Interval = plant.Interval;
+                originalPlant.LastNotification = plant.LastNotification;
+                //originalPlant.NextNotification = originalPlant.LastNotification.Value.AddDays(originalPlant.Interval.Value);
+               
+                
             }
 
             return originalPlant;

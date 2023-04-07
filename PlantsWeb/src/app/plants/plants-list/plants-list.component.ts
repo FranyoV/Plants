@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 import { Plant } from '../../models/Plant';
-import testData from '../../models/testData';
 import { WebApiService } from 'src/app/webapi.service';
 import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/data.service';
@@ -39,7 +38,7 @@ export class PlantsListComponent implements OnInit, OnDestroy {
       error: (error) => {console.error('Getting plant for user failed.',error)}
     })
 
-    this.subscription = this.data.currentData.subscribe(
+    this.subscription = this.data.currentPlants.subscribe(
       (plants ) => {this.plants = plants; 
         console.log("in the listing component",this.plants);
         
@@ -52,7 +51,7 @@ export class PlantsListComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  deletePlant(plantId: Guid){
+  deletePlant(plantId: string){
 
     console.log("delete clicked.")
     this.webApi.deletePlant(plantId).subscribe({
@@ -62,7 +61,7 @@ export class PlantsListComponent implements OnInit, OnDestroy {
     })
   }
 
-  goToEditPlantPage(plantId: Guid){
+  goToEditPlantPage(plantId: string){
     console.log(plantId);
     this.data.sendPlantId(plantId);
     this.router.navigate([`plants/${plantId}`]);

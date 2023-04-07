@@ -1,7 +1,7 @@
 
 
 .card-header-image {
-    background-image: url("../../assets/defaultprofilepic.png");
+    background-image: url("../../../assets/defaultprofilepic.png");
     background-size: cover;
     margin-left: 2px;
   }

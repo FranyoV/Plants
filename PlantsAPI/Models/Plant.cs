@@ -7,10 +7,12 @@ namespace PlantsAPI.Models
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string? Description { get; set; } 
-        public string? ImageUrl { get; set; }  
+        public string? ImageUrl { get; set; }
 
-        [JsonIgnore]
-        public Maintenance? Maintenance { get; set; }
+        public string? Note { get; set; }
+        public int? Interval { get; set; }
+        public DateTime? LastNotification { get; set; }
+        public DateTime? NextNotification { get; set; }
 
         public Guid UserId { get; set; }
 

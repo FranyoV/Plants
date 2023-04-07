@@ -5,7 +5,7 @@ namespace PlantsAPI.Repositories
 {
     public interface IPostRepository
     {
-        Task<IEnumerable<Post>> GetPosts();
+        Task<IEnumerable<PostDto>> GetPosts();
         Task<Post> GetPostById(Guid id);
         Task<Post> AddPost(Post post);
         Task<Post> EditPost(Post post);

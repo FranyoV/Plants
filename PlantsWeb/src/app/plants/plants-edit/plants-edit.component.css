@@ -22,7 +22,12 @@ img {
     max-width: 200px;
 }
 
+.row {
+    height: 100%;
+}
+
 .col {
     text-align: center;
+    
 }
 

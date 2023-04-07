@@ -2,22 +2,18 @@
 
 namespace PlantsAPI.Models
 {
-    public class Post
+    public class PostDto
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
-        public string Content   { get; set; }
+        public string Content { get; set; }
         public DateTime DateOfCreation { get; set; }
         public string ImageUrl { get; set; }
 
-        //public virtual UserDto? UserDto { get; set; }
+        //userdata
+        public string UserName { get; set; }
         public Guid UserId { get; set; }
 
 
-        [JsonIgnore]
-        public virtual User? User { get; set; }
-
-        [JsonIgnore]
-        public IEnumerable<Reply>? Replies { get; set; }        
     }
 }

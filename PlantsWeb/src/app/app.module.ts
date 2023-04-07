@@ -12,9 +12,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 import { AppComponent } from './app.component';
-import { MainPageComponent } from './main-page/main-page.component';
+import { PostsListComponent } from './posts/posts-list/posts-list.component';
 import { PlantsListComponent } from './plants/plants-list/plants-list.component';
 import { HeaderComponent } from './header/header.component';
 import { PlantsAddComponent } from './plants/plants-add/plants-add.component';
@@ -23,13 +25,15 @@ import { ProfileComponent } from './profile/profile.component';
 import { DialogComponent } from './dialog/dialog.component';
 import { PostFilterPipe } from './post-filter.pipe';
 import { ReplyAddComponent } from './reply-add/reply-add.component';
-import { PostAddComponent } from './post-add/post-add.component';
+import { PostAddComponent } from './posts/post-add/post-add.component';
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    MainPageComponent,
+    PostsListComponent,
     PlantsListComponent,
     HeaderComponent,
     PlantsAddComponent,
@@ -38,7 +42,9 @@ import { PostAddComponent } from './post-add/post-add.component';
     DialogComponent,
     PostFilterPipe,
     ReplyAddComponent,
-    PostAddComponent
+    PostAddComponent,
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
@@ -54,7 +60,9 @@ import { PostAddComponent } from './post-add/post-add.component';
     MatInputModule,
     MatToolbarModule,
     MatButtonToggleModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   providers: [],
   bootstrap: [AppComponent]

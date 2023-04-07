@@ -1,15 +1,15 @@
 import { Guid } from "guid-typescript";
-import { User } from "./User";
+import { UserDto } from "./UserDto";
 
 export class Post {
 
     constructor(
-        public id : Guid,
+        public id : string,
         public title : string,
         public content : string ,
         public imageUrl : string | null,
         public dateOfCreation : Date,
-        public userId : Guid,
-        public user : User | null | undefined
+        public userId : string,
+        public userName : string | null | undefined
         ){}
 }

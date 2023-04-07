@@ -1,60 +1,102 @@
 
-
 <div class="container d-flex justify-content-center align-items-center ">
   <div>
 
-    <h2 class="text-center">Add plant</h2>
-    <div class="row">
-      <div class="col">
+    <h2 class="text-center">Edit plant</h2>
+
+    <div class="row ">
+      <div class="col-6">
         <img src="assets/plant-icon.avif" alt="">
       </div>
+      <div class="col-6">
 
+        <form [formGroup]="editForm" (ngSubmit)="editPlant()">
+          <div class="row">
+          <div class="col">
+            <h3>Plant data:</h3>
 
-    <div class="col">
-    <form [formGroup]="editForm" (ngSubmit)="editPlant()">
-      <mat-form-field  appearance="fill">
-        <mat-label >Name</mat-label>
+          <mat-form-field  appearance="fill">
+            <mat-label >Name</mat-label>
+            <input  
+            class="input-group form-control" 
+            type="text" 
+            formControlName="name" 
+            placeholder="Name" matInput>
+          </mat-form-field>
 
-        <input  
-        
-        class="input-group form-control" 
-        type="text" 
-        formControlName="name" 
-        placeholder="Name" matInput>
-      </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Description</mat-label>
+            <textarea 
+            class="input-group form-control" 
+            type="text"
+            formControlName="description"
+            placeholder="Add description"
+            rows="3"
+            matInput></textarea>
+          </mat-form-field>
 
-      <mat-form-field appearance="fill">
-        <mat-label>Description</mat-label>
-        <textarea 
-        class="input-group form-control" 
-        type="text"
-        formControlName="description"
-        placeholder="Add description"
-        rows="3"
-        matInput></textarea>
-      </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Image</mat-label>
+            <input 
+            class="form-control"
+            type="text" 
+            formControlName="imageUrl"
+            id="UploadImage" 
+            placeholder="imageurlvagyvalami"
+            matInput>
+          </mat-form-field>
+          </div>
 
-      <mat-form-field appearance="fill">
-        <mat-label>Image</mat-label>
-        <input 
-        class="form-control"
-        type="text" 
-        formControlName="imageUrl"
-        id="UploadImage" 
-        placeholder="imageurlvagyvalami"
-        matInput>
-      </mat-form-field>
+          <div class="col">
+            <h3>Maintenance:</h3>
+          <mat-form-field appearance="fill">
+            <mat-label>Input disabled</mat-label>
+            <input 
+            matInput 
+            [matDatepicker]="dp3" 
+            
+            disabled>
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="dp3"></mat-datepicker-toggle>
+            <mat-datepicker #dp3 disabled="false" ></mat-datepicker>
+          </mat-form-field>
 
-      <div class="button-row">
-        <button mat-stroked-button type="submit" class="btn btn-primary gy-3" >Save</button>
-        <a mat-stroked-button href="plants" class="btn btn-primary">Cancel</a>
-  
+          <mat-form-field appearance="fill">
+            <mat-label>Interval</mat-label>
+            <input 
+            class="form-control"
+            type="number" 
+            formControlName="interval"
+            id="Interval" 
+            placeholder="1"
+            matInput>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Note</mat-label>
+            <input 
+            class="form-control"
+            type="text" 
+            formControlName="note"
+            id="Note" 
+            placeholder="..."
+            matInput>
+          </mat-form-field>
+        </div>
       </div>
 
-    </form>
+          <div class="button-row">
+            <button mat-stroked-button type="submit" class="btn btn-primary gy-3" >Save</button>
+            <a mat-stroked-button href="plants" class="btn btn-primary">Cancel</a>
+          </div>
+
+        </form>
+      </div>
+    </div>
   </div>
 </div>
-  </div>
+
+<router-outlet></router-outlet>
 
 
     <!--form [formGroup]="addForm" (ngSubmit)="addPlant()">
@@ -106,7 +148,7 @@
     </form>
   </div-->
     
-  <router-outlet></router-outlet>
+
 
 
 

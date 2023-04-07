@@ -10,8 +10,8 @@ namespace PlantsAPI.Models
         public string? Note { get; set; }
         public int Interval { get; set; }
         public DateTime LastNotification { get; set; }
-        public DateTime NextNotification { get { return NextNotification; } set { LastNotification.AddDays(Interval); } }  
-        
+        public DateTime NextNotification { get { return NextNotification; } set { LastNotification.AddDays(Interval); } }
+
         [ForeignKey("Plant")]
         public Guid PlantId { get; set; }
 

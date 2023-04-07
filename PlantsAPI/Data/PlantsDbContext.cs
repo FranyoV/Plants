@@ -13,7 +13,7 @@ namespace PlantsAPI.Data
         public virtual DbSet<Post> Posts { get; set; } = null!;
         public virtual DbSet<Reply> Replies { get; set; } = null!;
         public virtual DbSet<Plant> Plants { get; set; } = null!;
-        public virtual DbSet<Maintenance> Maintenances { get; set; } = null!;   
+       
 
         //TODO: finish configuration of modelbuilder for all entities
 
@@ -47,14 +47,8 @@ namespace PlantsAPI.Data
                 .WithMany(u => u.Plants);
 
             //modelbuilder.Entity<Plant>().
-            //MAINTENANCE
-            modelbuilder.Entity<Maintenance>().ToTable("Maintenances")
-                .HasOne(m => m.Plant)
-                .WithOne(m => m.Maintenance);
+
                 
-
-
-
         }
     }
 }

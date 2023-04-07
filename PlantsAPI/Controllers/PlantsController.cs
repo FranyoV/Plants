@@ -51,7 +51,7 @@ namespace PlantsAPI.Controllers
 
         [HttpPut]
         [Route("{id}")]
-        public async Task<ActionResult<Plant>> PutPlant( Plant plant)
+        public async Task<ActionResult<Plant>> PutPlant([FromBody] Plant plant)
         {
             var modifiedPlant = await unitOfWork.Plants.EditPlant(plant);
             await unitOfWork.SaveChangesAsync();

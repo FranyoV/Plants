@@ -2,8 +2,8 @@ import { Guid } from "guid-typescript";
 import { Maintenance } from "./Maintenance";
 import { Plant } from "./Plant"
  
-const testData : Plant[] =[
-    {
+const testData : Plant[] =[];
+   /* {
         id: Guid.create(),
         name: "Kaktusz", 
         description: "Bárhol megél, ha teheted, hagyd a napon.",
@@ -39,6 +39,6 @@ const testData : Plant[] =[
         imageUrl: "http://imageurl.comsmdnk",
         userId: Guid.create()},
         
-    ]
+    ]*/
 
 export default testData;

@@ -12,18 +12,38 @@ namespace PlantsAPI.Repositories
 
         }
 
-        public async Task<IEnumerable<Post>> GetPosts()
+        public async Task<IEnumerable<PostDto>> GetPosts()
         {
-            var result = await dbSet.ToListAsync();
+            List<Post> posts = new List<Post>();
+            List<PostDto> postDtos = new List<PostDto>();
+            posts = await dbSet.ToListAsync();
 
-           /* foreach (var post in result)
+            if (posts.Count > 0)
             {
-                var user = dbContext.Users.FirstOrDefault(x => x.Id == post.UserId);
-                post.UserDto.Name = user.Name;
-                post.UserDto.Id = post.UserId;  
-            }*/
+                foreach (var post in posts)
+                {
+                    var user = dbContext.Users.FirstOrDefault(x => x.Id == post.UserId);
 
-            return result;
+                   /* UserDto UserDto = new UserDto()
+                    {
+                        Id = user.Id,
+                        Name = user.Name
+                    };*/
+                    PostDto postDto = new PostDto()
+                    {
+                        Id = post.Id,
+                        Title = post.Title,
+                        Content = post.Content,
+                        DateOfCreation = post.DateOfCreation,
+                        ImageUrl = post.ImageUrl,
+                        UserName = user.Name,
+                        UserId = post.UserId
+                    };
+                    postDtos.Add(postDto);
+                }
+            }
+
+            return postDtos;
         }
 
         public async Task<Post> GetPostById(Guid id)
