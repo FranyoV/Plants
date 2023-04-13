@@ -8,23 +8,29 @@ namespace PlantsAPI.Configuration
         private readonly ILogger logger;
         private readonly IConfiguration configuration;
         private readonly PlantsDbContext dbContext;
+        private readonly IHttpContextAccessor httpContextAccessor;
+
         public IUserRepository Users { get; private set; }
         public IPlantRepository Plants { get; private set; }
         public IPostRepository Posts { get; private set; }
         public IReplyRepository Replies { get; private set; }
+        public IAuthRepository Auth { get; private set; }
 
-        public UnitOfWork(PlantsDbContext plantsDbContext, 
-            ILoggerFactory loggerFactory,
-            IConfiguration configuration)
+        public UnitOfWork(PlantsDbContext _plantsDbContext, 
+            ILoggerFactory _loggerFactory,
+            IConfiguration _configuration,
+            IHttpContextAccessor _httpContextAccessor)
         {
-            this.dbContext = plantsDbContext;
-            this.logger = loggerFactory.CreateLogger("logs");
-            this.configuration = configuration;
+            this.dbContext = _plantsDbContext;
+            this.logger = _loggerFactory.CreateLogger("logs");
+            this.configuration = _configuration;
+            this.httpContextAccessor = _httpContextAccessor;
 
             this.Users = new UserRepository(dbContext, logger);
             this.Plants = new PlantRepository(dbContext, logger);
             this.Posts = new PostRepository(dbContext, logger);
             this.Replies = new ReplyRepository(dbContext, logger);
+            this.Auth = new AuthRepository(dbContext, logger, configuration);
         }
 
         public async Task SaveChangesAsync()

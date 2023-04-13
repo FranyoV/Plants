@@ -12,34 +12,41 @@
   
       <div class="row">
         
-        <form [formGroup]="addForm" (ngSubmit)="addPost()">
+        <form [formGroup]="addPostForm" (ngSubmit)="addPost()">
           <div class="row">
             <div class="col">
   
               <mat-form-field  appearance="fill">
                 <mat-label >Title</mat-label>
                 <input  
-                class="input-group form-control" 
+                
                 type="text" 
                 formControlName="title" 
                 placeholder="Title" matInput>
+                <mat-error
+                *ngIf="title?.touched && title?.errors?.['required']">A title is required.
+                </mat-error>
+                <mat-error *ngIf="title?.errors?.['maxlength']">
+                  Title should be less than 50 characters.
+                </mat-error>
               </mat-form-field>
   
               <mat-form-field appearance="fill">
                 <mat-label>Content</mat-label>
                 <textarea 
-                class="input-group form-control" 
                 type="text"
                 formControlName="content"
                 placeholder="Add description"
                 rows="3"
                 matInput></textarea>
+                <mat-error
+                *ngIf="content?.touched && content?.errors?.['required']">Field must be filled.
+                </mat-error>
               </mat-form-field>
   
               <mat-form-field appearance="fill">
                 <mat-label>Image</mat-label>
                 <input 
-                class="form-control"
                 type="text" 
                 formControlName="imageUrl"
                 id="UploadImage" 
@@ -47,17 +54,16 @@
                 matInput>
               </mat-form-field>
             </div>
-  
-          
       
           </div>
   
           <div class="row">
             <div class="button-row">
-              <button mat-stroked-button type="submit" class="btn btn-primary gy-3" >Save</button>
-              <a mat-stroked-button href="posts" class="btn btn-primary">Cancel</a>
+              <button mat-stroked-button [disabled]="addPostForm.invalid" type="submit" class=" gy-3" >Save</button>
+              <a mat-stroked-button href="main" >Cancel</a>
             </div>
           </div>
+
         </form>
         
       </div>

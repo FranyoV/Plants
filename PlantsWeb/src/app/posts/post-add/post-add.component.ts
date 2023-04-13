@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/data.service';
@@ -16,12 +16,21 @@ export class PostAddComponent implements OnInit{
   posts: Post[] = [];
   currentUserId: string = "";
 
-  addForm = this.formBuilder.group({
-    title : "",
-    content : "",
-    imageUrl: "" ,
-
+  addPostForm = this.formBuilder.group({
+    title : ['', [Validators.required, Validators.maxLength(50)]],
+    content : ['', [Validators.required]],
+    imageUrl: [''],
   })
+
+  get title() {
+    return this.addPostForm.get('title');
+  }
+
+  get content() {
+    return this.addPostForm.get('content');
+  }
+
+  
   subscription! : Subscription;
 
   constructor(
@@ -43,9 +52,9 @@ export class PostAddComponent implements OnInit{
   addPost(){
     const newPost: Post = new Post(
       "00000000-0000-0000-0000-000000000000",
-      this.addForm.value.title!,
-      this.addForm.value.content!,
-      this.addForm.value.imageUrl!,
+      this.addPostForm.value.title!,
+      this.addPostForm.value.content!,
+      this.addPostForm.value.imageUrl!,
       new Date(),
       "3fa85f64-5717-4562-b3fc-2c963f66afa6",
       null

@@ -14,6 +14,8 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatListModule } from '@angular/material/list';
 
 import { AppComponent } from './app.component';
 import { PostsListComponent } from './posts/posts-list/posts-list.component';
@@ -24,7 +26,7 @@ import { PlantsEditComponent } from './plants/plants-edit/plants-edit.component'
 import { ProfileComponent } from './profile/profile.component';
 import { DialogComponent } from './dialog/dialog.component';
 import { PostFilterPipe } from './post-filter.pipe';
-import { ReplyAddComponent } from './reply-add/reply-add.component';
+import { PostDetailsComponent } from './posts/post-details/post-details.component';
 import { PostAddComponent } from './posts/post-add/post-add.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
@@ -41,7 +43,7 @@ import { RegisterComponent } from './register/register.component';
     ProfileComponent,
     DialogComponent,
     PostFilterPipe,
-    ReplyAddComponent,
+    PostDetailsComponent,
     PostAddComponent,
     LoginComponent,
     RegisterComponent
@@ -62,7 +64,9 @@ import { RegisterComponent } from './register/register.component';
     MatButtonToggleModule,
     MatPaginatorModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatExpansionModule,
+    MatListModule
   ],
   providers: [],
   bootstrap: [AppComponent]

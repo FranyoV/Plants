@@ -1,8 +1,11 @@
 export class Reply {
-    id! : string;
-    content! : string;
-    dateOfCreation! : Date;
-    
-    postId! : string;
-    uerId! : string;
+    constructor(
+        public id : string,
+        public content : string,
+        public dateOfCreation : Date,
+        
+        public postId : string,
+        public userId : string,
+    ){}
+
 }

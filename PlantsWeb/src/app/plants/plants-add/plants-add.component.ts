@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Guid } from 'guid-typescript';
 import { Subscription } from 'rxjs';
@@ -24,13 +24,12 @@ export class PlantsAddComponent implements OnInit,OnDestroy{
   subscription! : Subscription;
 
   addForm = this.formBuilder.group({
-    id : "",
-    name : "",
+    name : ['', [Validators.required, Validators.maxLength(50)]],
     description : "",
     imageUrl: "" ,
     interval: 0,
     note: "",
-    lastNotification: Date
+    lastNotification: ['']
   })
 
 

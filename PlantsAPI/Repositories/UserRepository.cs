@@ -23,6 +23,12 @@ namespace PlantsAPI.Repositories
             return user;
         }
 
+        public async Task<User> GetUserByName(string username)
+        {
+            var user = await dbSet.Where(u => u.Name == username).FirstOrDefaultAsync();
+            return user;
+        }
+
 
         public async Task<User> AddUser(User user)
         {
@@ -55,7 +61,7 @@ namespace PlantsAPI.Repositories
 
             var toBeDeleted = await dbSet.Where(u => u.Id == userId).FirstAsync();
 
-            if (toBeDeleted == null)
+            if (toBeDeleted != null)
             {
                 var result = dbSet.Remove(toBeDeleted);
                 return result.State == EntityState.Deleted;
@@ -63,6 +69,7 @@ namespace PlantsAPI.Repositories
             }
             return false;
         }
+
 
     }
 }

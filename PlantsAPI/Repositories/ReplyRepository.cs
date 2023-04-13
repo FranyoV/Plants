@@ -25,11 +25,24 @@ namespace PlantsAPI.Repositories
             return reply;
         }
 
+        public async Task<IEnumerable<Reply>> GetRepliesOfPost(Guid postId)
+        {
+            if (postId == Guid.Empty) throw new ArgumentNullException(nameof(postId));
+            List<Reply> replies = await dbSet.Where(r => r.PostId == postId).ToListAsync();
+
+            var repliesInOrder = replies.OrderBy(x => x.DateOfCreation);
+
+            return repliesInOrder;
+        }
+
         public async Task<Reply> AddReply(Reply reply)
         {
             if (reply == null) throw new ArgumentNullException(nameof(reply));
-            var result = dbSet.Add(reply);
-            return result.Entity;
+            reply.Id = Guid.NewGuid();
+            var added = dbSet.Add(reply);
+
+            //var result = await GetReplyById(reply.Id);
+            return added.Entity;
         }
 
         public async Task<Reply> EditReply(Reply reply)

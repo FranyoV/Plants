@@ -16,7 +16,7 @@ namespace PlantsAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Reply>>> GetReply()
+        public async Task<ActionResult<IEnumerable<Reply>>> GetReplies()
         {
 
             var replies = await unitOfWork.Replies.GetReplies();
@@ -29,6 +29,14 @@ namespace PlantsAPI.Controllers
         {
             var reply = await unitOfWork.Replies.GetReplyById(id);
             return Ok(reply);
+        }
+
+        [HttpGet]
+        [Route("post/{postid}")]
+        public async Task<ActionResult<IEnumerable<Reply>>> GetRepliesOfPost([FromRoute] Guid postid) 
+        {
+            var replies = await unitOfWork.Replies.GetRepliesOfPost(postid);
+            return Ok(replies);
         }
 
         [HttpPost]

@@ -1,1 +1,20 @@
-<p>profile works!</p>
+
+<div class="container">
+
+    <br>
+    <mat-card align-center>
+        <mat-card-header>
+        <mat-card-title >Username: {{this.currentUser?.name}}</mat-card-title>
+        </mat-card-header>
+    <mat-card-content>
+    <span>Number os plants: 0</span><br>
+    <span>Number os posts: 0</span><br>
+    <span>Number of replies: 0</span><br>
+    </mat-card-content>
+    <mat-card-actions>
+        <button mat-raised-button>Delete profile</button>
+        <button mat-raised-button>Edit profile</button>
+        <button mat-raised-button>Logout</button>
+    </mat-card-actions>
+    </mat-card>
+</div>

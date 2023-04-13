@@ -37,7 +37,7 @@ export class WebApiService {
   }*/
 
 
-  async getUserById(id: Guid): Promise<Observable<User>> {
+  getUserById(id: string): Observable<User> {
     let url = `${this.baseUrl}/api/users/${id}`;
     return this.http.get<User>(url);
   }
@@ -109,6 +109,11 @@ export class WebApiService {
   getRepliesById(id: Guid): Observable<Reply> {
     let url = `${this.baseUrl}/api/replies/${id}`;
     return this.http.get<Reply>(url);
+  }
+
+  getRepliesOfPost(postId: string) : Observable<Reply[]> {
+    let url = `${this.baseUrl}/api/replies/post/${postId}`;
+    return this.http.get<Reply[]>(url);
   }
 
   addReplies(reply: Reply): Observable<Reply> {

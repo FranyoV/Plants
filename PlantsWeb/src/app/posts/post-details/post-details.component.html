@@ -1,0 +1,86 @@
+
+<div class="container">
+    <div class="my-3" >
+    
+        <mat-card class="card width:fill">
+
+          <div class="container">
+          <mat-card-header class="container">
+            
+              <div mat-card-avatar class="card-header-image"></div>
+              <mat-card-title-group >
+                
+                <div mat-card-title [align]="'start'" class="col" >Username</div>
+                <div  class="col" [align]="'end'">{{currentPost?.dateOfCreation | date : 'medium'}}</div >
+              </mat-card-title-group>
+                      
+          </mat-card-header>
+        </div>
+  
+          <mat-card-content>
+            <div class="container">
+              <mat-card-title>{{ currentPost?.title }}</mat-card-title><br>
+              <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>
+              
+            </div>
+
+            <br>
+            
+            <mat-divider></mat-divider>
+            <br>
+            
+            <mat-list *ngFor="let reply of replies">
+              
+              <mat-divider></mat-divider>
+              <br>
+                <mat-list-item class="mat-list-item-word-wrap" >
+                    
+                  <mat-avatar matListItemAvatar>
+                    <img class="h-100" src="../../../assets/defaultprofilepic.png" alt="">
+                  </mat-avatar>
+
+                  <div matListItemTitle class="row">
+                    <div matListItemLine class="col">Username</div>
+                    <div matListItemLine class="col" [align]="'end'">{{reply.dateOfCreation | date : 'medium'}}</div>
+                  </div>
+                  <div matListItemLine class="mat-line">
+
+                    {{reply.content}}
+                  </div>
+                 
+                </mat-list-item>
+                <br>
+                <mat-divider></mat-divider>
+                               
+              </mat-list>
+              
+          </mat-card-content>
+  
+          <mat-card-actions >
+            <div class="container">
+
+              <form [formGroup]="addReplyForm" (ngSubmit)="addReply()" class="example-form h-100">
+                <mat-form-field color="primary" appearance="outline" class="example-full-width">
+                  <mat-label>Leave a comment</mat-label>
+                  <textarea 
+                  matInput 
+                  formControlName="content" 
+                  placeholder="My comment..."
+                  required  ></textarea>
+                 <mat-error 
+                 *ngIf="content?.touched && content?.errors?.['required']">
+                 This field is required.
+                </mat-error>
+                </mat-form-field>
+              
+              <button mat-raised-button [disabled]="addReplyForm.invalid" type="submit">Send</button>
+              
+            </form>
+            </div>
+           
+          </mat-card-actions>
+        </mat-card>
+   
+    </div>
+  
+</div>

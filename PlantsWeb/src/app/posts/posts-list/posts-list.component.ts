@@ -44,7 +44,7 @@ export class PostsListComponent implements OnInit{
   }
 
   goToAddPostPage(){
-    this.router.navigate([`post/new`]);
+    this.router.navigate([`posts/new`]);
   }
 
 

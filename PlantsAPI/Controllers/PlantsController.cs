@@ -5,7 +5,7 @@ using PlantsAPI.Models;
 namespace PlantsAPI.Controllers
 {
     [Route("api/plants")]
-    //[ApiController]
+    [ApiController]
     public class PlantsController : ControllerBase
     {
         private readonly IUnitOfWork unitOfWork;

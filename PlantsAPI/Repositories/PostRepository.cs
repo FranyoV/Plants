@@ -41,9 +41,40 @@ namespace PlantsAPI.Repositories
                     };
                     postDtos.Add(postDto);
                 }
+                
+            }
+            var postsInOrder = postDtos.OrderByDescending(x => x.DateOfCreation);
+
+            return postsInOrder;
+        }
+
+
+        public async Task<IEnumerable<Post>> GetPostsOfUser(Guid id)
+        {
+            if (id == Guid.Empty) throw new ArgumentNullException(nameof(id));
+
+            List<Post> postsOfUser = await dbSet.Where(p => p.UserId == id).ToListAsync();
+
+            return postsOfUser;
+        }
+
+        public async Task<IEnumerable<Post>> GetPostsWithUsersReplies(Guid userid)
+        {
+
+            var repliesOfUser = await dbContext.Replies.Where(r => r.UserId == userid).ToListAsync();
+
+            List<Post> postsWithUsersReplies = new List<Post>();
+
+            foreach (var reply in repliesOfUser){
+                var post = await dbContext.Posts.Where(p => p.Id == reply.PostId).ToListAsync();
+                if (post != null)
+                {
+                    postsWithUsersReplies.AddRange(post);
+                } 
             }
 
-            return postDtos;
+         
+            return postsWithUsersReplies;
         }
 
         public async Task<Post> GetPostById(Guid id)

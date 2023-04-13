@@ -1,0 +1,33 @@
+
+mat-card-header {
+  vertical-align: middle;
+  vertical-align: bottom !important;
+}
+
+.card-header-image {
+    background-image: url("../../../assets/defaultprofilepic.png");
+    background-size: cover;
+    margin-left: 2px;
+  }
+
+  .example-form {
+
+    width: 100%;
+  }
+  
+  .example-full-width {
+    width: 100%;
+  }
+
+  .mat-list-item.mat-list-item-word-wrap {
+    height: initial !important;
+  }
+  .mat-list-item-word-wrap .mat-line {
+    word-wrap: break-word !important; 
+    white-space: pre-wrap !important;
+  }
+
+  button {
+    float: right;
+    margin-left: 5px;
+  }
