@@ -22,6 +22,7 @@ mat-card-header {
   .mat-list-item.mat-list-item-word-wrap {
     height: initial !important;
   }
+  
   .mat-list-item-word-wrap .mat-line {
     word-wrap: break-word !important; 
     white-space: pre-wrap !important;

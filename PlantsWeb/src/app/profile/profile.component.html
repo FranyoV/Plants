@@ -4,12 +4,18 @@
     <br>
     <mat-card align-center>
         <mat-card-header>
+            <div mat-card-avatar class="card-header-image"></div>
+           
         <mat-card-title >Username: {{this.currentUser?.name}}</mat-card-title>
         </mat-card-header>
     <mat-card-content>
-    <span>Number os plants: 0</span><br>
-    <span>Number os posts: 0</span><br>
-    <span>Number of replies: 0</span><br>
+    <div>
+        <div>
+            <h3>chart</h3>
+            <canvas id="myChart" #myChart></canvas>
+        </div>
+       
+    </div>
     </mat-card-content>
     <mat-card-actions>
         <button mat-raised-button>Delete profile</button>

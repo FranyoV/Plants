@@ -1,0 +1,10 @@
+.card-header-image {
+    background-image: url("../../assets/defaultprofilepic.png");
+    background-size: cover;
+    margin-left: 2px;
+  }
+
+  canvas{
+    width: 500px;
+    height: 500px;
+  }

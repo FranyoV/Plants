@@ -54,7 +54,7 @@ export class WebApiService {
     return this.http.get<Plant>(url);
   }
 
-  getPlantsOfUser(userId: Guid): Observable<Plant[]> {
+  getPlantsOfUser(userId: string): Observable<Plant[]> {
     let url = `${this.baseUrl}/api/plants/user/${userId}`;
     return this.http.get<Plant[]>(url);
   }

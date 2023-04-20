@@ -2,76 +2,76 @@
 <div class="container d-flex justify-content-center align-items-center ">
   <div>
 
-    <h2 class="text-center">Add plant</h2>
-
-    <div class="row">
-      <div class="col">
-        <img src="assets/plant-icon.avif" alt="">
-      </div>
-    </div>
-
-    <div class="row">
+    <h2 class="text-center">Add plant</h2>  
       
       <form [formGroup]="addForm" (ngSubmit)="addPlant()">
         <div class="row">
-          <div class="col">
-              
-            <h3>Plant data:</h3>
 
-            <mat-form-field  appearance="fill">
-              <mat-label >Name</mat-label>
-              <input  
-              
-              type="text" 
-              formControlName="name" 
-              placeholder="Name" matInput>
-              <mat-hint 
-                 *ngIf="addForm.get('name')?.touched && addForm.get('name')?.errors?.['required']
-                 "></mat-hint>
-            </mat-form-field>
-
-            <mat-form-field appearance="fill">
-              <mat-label>Description</mat-label>
-              <textarea 
-              
-              type="text"
-              formControlName="description"
-              placeholder="Add description"
-              rows="3"
-              matInput></textarea>
-            </mat-form-field>
-
-            <mat-form-field appearance="fill">
-              <mat-label>Image</mat-label>
-              <input 
-             
-              type="text" 
-              formControlName="imageUrl"
-              id="UploadImage" 
-              placeholder="Paste th url."
-              matInput>
-            </mat-form-field>
+          <div class="col" style="float:none;margin:auto;align-items: center;">
+            <img src="assets/plant-icon.avif" alt="">
           </div>
 
-          <div class="col">
-            <h3>Maintenance:</h3>
+          <div class=" col" style="float:none;margin:auto;">
+              <div class="container">
 
-            <mat-form-field appearance="fill">
-              <mat-label>Input disabled</mat-label>
+                <h3 style="text-align: center;">Plant info:</h3>
+
+                <mat-form-field  appearance="outline">
+                  <mat-label >Name</mat-label>
+                  <input  
+                  
+                  type="text" 
+                  formControlName="name" 
+                  placeholder="Name" matInput>
+                  <mat-hint 
+                     *ngIf="addForm.get('name')?.touched && addForm.get('name')?.errors?.['required']
+                     "></mat-hint>
+                </mat-form-field>
+    
+                <mat-form-field appearance="outline">
+                  <mat-label>Description</mat-label>
+                  <textarea 
+                  
+                  type="text"
+                  formControlName="description"
+                  placeholder="Add description"
+                  rows="3"
+                  matInput></textarea>
+                </mat-form-field>
+    
+                <mat-form-field appearance="outline">
+                  <mat-label>Image</mat-label>
+                  <input 
+                 
+                  type="text" 
+                  formControlName="imageUrl"
+                  id="UploadImage" 
+                  placeholder="Paste th url."
+                  matInput>
+                </mat-form-field>
+              </div>
+    
+              </div>
+
+          
+          <div class="col">
+
+            <h3 style="text-align: center;">Maintenance info:</h3>
+           
+            <mat-form-field appearance="outline" style="margin-bottom: 20px;">
+              <mat-label>Next notification date</mat-label>
+              <mat-hint>MM/DD/YYYY</mat-hint>
               <input 
               matInput 
-              [matDatepicker]="dp3" 
-              
+              [matDatepicker]="myDatePicker" 
               disabled>
-              <mat-hint>MM/DD/YYYY</mat-hint>
-              <mat-datepicker-toggle matIconSuffix [for]="dp3"></mat-datepicker-toggle>
-              <mat-datepicker #dp3 disabled="false" ></mat-datepicker>
+              <mat-datepicker-toggle matIconSuffix [for]="myDatePicker"></mat-datepicker-toggle>
+              <mat-datepicker #myDatePicker disabled="false" ></mat-datepicker>
             </mat-form-field>
 
-            <mat-form-field appearance="fill">
-              <mat-label>Interval</mat-label>
+            <mat-form-field appearance="outline">
+              <mat-label>Interval of days</mat-label>
               <input 
-              
               type="number" 
               formControlName="interval"
               id="Interval" 
@@ -79,30 +79,37 @@
               matInput>
             </mat-form-field>
 
-            <mat-form-field appearance="fill">
+            <mat-form-field appearance="outline">
+              
               <mat-label>Note</mat-label>
               <input 
-             
+              matTooltip="We will send you this note in the notification email."
               type="text" 
               formControlName="note"
               id="Note" 
               placeholder="..."
               matInput>
             </mat-form-field>
-          </div>
-        </div>
 
-        <div class="row">
-          <div class="button-row">
+          </div>
+          
+          <div class="container button-row" [align]="'end'">
             <button mat-stroked-button [disabled]="addForm.invalid" type="submit" class="gy-3" >Save</button>
             <a mat-stroked-button href="plants" class="btn">Cancel</a>
           </div>
         </div>
+
+        <!--div class="row">
+          <div class="container button-row" [align]="'end'">
+            <button mat-stroked-button [disabled]="addForm.invalid" type="submit" class="gy-3" >Save</button>
+            <a mat-stroked-button href="plants" class="btn">Cancel</a>
+          </div>
+        </div-->
       </form>
       
     </div>
   </div>
-</div>
+
 
 
 <router-outlet></router-outlet>

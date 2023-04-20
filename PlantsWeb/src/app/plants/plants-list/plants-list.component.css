@@ -7,19 +7,21 @@
     transform: scale(1.05);
 }
 
-.card-body {
-display: flex !important;
-flex-direction: column !important;
+mat-card-title{
+    vertical-align: middle !important;
 }
 
-.card .btn {
-margin-top: auto !important;
+mat-card-content {
+    display: flex !important;
+    flex-direction: column !important;
 }
 
-.col-md-4 {
+mat-card-actions {
+    margin-top: auto !important;
+    text-align: right;
+}
+
+.col-md-6 {
     margin-bottom: 10px;
 }
 
-.addButtonRow{
-    text-align: right;
-}

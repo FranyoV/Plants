@@ -11,28 +11,27 @@ export class DataService {
   plants : Plant[] = [];
   posts : Post[] = [];
 
-  private plantsDataSource = new BehaviorSubject<Plant[]>(this.plants);
-  private postsDataSource = new BehaviorSubject<Post[]>(this.posts);
+  //holds current value of the message
+  private plantsMessageSource = new BehaviorSubject<Plant[]>(this.plants);
+  private postsMessageSource = new BehaviorSubject<Post[]>(this.posts);
   private plantId = new BehaviorSubject<string>("");
 
-  currentPlants = this.plantsDataSource.asObservable();
-  currentPosts = this.postsDataSource.asObservable();
-  currentPlantId = this.plantId.asObservable();
+  currentPlantsMessage = this.plantsMessageSource.asObservable();
+  currentPostsMessage = this.postsMessageSource.asObservable();
+  currentPlantIdMessage = this.plantId.asObservable();
 
   constructor() { }
 
-  updatePlantsList(data: Plant[]){
-    this.plantsDataSource.next(data);
-    console.log("message in dataservice");
+  changePlantsMessage(data: Plant[]){
+    this.plantsMessageSource.next(data);
   }
 
-  updatePostsList(data: Post[]){
-    this.postsDataSource.next(data);
-    console.log("in data service for postslist update");
+  changePostsMessage(data: Post[]){
+    this.postsMessageSource.next(data);
   }
 
   sendPlantId(id: string){
     this.plantId.next(id);
-    console.log("plant id: ", id)
   }
+
 }

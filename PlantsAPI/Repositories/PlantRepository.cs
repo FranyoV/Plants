@@ -38,7 +38,14 @@ namespace PlantsAPI.Repositories
         public async Task<Plant> AddPlant(Plant plant)
         {
             if (plant == null) throw new ArgumentNullException(nameof(plant));
-            plant.Id = Guid.NewGuid();
+
+            plant.Id = Guid.NewGuid();  
+
+            if(plant.LastNotification != null && (plant.Interval != null || plant.Interval != 0) )
+            {
+                plant.NextNotification = plant.LastNotification.Value.AddDays((double)plant.Interval);
+            }
+           
             var result = dbSet.Add(plant);
             return result.Entity;
         }

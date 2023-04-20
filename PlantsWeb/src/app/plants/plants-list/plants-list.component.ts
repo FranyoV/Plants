@@ -16,7 +16,6 @@ import { DialogComponent } from 'src/app/dialog/dialog.component';
   styleUrls: ['./plants-list.component.css']
 })
 export class PlantsListComponent implements OnInit, OnDestroy {
-  //testData: Plant[] = testData;
 
   plants: Plant[] = [];
   subscription!: Subscription;
@@ -24,36 +23,28 @@ export class PlantsListComponent implements OnInit, OnDestroy {
 
 
   constructor(
-    private router: Router,
-    private data: DataService,
-    private webApi: WebApiService,
-    private dialog: MatDialog
+    private router : Router,
+    private data : DataService,
+    private webApi : WebApiService,
+    private dialog : MatDialog
     ){}
 
 
   ngOnInit(){
-    
-    this.webApi.getPlantsOfUser(Guid.parse("3fa85f64-5717-4562-b3fc-2c963f66afa6")).subscribe({
-      next: (plants) => {this.plants = plants},
+
+    this.subscription = this.data.currentPlantsMessage.subscribe( message => this.plants = message ) ;
+
+    this.webApi.getPlantsOfUser("3fa85f64-5717-4562-b3fc-2c963f66afa6").subscribe({
+      next: (result) => {this.plants = result},
       error: (error) => {console.error('Getting plant for user failed.',error)}
-    })
-
-    this.subscription = this.data.currentPlants.subscribe(
-      (plants ) => {this.plants = plants; 
-        console.log("in the listing component",this.plants);
-        
-      }
-    )    
+    }) 
     
-  }
-
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
   }
 
   deletePlant(plantId: string){
 
-    console.log("delete clicked.")
+    this.openDialog("1000", '1000') ;
+
     this.webApi.deletePlant(plantId).subscribe({
       next: (result) => {
         const index = this.plants.findIndex(p => p.id == plantId);
@@ -79,7 +70,11 @@ export class PlantsListComponent implements OnInit, OnDestroy {
       width: '250px',
       enterAnimationDuration,
       exitAnimationDuration,
+      
     });
   }
 
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
 }

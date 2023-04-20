@@ -9,19 +9,20 @@
 
   <div class="row gy-3">
    
-
-      <div class="col-md-4" *ngFor="let plant of plants">
+      <div class="col-md-6" *ngFor="let plant of plants">
 
         <mat-card class="card h-100">
           <mat-card-header>
             <mat-card-title-group>
               <mat-card-title>{{plant.name}}</mat-card-title>
-              <mat-card-subtitle></mat-card-subtitle>
+              
               <img mat-card-sm-image src="assets/plant-icon.avif" >
             </mat-card-title-group>
           </mat-card-header>
           <mat-card-content>
+           <p>
             {{plant.description}}
+           </p>
           </mat-card-content>
           <mat-card-actions>
             <button mat-stroked-button (click)="goToEditPlantPage(plant.id)" >Edit</button>
@@ -30,21 +31,6 @@
           </mat-card-actions>
         </mat-card>
 
-        <!--div class="card h-100">
-          <img class="card-img-top" src="assets/plant-icon.avif" alt="Card image cap">
-          <div class="card-body ">
-            <h5 class="card-title">{{plant.name}}</h5>
-            <p class="card-text">{{plant.description}}</p>
-          </div>
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item">maintenance..</li>
-
-              <button mat-stroked-button (click)="goToEditPlantPage(plant.id)" >Edit</button>
-              <button mat-stroked-button (click)="openDialog('0ms', '0ms')">Delete</button>
-            
-             
-          </ul>
-        </div-->
 
       </div>
     

@@ -1,10 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Guid } from 'guid-typescript';
 import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/data.service';
-import { Maintenance } from 'src/app/models/Maintenance';
 import { Plant } from 'src/app/models/Plant';
 import { WebApiService } from 'src/app/webapi.service';
 
@@ -13,7 +11,7 @@ import { WebApiService } from 'src/app/webapi.service';
   templateUrl: './plants-edit.component.html',
   styleUrls: ['./plants-edit.component.css']
 })
-export class PlantsEditComponent implements OnInit, OnDestroy{
+export class PlantsEditComponent implements OnInit{
 
   subscription! : Subscription;
   currentPlantId : string = ""; 
@@ -21,7 +19,6 @@ export class PlantsEditComponent implements OnInit, OnDestroy{
   plants: Plant[] = [];
 
   editForm = this.formBuilder.group({
-    id : "",
     name : "",
     description : "",
     imageUrl: "" ,
@@ -40,14 +37,13 @@ export class PlantsEditComponent implements OnInit, OnDestroy{
 
 
   ngOnInit(){
+    this.data.currentPlantsMessage.subscribe( message => this.plants = message );
 
     this.route.paramMap.subscribe( (params) => {
       const id = params.get("plantId");
       this.currentPlantId = id!;})
 
-  /*  this.subscription = this.data.currentPlantId.subscribe(
-      plantId => this.currentPlantId = plantId);
-*/
+
       if(this.currentPlant == null){
         this.webApi.getPlantById(this.currentPlantId).subscribe({
           next: (result) => {
@@ -61,15 +57,10 @@ export class PlantsEditComponent implements OnInit, OnDestroy{
         });
       }
 
-
-    console.log("currentplant outside of get:", this.currentPlant);
-   
   }
 
 
-  ngOnDestroy(): void {
-    //this.subscription.unsubscribe();
-  }
+
 
   editPlant(){
     console.log("currentplantid in edit:", this.currentPlantId);
@@ -85,25 +76,28 @@ export class PlantsEditComponent implements OnInit, OnDestroy{
       null,
       this.currentPlant.userId,
       );
-      console.log(modifiedPlant);
+
       if (modifiedPlant == null){
         //snackbar -> unsuccesful add
       }else{
-        console.log("modifiedplant:", modifiedPlant);
+       
         this.webApi.editPlant(this.currentPlantId, modifiedPlant).subscribe({
-          next: () => {  let index = this.plants.findIndex(p => p.id = modifiedPlant.id);
-            this.plants.splice(index, 1, modifiedPlant);
-            this.data.updatePlantsList(this.plants);}, 
+          next: (result) => {  
+           
+            let index = this.plants.findIndex(p => p.id = result.id);
+            this.plants.splice(index, 1, result);
             
-          error: (error) => {console.log('Adding failed', error)}
+            this.newMessage(this.plants), 
+            this.router.navigate(['plants']);},
+            
+          error: (error) => {console.error('Adding failed', error)}
         });
 
-        let index = this.plants.findIndex(p => p.id = modifiedPlant.id);
-            this.plants.splice(index, 1, modifiedPlant);
-            this.data.updatePlantsList(this.plants);
       }
-
-      this.router.navigate(['plants']);
-    
   }
+
+  newMessage(updatedPlants : Plant[]) {
+    this.data.changePlantsMessage(updatedPlants);
+  }
+  
 }

@@ -16,6 +16,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatListModule } from '@angular/material/list';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatTableModule } from '@angular/material/table';
 
 import { AppComponent } from './app.component';
 import { PostsListComponent } from './posts/posts-list/posts-list.component';
@@ -30,6 +32,7 @@ import { PostDetailsComponent } from './posts/post-details/post-details.componen
 import { PostAddComponent } from './posts/post-add/post-add.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
+import { MarketplaceComponent } from './marketplace/marketplace.component';
 
 
 @NgModule({
@@ -46,7 +49,8 @@ import { RegisterComponent } from './register/register.component';
     PostDetailsComponent,
     PostAddComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    MarketplaceComponent
   ],
   imports: [
     BrowserModule,
@@ -66,7 +70,9 @@ import { RegisterComponent } from './register/register.component';
     MatDatepickerModule,
     MatNativeDateModule,
     MatExpansionModule,
-    MatListModule
+    MatListModule,
+    MatTooltipModule,
+    MatTableModule
   ],
   providers: [],
   bootstrap: [AppComponent]

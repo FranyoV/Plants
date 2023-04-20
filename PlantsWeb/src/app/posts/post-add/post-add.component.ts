@@ -42,10 +42,10 @@ export class PostAddComponent implements OnInit{
 
 
   ngOnInit(): void {
-    //parammap for currentUSerId
-
-    this.subscription = this.data.currentPosts.subscribe(
-      posts => this.posts = posts)
+    this.webApi.getPosts().subscribe({
+      next: (res) => { this.posts = res },
+      error: (err) => { console.error("Coutldn't get posts.", err)}
+    })
   }
 
 
@@ -65,17 +65,17 @@ export class PostAddComponent implements OnInit{
     }
     else{
       this.webApi.addPost(newPost).subscribe({
-        next: (result) => { this.posts.push(result), this.data.updatePostsList(this.posts) },
-        error: (error) => { console.error("Failed to create the new post", error)}
+        next: (res) => { 
+          this.posts.push(res),
+           this.newMessage(this.posts),
+           this.router.navigate(['main']); },
+        error: (err) => { console.error("Failed to create the new post", err)}
       })
-  
     }
+  }
 
-
-    this.posts.push(newPost), 
-    this.data.updatePostsList(this.posts)
-    this.router.navigate(['main']);
-
+  newMessage(updatedPosts : Post[]) {
+    this.data.changePostsMessage(updatedPosts);
   }
 
 }
