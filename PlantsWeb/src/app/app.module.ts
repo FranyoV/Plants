@@ -18,6 +18,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatListModule } from '@angular/material/list';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTableModule } from '@angular/material/table';
+import { MatTabsModule } from '@angular/material/tabs';
 
 import { AppComponent } from './app.component';
 import { PostsListComponent } from './posts/posts-list/posts-list.component';
@@ -26,13 +27,15 @@ import { HeaderComponent } from './header/header.component';
 import { PlantsAddComponent } from './plants/plants-add/plants-add.component';
 import { PlantsEditComponent } from './plants/plants-edit/plants-edit.component';
 import { ProfileComponent } from './profile/profile.component';
-import { DialogComponent } from './dialog/dialog.component';
+import { DialogComponent } from './plants/dialog/dialog.component';
 import { PostFilterPipe } from './post-filter.pipe';
 import { PostDetailsComponent } from './posts/post-details/post-details.component';
 import { PostAddComponent } from './posts/post-add/post-add.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
-import { MarketplaceComponent } from './marketplace/marketplace.component';
+import { MarketplaceComponent } from './marketplace/item-list/marketplace.component';
+import { ItemAddComponent } from './marketplace/item-add/item-add.component';
+import { ItemDetailsComponent } from './marketplace/item-details/item-details.component';
 
 
 @NgModule({
@@ -50,7 +53,9 @@ import { MarketplaceComponent } from './marketplace/marketplace.component';
     PostAddComponent,
     LoginComponent,
     RegisterComponent,
-    MarketplaceComponent
+    MarketplaceComponent,
+    ItemAddComponent,
+    ItemDetailsComponent
   ],
   imports: [
     BrowserModule,
@@ -72,7 +77,8 @@ import { MarketplaceComponent } from './marketplace/marketplace.component';
     MatExpansionModule,
     MatListModule,
     MatTooltipModule,
-    MatTableModule
+    MatTableModule,
+    MatTabsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

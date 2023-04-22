@@ -7,6 +7,8 @@ import { Reply } from './models/Reply';
 import { Guid } from 'guid-typescript';
 import { PlantDto } from './models/PlantDto';
 import { User } from './models/User';
+import { LoginRequest } from './models/LoginRequest';
+import { LoginResponse } from './models/LoginResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +23,7 @@ export class WebApiService {
   constructor(public http: HttpClient) { }
 
   //Auth
-/*register(request: LogingRequest): Observable<any> {
+  register(request: LoginRequest): Observable<any> {
     let url = `${this.baseUrl}/api/auth/register`
     return this.http.post<any>(url, request);
   }
@@ -34,7 +36,7 @@ export class WebApiService {
   getMe(): Observable<string> {
     let url = `${this.baseUrl}/api/auth`;
     return this.http.get(url, {responseType: 'text'});
-  }*/
+  }
 
 
   getUserById(id: string): Observable<User> {
@@ -57,6 +59,11 @@ export class WebApiService {
   getPlantsOfUser(userId: string): Observable<Plant[]> {
     let url = `${this.baseUrl}/api/plants/user/${userId}`;
     return this.http.get<Plant[]>(url);
+  }
+
+  getPlantsCount(userId: string) : Observable<number>{
+    let url = `${this.baseUrl}/api/plants/user/${userId}/count`;
+    return this.http.get<number>(url);
   }
 
   addPlant(plant: Plant): Observable<Plant> {
@@ -83,6 +90,21 @@ export class WebApiService {
   getPostById(id: string): Observable<Post> {
     let url = `${this.baseUrl}/api/posts/${id}`;
     return this.http.get<Post>(url);
+  }
+
+  getPostByUser(userId: string): Observable<Post> {
+    let url = `${this.baseUrl}/api/posts/${userId}/posts`;
+    return this.http.get<Post>(url);
+  }
+
+  getPostByUserReplies(userId: string): Observable<Post> {
+    let url = `${this.baseUrl}/api/posts/${userId}/replies`;
+    return this.http.get<Post>(url);
+  }
+
+  getPostsCount(userId: string) : Observable<number>{
+    let url = `${this.baseUrl}/api/posts/user/${userId}/count`;
+    return this.http.get<number>(url);
   }
 
   addPost(post: Post): Observable<Post> {
@@ -114,6 +136,11 @@ export class WebApiService {
   getRepliesOfPost(postId: string) : Observable<Reply[]> {
     let url = `${this.baseUrl}/api/replies/post/${postId}`;
     return this.http.get<Reply[]>(url);
+  }
+
+  getRepliesCount(userId: string) : Observable<number>{
+    let url = `${this.baseUrl}/api/replies/user/${userId}/count`;
+    return this.http.get<number>(url);
   }
 
   addReplies(reply: Reply): Observable<Reply> {

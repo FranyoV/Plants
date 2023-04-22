@@ -40,8 +40,17 @@ namespace PlantsAPI.Controllers
             return Ok(plants);
         }
 
-        [HttpPost]
 
+        [HttpGet]
+        [Route("user/{userId}/count")]
+        public async Task<ActionResult<int>> GetPlantsCount ([FromRoute] Guid userId)
+        {
+            var plants = await unitOfWork.Plants.GetPlantsCount(userId);
+            return Ok(plants);
+        }
+
+
+        [HttpPost]
         public async Task<ActionResult<Plant>> PostPlant([FromBody] Plant plant)
         {
             var newPlant = await unitOfWork.Plants.AddPlant(plant);

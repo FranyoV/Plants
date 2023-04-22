@@ -1,3 +1,4 @@
+import { formatDate } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -22,7 +23,7 @@ export class PlantsAddComponent implements OnInit{
     imageUrl: "" ,
     interval: 0,
     note: "",
-    lastNotification: [ new Date ]
+    lastNotification: formatDate( Date(), 'yyyy-MM-dd', 'en', '+0200')
   })
 
 
@@ -52,7 +53,7 @@ export class PlantsAddComponent implements OnInit{
       this.addForm.value.imageUrl!,
       this.addForm.value.note!,
       this.addForm.value.interval!,
-      this.addForm.value.lastNotification!,
+      new Date(this.addForm.value.lastNotification!),
       null ,
       null,
       "3fa85f64-5717-4562-b3fc-2c963f66afa6"

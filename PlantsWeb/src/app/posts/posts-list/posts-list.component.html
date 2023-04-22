@@ -1,4 +1,5 @@
 <div class="container">
+
   <h2 class="text-center my-3">Feed</h2>
 
   <div class="addButtonRow my-5">
@@ -18,34 +19,104 @@
   </div>
 
 
-  <div class="my-3" *ngFor="let post of posts | filter : searchText" >
-    
-      <mat-card class="card width:fill">
-        <mat-card-header>
-          <div mat-card-avatar class="card-header-image"></div>
+  <mat-tab-group>
+    <mat-tab label="All">
+          
+        <div class="my-3" *ngFor="let post of posts | filter : searchText" >
+          
+          <mat-card class="card width:fill">
+            <mat-card-header>
+              <div mat-card-avatar class="card-header-image"></div>
+                
             
-        
-            <mat-card-title>{{post.userName}}</mat-card-title>
-            <mat-card-subtitle>{{post.dateOfCreation | date : 'medium'}}</mat-card-subtitle>
-            <!--mat-card-title-group>
-          </mat-card-title-group-->
-          
-        </mat-card-header>
+                <mat-card-title>{{post.userName}}</mat-card-title>
+                <mat-card-subtitle>{{post.dateOfCreation | date : 'medium'}}</mat-card-subtitle>
+                <!--mat-card-title-group>
+              </mat-card-title-group-->
+              
+            </mat-card-header>
 
-        <mat-card-content>
-          <mat-card-title>{{ post.title }}</mat-card-title>
-          <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.</p>
-          <p [align]="'end'">Number of comments on this post: 2</p>
-        </mat-card-content>
+            <mat-card-content>
+              <mat-card-title>{{ post.title }}</mat-card-title>
+              <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.</p>
+              <p [align]="'end'">Number of comments on this post: 2</p>
+            </mat-card-content>
 
-        <mat-card-actions [align]="'end'">
+            <mat-card-actions [align]="'end'">
+              
+                <button mat-stroked-button (click)="goToPostDetails(post.id)">See more details or leave a reply..</button>
+              
+            </mat-card-actions>
+          </mat-card>
+
+      </div>
+            
+    </mat-tab>
+    <mat-tab label="My Posts"> 
+      <div class="my-3" *ngFor="let post of posts | filter : searchText" >
           
-            <button mat-stroked-button (click)="goToPostDetails(post.id)">See more details or leave a reply..</button>
+        <mat-card class="card width:fill">
+          <mat-card-header>
+            <div mat-card-avatar class="card-header-image"></div>
+              
           
-        </mat-card-actions>
-      </mat-card>
- 
-  </div>
+              <mat-card-title>{{post.userName}}</mat-card-title>
+              <mat-card-subtitle>{{post.dateOfCreation | date : 'medium'}}</mat-card-subtitle>
+              <!--mat-card-title-group>
+            </mat-card-title-group-->
+            
+          </mat-card-header>
+
+          <mat-card-content>
+            <mat-card-title>{{ post.title }}</mat-card-title>
+            <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.</p>
+            <p [align]="'end'">Number of comments on this post: 2</p>
+          </mat-card-content>
+
+          <mat-card-actions [align]="'end'">
+            
+              <button mat-stroked-button (click)="goToPostDetails(post.id)">See more details or leave a reply..</button>
+            
+          </mat-card-actions>
+        </mat-card>
+
+    </div>
+   </mat-tab>
+    <mat-tab label="My Replies"> 
+      <div class="my-3" *ngFor="let post of posts | filter : searchText" >
+          
+        <mat-card class="card width:fill">
+          <mat-card-header>
+            <div mat-card-avatar class="card-header-image"></div>
+              
+          
+              <mat-card-title>{{post.userName}}</mat-card-title>
+              <mat-card-subtitle>{{post.dateOfCreation | date : 'medium'}}</mat-card-subtitle>
+              <!--mat-card-title-group>
+            </mat-card-title-group-->
+            
+          </mat-card-header>
+
+          <mat-card-content>
+            <mat-card-title>{{ post.title }}</mat-card-title>
+            <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.</p>
+            <p [align]="'end'">Number of comments on this post: 2</p>
+          </mat-card-content>
+
+          <mat-card-actions [align]="'end'">
+            
+              <button mat-stroked-button (click)="goToPostDetails(post.id)">See more details or leave a reply..</button>
+            
+          </mat-card-actions>
+        </mat-card>
+
+    </div>
+    </mat-tab>
+  </mat-tab-group>
+
+
+
+
 
   <mat-paginator (page)="OnPageEvent($event)"
               [length]="posts.length"

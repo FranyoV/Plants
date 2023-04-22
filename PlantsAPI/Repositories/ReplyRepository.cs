@@ -35,6 +35,15 @@ namespace PlantsAPI.Repositories
             return repliesInOrder;
         }
 
+        public async Task<int> GetRepliesCount(Guid userId)
+        {
+            if (userId == Guid.Empty) throw new ArgumentNullException(nameof(userId));
+
+            List<Reply> result = await dbSet.Where(p => p.UserId == userId).ToListAsync();
+            return result.Count;
+
+        }
+
         public async Task<Reply> AddReply(Reply reply)
         {
             if (reply == null) throw new ArgumentNullException(nameof(reply));

@@ -4,7 +4,16 @@
     margin-left: 2px;
   }
 
-  canvas{
-    width: 500px;
-    height: 500px;
+button {
+  margin: 0.5rem;
+}
+
+.chart-container {
+  align-items: center;
+  text-align: center;
+}
+
+
+canvas{
+  margin: 0 auto;
   }

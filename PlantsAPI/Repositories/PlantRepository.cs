@@ -34,6 +34,15 @@ namespace PlantsAPI.Repositories
 
         }
 
+        public async Task<int> GetPlantsCount(Guid userId)
+        {
+            if (userId == Guid.Empty) throw new ArgumentNullException(nameof(userId));
+
+            List<Plant> result = await dbSet.Where(p => p.UserId == userId).ToListAsync();
+            return result.Count;
+
+        }
+
 
         public async Task<Plant> AddPlant(Plant plant)
         {
@@ -53,8 +62,8 @@ namespace PlantsAPI.Repositories
         public async Task<Plant> EditPlant(Plant plant)
         {
             if (plant == null) throw new ArgumentNullException(nameof(plant));
-
-            var originalPlant = await dbSet.FirstAsync(p => p.Id == plant.Id);
+            
+            Plant originalPlant = await dbSet.FirstAsync(p => p.Id == plant.Id);
 
             if (originalPlant != null)
             {
@@ -64,13 +73,24 @@ namespace PlantsAPI.Repositories
                 originalPlant.ImageUrl = plant.ImageUrl;
                 originalPlant.Note = plant.Note;
                 originalPlant.Interval = plant.Interval;
-                originalPlant.LastNotification = plant.LastNotification;
-                //originalPlant.NextNotification = originalPlant.LastNotification.Value.AddDays(originalPlant.Interval.Value);
-               
-                
+
+                if (plant.LastNotification != null)
+                {
+                    originalPlant.LastNotification = plant.LastNotification;
+
+                    if (plant.LastNotification < DateTime.Now)
+                    {
+                        originalPlant.NextNotification = DateTime.Now;
+                    }
+                    else
+                    {
+                        originalPlant.NextNotification = originalPlant.LastNotification.Value.AddDays(originalPlant.Interval.Value);
+                    }
+                }
+
             }
 
-            return originalPlant;
+            return (originalPlant != null) ? originalPlant : new Plant();
         }
 
 

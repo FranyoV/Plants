@@ -10,7 +10,8 @@ import { PostDetailsComponent } from './posts/post-details/post-details.componen
 import { PostAddComponent } from './posts/post-add/post-add.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
-import { MarketplaceComponent } from './marketplace/marketplace.component';
+import { MarketplaceComponent } from './marketplace/item-list/marketplace.component';
+import { ItemAddComponent } from './marketplace/item-add/item-add.component';
 
 const routes: Routes = [
   {path: '', component: HeaderComponent,
@@ -22,7 +23,8 @@ const routes: Routes = [
     {path: 'profile/:userId', component: ProfileComponent},
     {path: 'post/:postId', component: PostDetailsComponent},
     {path: 'posts/new', component: PostAddComponent},
-    {path: 'marketplace', component: MarketplaceComponent}
+    {path: 'marketplace', component: MarketplaceComponent},
+    {path: 'marketplace/new', component: ItemAddComponent}
     ]
     //rerouting --> { path: '', redirectTo: 'component-one', pathMatch: 'full' },
   },

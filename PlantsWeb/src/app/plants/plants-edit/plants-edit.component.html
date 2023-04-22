@@ -19,7 +19,6 @@
                 <mat-form-field  appearance="fill">
                   <mat-label >Name</mat-label>
                   <input  
-                  
                   type="text" 
                   formControlName="name" 
                   placeholder="Name" matInput>
@@ -42,7 +41,6 @@
                 <mat-form-field appearance="fill">
                   <mat-label>Image</mat-label>
                   <input 
-                 
                   type="text" 
                   formControlName="imageUrl"
                   id="UploadImage" 
@@ -59,14 +57,16 @@
             <h3 style="text-align: center;">Maintenance info:</h3>
            
             <mat-form-field appearance="fill">
-              <mat-label>Input disabled</mat-label>
+              <mat-label>Input</mat-label>
               <input 
               matInput 
               [matDatepicker]="dp3" 
-              disabled>
+              type="datetime"
+              formControlName="lastNotification"
+              >
               <mat-hint>MM/DD/YYYY</mat-hint>
               <mat-datepicker-toggle matIconSuffix [for]="dp3"></mat-datepicker-toggle>
-              <mat-datepicker #dp3 disabled="false" ></mat-datepicker>
+              <mat-datepicker #dp3  ></mat-datepicker>
             </mat-form-field>
 
             <mat-form-field appearance="fill">

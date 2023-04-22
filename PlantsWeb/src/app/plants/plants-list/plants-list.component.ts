@@ -8,7 +8,7 @@ import { Guid } from 'guid-typescript';
 import { MatDialog } from '@angular/material/dialog';
 import {MatMenuTrigger} from '@angular/material/menu';
 import { Dialog } from '@angular/cdk/dialog';
-import { DialogComponent } from 'src/app/dialog/dialog.component';
+import { DialogComponent } from 'src/app/plants/dialog/dialog.component';
 
 @Component({
   selector: 'app-plants',

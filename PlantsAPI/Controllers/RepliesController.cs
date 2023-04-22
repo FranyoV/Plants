@@ -39,6 +39,14 @@ namespace PlantsAPI.Controllers
             return Ok(replies);
         }
 
+        [HttpGet]
+        [Route("user/{userId}/count")]
+        public async Task<ActionResult<int>> GetRepliesCount([FromRoute] Guid userId)
+        {
+            var replies = await unitOfWork.Replies.GetRepliesCount(userId);
+            return Ok(replies);
+        }
+
         [HttpPost]
         public async Task<ActionResult<Reply>> PostReply(Reply reply)
         {

@@ -1,10 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
+import { DateAdapter } from '@angular/material/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgbDateStructAdapter } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/data.service';
 import { Plant } from 'src/app/models/Plant';
 import { WebApiService } from 'src/app/webapi.service';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-plants-edit',
@@ -19,12 +22,12 @@ export class PlantsEditComponent implements OnInit{
   plants: Plant[] = [];
 
   editForm = this.formBuilder.group({
-    name : "",
+    name : ['', [Validators.required, Validators.maxLength(50)]],
     description : "",
     imageUrl: "" ,
     interval: 0,
     note: "", 
-    lastNotification: Date
+    lastNotification: formatDate( Date(), 'yyyy-MM-dd', 'en', '+0200')
   })
 
   constructor(
@@ -52,6 +55,7 @@ export class PlantsEditComponent implements OnInit{
              this.editForm.controls['description'].setValue(this.currentPlant.description);
              this.editForm.controls['imageUrl'].setValue(this.currentPlant.imageUrl ),
              this.editForm.controls['interval'].setValue(this.currentPlant.interval ),
+             this.editForm.controls['lastNotification'].setValue('hm'),
              this.editForm.controls['note'].setValue(this.currentPlant.note)},
           error: (error) => { console.error("No plants with this id.", error)}
         });
@@ -60,10 +64,9 @@ export class PlantsEditComponent implements OnInit{
   }
 
 
-
-
   editPlant(){
-    console.log("currentplantid in edit:", this.currentPlantId);
+    const date = this.editForm.value.lastNotification;
+    console.log("currentplantid in edit:", this.editForm.value.lastNotification);
     const modifiedPlant: Plant= new Plant(
       this.currentPlantId,
       this.editForm.value.name!,
@@ -71,11 +74,12 @@ export class PlantsEditComponent implements OnInit{
       this.editForm.value.imageUrl!,
       this.editForm.value.note!,
       this.editForm.value.interval!,
-      null,
+      new Date(this.editForm.value.lastNotification!),
       null,
       null,
       this.currentPlant.userId,
       );
+      console.log(modifiedPlant)
 
       if (modifiedPlant == null){
         //snackbar -> unsuccesful add

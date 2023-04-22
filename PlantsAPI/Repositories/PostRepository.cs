@@ -49,7 +49,7 @@ namespace PlantsAPI.Repositories
         }
 
 
-        public async Task<IEnumerable<Post>> GetPostsOfUser(Guid id)
+        public async Task<IEnumerable<Post>> GetPostsByUser(Guid id)
         {
             if (id == Guid.Empty) throw new ArgumentNullException(nameof(id));
 
@@ -58,7 +58,8 @@ namespace PlantsAPI.Repositories
             return postsOfUser;
         }
 
-        public async Task<IEnumerable<Post>> GetPostsWithUsersReplies(Guid userid)
+
+        public async Task<IEnumerable<Post>> GetPostsByUserReplies(Guid userid)
         {
 
             var repliesOfUser = await dbContext.Replies.Where(r => r.UserId == userid).ToListAsync();
@@ -76,6 +77,17 @@ namespace PlantsAPI.Repositories
          
             return postsWithUsersReplies;
         }
+
+
+        public async Task<int> GetPostsCount(Guid userId)
+        {
+            if (userId == Guid.Empty) throw new ArgumentNullException(nameof(userId));
+
+            List<Post> result = await dbSet.Where(p => p.UserId == userId).ToListAsync();
+            return result.Count;
+
+        }
+
 
         public async Task<Post> GetPostById(Guid id)
         {

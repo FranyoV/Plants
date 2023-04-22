@@ -31,6 +31,34 @@ namespace PlantsAPI.Controllers
             return Ok(post);
         }
 
+
+        [HttpGet]
+        [Route("api/posts/${userId}/posts")]
+        public async Task<ActionResult<Post>> GetPostByUser(Guid userId)
+        {
+            var post = await unitOfWork.Posts.GetPostsByUser(userId);
+            return Ok(post);
+        }
+
+
+        [HttpGet]
+        [Route("api/posts/${userId}/replies")]
+        public async Task<ActionResult<Post>> GetPostByUserReplies(Guid userId)
+        {
+            var post = await unitOfWork.Posts.GetPostsByUserReplies(userId);
+            return Ok(post);
+        }
+
+
+        [HttpGet]
+        [Route("user/{userId}/count")]
+        public async Task<ActionResult<int>> GetPostsCount([FromRoute] Guid userId)
+        {
+            var posts = await unitOfWork.Posts.GetPostsCount(userId);
+            return Ok(posts);
+        }
+
+
         [HttpPost]
         public async Task<ActionResult<Post>> PostPost(Post post)
         {
@@ -38,6 +66,7 @@ namespace PlantsAPI.Controllers
             await unitOfWork.SaveChangesAsync();
             return Ok(newPost);
         }
+
 
         [HttpPut]
         [Route("{id}")]
@@ -47,6 +76,7 @@ namespace PlantsAPI.Controllers
             await unitOfWork.SaveChangesAsync();
             return Ok(modifiedPost);
         }
+
 
         [HttpDelete]
         [Route("{id}")]
