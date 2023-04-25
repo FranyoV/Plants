@@ -14,6 +14,7 @@ namespace PlantsAPI.Configuration
         public IPlantRepository Plants { get; private set; }
         public IPostRepository Posts { get; private set; }
         public IReplyRepository Replies { get; private set; }
+        public IItemsRepository Items { get; private set; }
         public IAuthRepository Auth { get; private set; }
 
         public UnitOfWork(PlantsDbContext _plantsDbContext, 
@@ -30,6 +31,7 @@ namespace PlantsAPI.Configuration
             this.Plants = new PlantRepository(dbContext, logger);
             this.Posts = new PostRepository(dbContext, logger);
             this.Replies = new ReplyRepository(dbContext, logger);
+            this.Items = new ItemsRepository(dbContext, logger);
             this.Auth = new AuthRepository(dbContext, logger, configuration);
         }
 

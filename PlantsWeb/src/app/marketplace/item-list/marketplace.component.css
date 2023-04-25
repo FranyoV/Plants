@@ -8,6 +8,17 @@ table {
   }
   
   td, th {
-    width: 25%;
+    width: 15%;
+    text-align: center;
   }
+
+button {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+h2{
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
   

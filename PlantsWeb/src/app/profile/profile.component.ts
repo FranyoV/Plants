@@ -6,6 +6,7 @@ import { Chart, registerables } from 'chart.js';
 import { FormBuilder, Validators } from '@angular/forms';
 Chart.register(...registerables);
 
+
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -116,7 +117,8 @@ export class ProfileComponent implements OnInit, OnChanges {
     const labels = [
       'Posts',
       'Plants',
-      'Replies'
+      'Replies',
+      'Items For Sale'
     ];
 
     const data = {
@@ -124,11 +126,12 @@ export class ProfileComponent implements OnInit, OnChanges {
       datasets: [
         {
           //label: 'My First Dataset',
-          data: [this.postsCount, this.plantCount, this.repliesCount],
+          data: [this.postsCount, this.plantCount, this.repliesCount, 2],
           backgroundColor: [
             'rgb(255, 99, 132)',
             'rgb(54, 162, 235)',
-            'rgb(255, 205, 86)'
+            'rgb(255, 205, 86)',
+            'rgb(255, 23, 13)'
           ],
           hoverOffset: 4
       }]
@@ -141,7 +144,7 @@ export class ProfileComponent implements OnInit, OnChanges {
         responsive: false,
         plugins: {
           legend: {
-            position: 'left',
+            position: 'top',
           },
           title: {
             display: true,

@@ -8,7 +8,7 @@ import { Guid } from 'guid-typescript';
 import { MatDialog } from '@angular/material/dialog';
 import {MatMenuTrigger} from '@angular/material/menu';
 import { Dialog } from '@angular/cdk/dialog';
-import { DialogComponent } from 'src/app/plants/dialog/dialog.component';
+import { DialogComponent } from 'src/app/plants/plants-list/dialog/dialog.component';
 
 @Component({
   selector: 'app-plants',
@@ -53,8 +53,6 @@ export class PlantsListComponent implements OnInit, OnDestroy {
   }
 
   goToEditPlantPage(plantId: string){
-    console.log(plantId);
-    this.data.sendPlantId(plantId);
     this.router.navigate([`plants/${plantId}`]);
 
   }

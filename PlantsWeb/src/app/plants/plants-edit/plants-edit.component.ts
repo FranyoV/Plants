@@ -65,8 +65,7 @@ export class PlantsEditComponent implements OnInit{
 
 
   editPlant(){
-    const date = this.editForm.value.lastNotification;
-    console.log("currentplantid in edit:", this.editForm.value.lastNotification);
+   
     const modifiedPlant: Plant= new Plant(
       this.currentPlantId,
       this.editForm.value.name!,

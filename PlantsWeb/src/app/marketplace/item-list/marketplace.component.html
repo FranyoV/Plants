@@ -1,6 +1,10 @@
 <div class="container">
+
+  <h2>Marketplace</h2>
+
+  
     <div [align]="'end'">
-        <button mat-raised-button>Add item</button>
+        <button (click)="goToAddItemPage()" mat-raised-button>Add item</button>
     </div>
    
     
@@ -8,6 +12,7 @@
     <mat-label>Filter</mat-label>
     <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
   </mat-form-field>
+  
   
   <div class="mat-elevation-z8">
     <table mat-table [dataSource]="dataSource"   matSort>

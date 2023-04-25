@@ -12,6 +12,7 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { MarketplaceComponent } from './marketplace/item-list/marketplace.component';
 import { ItemAddComponent } from './marketplace/item-add/item-add.component';
+import { ItemEditComponent } from './marketplace/item-edit/item-edit.component';
 
 const routes: Routes = [
   {path: '', component: HeaderComponent,
@@ -24,7 +25,8 @@ const routes: Routes = [
     {path: 'post/:postId', component: PostDetailsComponent},
     {path: 'posts/new', component: PostAddComponent},
     {path: 'marketplace', component: MarketplaceComponent},
-    {path: 'marketplace/new', component: ItemAddComponent}
+    {path: 'marketplace/new', component: ItemAddComponent},
+    {path: 'marketplace/:itemId', component: ItemEditComponent}
     ]
     //rerouting --> { path: '', redirectTo: 'component-one', pathMatch: 'full' },
   },

@@ -13,6 +13,7 @@ namespace PlantsAPI.Data
         public virtual DbSet<Post> Posts { get; set; } = null!;
         public virtual DbSet<Reply> Replies { get; set; } = null!;
         public virtual DbSet<Plant> Plants { get; set; } = null!;
+        public virtual DbSet<Item> Items { get; set; } = null!;
        
 
         //TODO: finish configuration of modelbuilder for all entities
@@ -31,6 +32,8 @@ namespace PlantsAPI.Data
 
             modelbuilder.Entity<User>().HasMany(u => u.Plants);
 
+            modelbuilder.Entity<User>().HasMany(u => u.Items);
+
 
             //POST
             modelbuilder.Entity<Post>().ToTable("Posts")
@@ -46,9 +49,12 @@ namespace PlantsAPI.Data
                 .HasOne(p => p.User)
                 .WithMany(u => u.Plants);
 
-            //modelbuilder.Entity<Plant>().
+            //ITEM
+            modelbuilder.Entity<Item>().ToTable("Items")
+                .HasOne(p => p.User)
+                .WithMany(u => u.Items);
 
-                
+         
         }
     }
 }

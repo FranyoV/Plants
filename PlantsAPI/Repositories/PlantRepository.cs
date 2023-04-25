@@ -31,7 +31,6 @@ namespace PlantsAPI.Repositories
 
             var result = await dbSet.Where(p => p.UserId == userId).ToListAsync();
             return result;
-
         }
 
         public async Task<int> GetPlantsCount(Guid userId)

@@ -1,1 +1,53 @@
-<p>item-add works!</p>
+
+<div class="container d-flex justify-content-center align-items-center ">
+
+
+  <form [formGroup]="addForm" (ngSubmit)="addItem()">
+    <h2>Add a For Sale Item</h2>
+
+    <mat-form-field appearance="outline" style="width:50vw">
+      <mat-label>Name</mat-label>
+      <input matInput
+      type="text"
+      formControlName="name">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" style="width:50vw">
+      <mat-label>Type</mat-label>
+      <mat-select formControlName="type">
+        <mat-option value="">Select</mat-option>
+        <mat-option value="0">Plant</mat-option>
+        <mat-option value="1">Bowl</mat-option>
+        <mat-option value="2">Soil</mat-option>
+        <mat-option value="3">Tool</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" style="width:50vw">
+      <mat-label>Price</mat-label>
+      <input matInput 
+      type="number"
+      formControlName="price">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" style="width:50vw">
+      <mat-label>Description</mat-label>
+      <textarea matInput 
+      type="text" 
+      formControlName="description"
+      rows="2"></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" style="width:50vw">
+      <mat-label>Image</mat-label>
+      <input matInput formControlName="image">
+    </mat-form-field>
+  
+    <div class="buttonRow">
+      <button mat-raised-button (click)="goToMarketPlace()">Cancel</button>
+      <button type="submit" mat-raised-button>Save</button>
+    </div>
+
+  </form>
+
+</div>

@@ -5,14 +5,13 @@ export interface Item {
 
         id : string,
         name : string,
-        description : string | null,
-       // imageUrl : string | null,
         type: ItemType,
-        date: Date | null,
         price: number,
-         
-         //User info
-        user : User | null,
+        description : string | null,
+        imageUrl : string | null,
+        date: Date | null,
+        sold: boolean,
+        //User info
         userId: string
-         
+        user : User | null,        
 }

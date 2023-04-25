@@ -17,3 +17,9 @@ button {
 canvas{
   margin: 0 auto;
   }
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}

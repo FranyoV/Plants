@@ -19,6 +19,8 @@ import { MatListModule } from '@angular/material/list';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatSelectModule } from '@angular/material/select';
+import { MatRadioModule } from '@angular/material/radio';
 
 import { AppComponent } from './app.component';
 import { PostsListComponent } from './posts/posts-list/posts-list.component';
@@ -27,7 +29,7 @@ import { HeaderComponent } from './header/header.component';
 import { PlantsAddComponent } from './plants/plants-add/plants-add.component';
 import { PlantsEditComponent } from './plants/plants-edit/plants-edit.component';
 import { ProfileComponent } from './profile/profile.component';
-import { DialogComponent } from './plants/dialog/dialog.component';
+import { DialogComponent } from './plants/plants-list/dialog/dialog.component';
 import { PostFilterPipe } from './post-filter.pipe';
 import { PostDetailsComponent } from './posts/post-details/post-details.component';
 import { PostAddComponent } from './posts/post-add/post-add.component';
@@ -36,6 +38,7 @@ import { RegisterComponent } from './register/register.component';
 import { MarketplaceComponent } from './marketplace/item-list/marketplace.component';
 import { ItemAddComponent } from './marketplace/item-add/item-add.component';
 import { ItemDetailsComponent } from './marketplace/item-details/item-details.component';
+import { ItemEditComponent } from './marketplace/item-edit/item-edit.component';
 
 
 @NgModule({
@@ -55,7 +58,8 @@ import { ItemDetailsComponent } from './marketplace/item-details/item-details.co
     RegisterComponent,
     MarketplaceComponent,
     ItemAddComponent,
-    ItemDetailsComponent
+    ItemDetailsComponent,
+    ItemEditComponent
   ],
   imports: [
     BrowserModule,
@@ -78,7 +82,9 @@ import { ItemDetailsComponent } from './marketplace/item-details/item-details.co
     MatListModule,
     MatTooltipModule,
     MatTableModule,
-    MatTabsModule
+    MatTabsModule,
+    MatSelectModule,
+    MatRadioModule
   ],
   providers: [],
   bootstrap: [AppComponent]

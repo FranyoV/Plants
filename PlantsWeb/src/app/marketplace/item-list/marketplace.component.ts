@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
@@ -6,71 +6,70 @@ import {MatTableDataSource} from '@angular/material/table';
 import { ItemDetailsComponent } from '../item-details/item-details.component';
 import { Item } from 'src/app/models/Item';
 import { ItemType } from 'src/app/models/ItemType';
+import { Router } from '@angular/router';
+import { WebApiService } from 'src/app/webapi.service';
+import { DataService } from 'src/app/data.service';
+import { Subscription } from 'rxjs';
 
-export interface UserData {
-  id: string;
-  name: string;
-  progress: string;
-  fruit: string;
-}
-
-/** Constants used to fill up our data base. */
-const FRUITS: string[] = [
-  'blueberry',
-  'lychee',
-  'kiwi',
-  'mango',
-  'peach',
-  'lime',
-  'pomegranate',
-  'pineapple',
-];
-const NAMES: string[] = [
-  'Maia',
-  'Asher',
-  'Olivia',
-  'Atticus',
-  'Amelia',
-  'Jack',
-  'Charlotte',
-  'Theodore',
-  'Isla',
-  'Oliver',
-  'Isabella',
-  'Jasper',
-  'Cora',
-  'Levi',
-  'Violet',
-  'Arthur',
-  'Mia',
-  'Thomas',
-  'Elizabeth',
-];
 
 @Component({
   selector: 'app-marketplace',
   templateUrl: './marketplace.component.html',
   styleUrls: ['./marketplace.component.css']
 })
-export class MarketplaceComponent  implements AfterViewInit {
+export class MarketplaceComponent  implements OnInit, AfterViewInit, OnDestroy {
   displayedColumns: string[] = ['name', 'type', 'price', 'username', 'date', 'details'];
-  dataSource: MatTableDataSource<Item>;
+  dataSource!: MatTableDataSource<Item>;
   animal: string = '';
   name: string = '';
+  items: Item[] = [];
+  myItems: Item[] = [];
+  subscription!: Subscription;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(public dialog: MatDialog) {
-    // Create 100 users
-    const items = Array.from({length: 100}, (_, k) => createNewItem(k + 1));
-    const users = Array.from({length: 100}, (_, k) => createNewUser(k + 1));
+  constructor(
+    public dialog: MatDialog,
+    private router: Router,
+    private webApi: WebApiService,
+    private data : DataService,
+    ) {
 
-    // Assign the data to the data source for the table to render
-    this.dataSource = new MatTableDataSource(items);
+
+  }
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
+
+  ngOnInit(): void {
+    this.subscription = this.data.currentItemsMessage
+    .subscribe( message => this.items = message ) ;
+
+    this.getItems();
+      
+  }
+
+  getItems(){
+    this.webApi.getItems().subscribe({
+      next: (res) => {this.items = res, console.log(res),
+        this.dataSource = new MatTableDataSource(this.items);},
+      error: (err) => {console.error(err)}
+    })
+  }
+
+  getMyItems(){
+    this.webApi.getItemsOfUser("3fa85f64-5717-4562-b3fc-2c963f66afa6").subscribe({
+      next: (res) => { this.myItems = res},
+      error: (err) => { console.error(err)}
+    })
+  }
+
+
+
   openDialog(): void {
+
     const dialogRef = this.dialog.open(ItemDetailsComponent, {
       data: {name: this.name, animal: this.animal},
     });
@@ -93,41 +92,10 @@ export class MarketplaceComponent  implements AfterViewInit {
       this.dataSource.paginator.firstPage();
     }
   }
-}
 
-/** Builds and returns a new User. */
-function createNewUser(id: number): UserData {
-  const name =
-    NAMES[Math.round(Math.random() * (NAMES.length - 1))] +
-    ' ' +
-    NAMES[Math.round(Math.random() * (NAMES.length - 1))].charAt(0) +
-    '.';
+  goToAddItemPage(){
+    this.router.navigate(['marketplace/new']);
+  }
+  
 
-  return {
-    id: id.toString(),
-    name: name,
-    progress: Math.round(Math.random() * 100).toString(),
-    fruit: FRUITS[Math.round(Math.random() * (FRUITS.length - 1))],
-  };
-
-}
-
-
-function createNewItem(id: number): Item {
-  const name =
-    NAMES[Math.round(Math.random() * (NAMES.length - 1))] +
-    ' ' +
-    NAMES[Math.round(Math.random() * (NAMES.length - 1))].charAt(0) +
-    '.';
-
-  return {
-    id: id.toString(),
-    name: name,
-    description: FRUITS[Math.round(Math.random() * (FRUITS.length - 1))],
-    type: ItemType.PLANT,
-    date: new Date(),
-    price: Math.round(Math.random() * 100),
-    user: null,
-    userId: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-  };
 }

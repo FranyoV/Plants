@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PlantsAPI.Data;
 
@@ -11,9 +12,10 @@ using PlantsAPI.Data;
 namespace PlantsAPI.Migrations
 {
     [DbContext(typeof(PlantsDbContext))]
-    partial class PlantsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230425090847_ItemAdded")]
+    partial class ItemAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

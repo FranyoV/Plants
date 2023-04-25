@@ -9,6 +9,7 @@ import { PlantDto } from './models/PlantDto';
 import { User } from './models/User';
 import { LoginRequest } from './models/LoginRequest';
 import { LoginResponse } from './models/LoginResponse';
+import { Item } from './models/Item';
 
 @Injectable({
   providedIn: 'root'
@@ -79,6 +80,43 @@ export class WebApiService {
   deletePlant(id: string): Observable<Plant> {
     let url = `${this.baseUrl}/api/plants/${id}`;
     return this.http.delete<Plant>(url, this.httpOptions);
+  }
+
+
+  //ITEMS
+  getItems(): Observable<Item[]>{
+    const url = `${this.baseUrl}/api/items`;
+    return this.http.get<Item[]>(url);
+  }
+
+  getItemsById(id: string): Observable<Item> {
+    let url = `${this.baseUrl}/api/items/${id}`;
+    return this.http.get<Item>(url);
+  }
+
+  getItemsOfUser(userId: string): Observable<Item[]> {
+    let url = `${this.baseUrl}/api/items/user/${userId}`;
+    return this.http.get<Item[]>(url);
+  }
+
+  getItemsCount(userId: string) : Observable<number>{
+    let url = `${this.baseUrl}/api/items/user/${userId}/count`;
+    return this.http.get<number>(url);
+  }
+
+  addItem(item: Item): Observable<Item> {
+    let url = `${this.baseUrl}/api/items`;
+    return this.http.post<Item>(url, item);
+  }
+
+  editItem(id: string, item: Item): Observable<any> {
+    let url = `${this.baseUrl}/api/items/${id}`;
+    return this.http.put(url, item, this.httpOptions);
+  }
+
+  deleteItem(id: string): Observable<Item> {
+    let url = `${this.baseUrl}/api/items/${id}`;
+    return this.http.delete<Item>(url, this.httpOptions);
   }
 
   //POSTS

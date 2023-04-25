@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Plant } from './models/Plant';
 import { Post } from './models/Post';
+import { Item } from './models/Item';
 
 @Injectable({
   providedIn: 'root'
@@ -10,15 +11,16 @@ export class DataService {
 
   plants : Plant[] = [];
   posts : Post[] = [];
+  items : Item[] = [];
 
   //holds current value of the message
   private plantsMessageSource = new BehaviorSubject<Plant[]>(this.plants);
   private postsMessageSource = new BehaviorSubject<Post[]>(this.posts);
-  private plantId = new BehaviorSubject<string>("");
+  private itemsMessageSource = new BehaviorSubject<Item[]>(this.items);
 
   currentPlantsMessage = this.plantsMessageSource.asObservable();
   currentPostsMessage = this.postsMessageSource.asObservable();
-  currentPlantIdMessage = this.plantId.asObservable();
+  currentItemsMessage = this.itemsMessageSource.asObservable();
 
   constructor() { }
 
@@ -30,8 +32,9 @@ export class DataService {
     this.postsMessageSource.next(data);
   }
 
-  sendPlantId(id: string){
-    this.plantId.next(id);
+  changeItemsMessage(data: Item[]){
+    this.itemsMessageSource.next(data);
   }
+
 
 }

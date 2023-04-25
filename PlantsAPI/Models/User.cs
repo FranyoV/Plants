@@ -12,7 +12,6 @@ namespace PlantsAPI.Models
         public string PasswordHash { get; set; }
         public string PasswordSalt { get; set; }
 
-
         [JsonIgnore]
         public IEnumerable<Plant>? Plants { get; set; }
 
@@ -21,5 +20,8 @@ namespace PlantsAPI.Models
 
         [JsonIgnore]
         public IEnumerable<Reply>? Replies { get; set; }
+
+        [JsonIgnore]
+        public IEnumerable<Item>? Items { get; set; }
     }
 }
