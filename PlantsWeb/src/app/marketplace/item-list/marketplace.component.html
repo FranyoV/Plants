@@ -51,7 +51,7 @@
        <ng-container matColumnDef="details">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Details </th>
         <td mat-cell *matCellDef="let row"> 
-            <button mat-stroked-button (click)="openDialog()">...</button> </td>
+            <button mat-stroked-button (click)="openDialog(row)">...</button> </td>
       </ng-container>
   
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

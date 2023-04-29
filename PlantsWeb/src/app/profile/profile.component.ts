@@ -1,9 +1,11 @@
 import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { User } from '../models/User';
 import { WebApiService } from '../webapi.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Chart, registerables } from 'chart.js';
 import { FormBuilder, Validators } from '@angular/forms';
+import { SnackbarComponent } from '../snackbar/snackbar.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 Chart.register(...registerables);
 
 
@@ -45,7 +47,9 @@ export class ProfileComponent implements OnInit, OnChanges {
   constructor(
     private webApi: WebApiService,
     private route: ActivatedRoute,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private snackBar: MatSnackBar,
+    private router: Router
   ){}
 
   ngOnInit(): void {
@@ -81,6 +85,20 @@ export class ProfileComponent implements OnInit, OnChanges {
 
   changeProfileData(){
 
+  }
+
+  deleteUser(){
+    this.webApi.deleteUser(this.currentUserId).subscribe({
+      next: (res) => {this.logout()},
+      error: (error) => {
+        this.openSnackBar('Unsuccessful deletion. Try again!')
+        console.error('Delete NOT successful!', error);}
+    })
+  }
+
+  logout(){
+    localStorage.removeItem('authToken');
+    this.router.navigate([`/login`]);
   }
  
   getReplyCount(){
@@ -164,5 +182,12 @@ export class ProfileComponent implements OnInit, OnChanges {
     chart.data.datasets[0].data[1] = this.plantCount;
     chart.data.datasets[0].data[2] = this.repliesCount;
 
+  }
+
+  openSnackBar(message: string) {
+    this.snackBar.openFromComponent(SnackbarComponent, {
+      data: message,
+      duration: 3 * 1000,
+    });
   }
 }

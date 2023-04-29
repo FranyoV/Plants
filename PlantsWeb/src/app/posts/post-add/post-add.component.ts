@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/data.service';
 import { Post } from 'src/app/models/Post';
+import { SnackbarComponent } from 'src/app/snackbar/snackbar.component';
 import { WebApiService } from 'src/app/webapi.service';
 
 @Component({
@@ -37,7 +39,8 @@ export class PostAddComponent implements OnInit{
     private formBuilder: FormBuilder,
     private webApi: WebApiService,
     private data: DataService,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
     ){}
 
 
@@ -48,6 +51,13 @@ export class PostAddComponent implements OnInit{
     })
   }
 
+  openSnackBar(message: string) {
+    this.snackBar.openFromComponent(SnackbarComponent, {
+      data: message,
+      duration: 3 * 1000,
+    });
+  }
+
 
   addPost(){
     const newPost: Post = new Post(
@@ -56,7 +66,7 @@ export class PostAddComponent implements OnInit{
       this.addPostForm.value.content!,
       this.addPostForm.value.imageUrl!,
       new Date(),
-      "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "41b37237-054b-4bd5-79d1-08db48b0dc15",
       null
     )
 
@@ -68,8 +78,9 @@ export class PostAddComponent implements OnInit{
         next: (res) => { 
           this.posts.push(res),
            this.newMessage(this.posts),
-           this.router.navigate(['main']); },
-        error: (err) => { console.error("Failed to create the new post", err)}
+           this.router.navigate(['main'])
+           this.openSnackBar("New post created!"); },
+        error: (err) => { this.openSnackBar("Something went wrong!"), console.error("Failed to create the new post", err)}
       })
     }
   }

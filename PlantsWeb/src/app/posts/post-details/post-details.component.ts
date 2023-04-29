@@ -4,6 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Post } from '../../models/Post';
 import { Reply } from 'src/app/models/Reply';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { SnackbarComponent } from 'src/app/snackbar/snackbar.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Component({
@@ -31,7 +33,8 @@ export class PostDetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private webApi: WebApiService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private snackBar: MatSnackBar
   ){}
 
   ngOnInit(): void {
@@ -66,10 +69,23 @@ export class PostDetailsComponent implements OnInit {
     //this.replies.push(newReply);
 
     this.webApi.addReplies(newReply).subscribe({
-      next: (res) => { this.replies.push(res) },
-      error: (error ) => {console.log("Adding comment failed", error)}
+      next: (res) => { 
+        this.addReplyForm.controls['content'].setValue('');
+        this.replies.push(res) ,
+        this.openSnackBar("Reply successfully added!")
+      },
+      error: (error ) => {
+        this.openSnackBar("Couldn't add reply. Try again!"),
+        console.log("Adding comment failed", error)}
       
     })
+  }
+
+  openSnackBar(message: string) {
+    this.snackBar.openFromComponent(SnackbarComponent, {
+      data: message,
+      duration: 3 * 1000,
+    });
   }
 
 }

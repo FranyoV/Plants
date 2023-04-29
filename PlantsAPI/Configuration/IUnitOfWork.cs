@@ -1,4 +1,5 @@
 ﻿using PlantsAPI.Repositories;
+using PlantsAPI.Services;
 
 namespace PlantsAPI.Configuration
 {
@@ -10,6 +11,7 @@ namespace PlantsAPI.Configuration
         IReplyRepository Replies { get; }
         IItemsRepository Items { get; }
         IAuthRepository Auth { get; }
+        IUserContext UserContext { get; }
         Task SaveChangesAsync();
         void Dispose();
     }

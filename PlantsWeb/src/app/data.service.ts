@@ -12,15 +12,18 @@ export class DataService {
   plants : Plant[] = [];
   posts : Post[] = [];
   items : Item[] = [];
+  userId : string = '';
 
   //holds current value of the message
   private plantsMessageSource = new BehaviorSubject<Plant[]>(this.plants);
   private postsMessageSource = new BehaviorSubject<Post[]>(this.posts);
   private itemsMessageSource = new BehaviorSubject<Item[]>(this.items);
+  private userIdMessageSource = new BehaviorSubject<string>(this.userId);
 
   currentPlantsMessage = this.plantsMessageSource.asObservable();
   currentPostsMessage = this.postsMessageSource.asObservable();
   currentItemsMessage = this.itemsMessageSource.asObservable();
+  currentUserIdMessage = this.userIdMessageSource.asObservable();
 
   constructor() { }
 
@@ -34,6 +37,10 @@ export class DataService {
 
   changeItemsMessage(data: Item[]){
     this.itemsMessageSource.next(data);
+  }
+
+  changeUserIdMessage(data: string){
+    this.userIdMessageSource.next(data);
   }
 
 

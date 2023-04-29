@@ -73,8 +73,12 @@
                 </mat-error>
                 </mat-form-field>
               
-              <button mat-raised-button [disabled]="addReplyForm.invalid" type="submit">Send</button>
-              
+                <div [align]="'end'">
+                  <button mat-raised-button [disabled]="addReplyForm.invalid" type="submit">Send</button>
+                  <a mat-raised-button href="/main" >Back</a>
+                  
+                </div>
+             
             </form>
             </div>
            

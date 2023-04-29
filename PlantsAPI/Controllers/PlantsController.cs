@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PlantsAPI.Configuration;
 using PlantsAPI.Models;
 
@@ -6,13 +7,16 @@ namespace PlantsAPI.Controllers
 {
     [Route("api/plants")]
     [ApiController]
+    [Authorize]
     public class PlantsController : ControllerBase
     {
         private readonly IUnitOfWork unitOfWork;
+        private Guid tokenId;
 
         public PlantsController(IUnitOfWork unitOFWork)
         {
             this.unitOfWork = unitOFWork;
+            tokenId = Guid.Parse(unitOfWork.UserContext.GetMe());
         }
 
         [HttpGet]
@@ -36,7 +40,9 @@ namespace PlantsAPI.Controllers
         [Route("user/{userId}")]
         public async Task<ActionResult<IEnumerable<Plant>>> GetPlantsOfUser([FromRoute] Guid userId)
         {
+
             var plants = await unitOfWork.Plants.GetPlantsOfUser(userId);
+            var context = unitOfWork.UserContext.GetMe();
             return Ok(plants);
         }
 

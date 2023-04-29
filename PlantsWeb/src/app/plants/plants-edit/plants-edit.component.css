@@ -10,13 +10,19 @@ h2 {
     
   }
 
+mat-form-field {
+    width: 25vw;
+}
+
 .btn {
 margin: 3px;
 }
 
+
 .button-row{
-    text-align: center;
-}
+
+    margin-right: 10px;
+ }
 
 img {
     max-width: 200px;

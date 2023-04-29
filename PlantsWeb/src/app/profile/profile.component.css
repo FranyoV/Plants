@@ -1,8 +1,16 @@
 .card-header-image {
     background-image: url("../../assets/defaultprofilepic.png");
     background-size: cover;
-    margin-left: 2px;
+    
+    margin: 0rem;
   }
+
+mat-card-header {
+  vertical-align: middle;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  padding-top: 0 !important;
+}
 
 button {
   margin: 0.5rem;
@@ -11,6 +19,10 @@ button {
 .chart-container {
   align-items: center;
   text-align: center;
+}
+
+.col {
+  padding-top: 2rem;
 }
 
 
@@ -22,4 +34,10 @@ form {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+}
+
+
+
+mat-card {
+  box-shadow: inset;
 }

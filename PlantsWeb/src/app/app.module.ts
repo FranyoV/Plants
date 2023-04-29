@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
@@ -21,6 +21,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { AppComponent } from './app.component';
 import { PostsListComponent } from './posts/posts-list/posts-list.component';
@@ -39,7 +40,8 @@ import { MarketplaceComponent } from './marketplace/item-list/marketplace.compon
 import { ItemAddComponent } from './marketplace/item-add/item-add.component';
 import { ItemDetailsComponent } from './marketplace/item-details/item-details.component';
 import { ItemEditComponent } from './marketplace/item-edit/item-edit.component';
-
+import { SnackbarComponent } from './snackbar/snackbar.component';
+import { AuthInterceptor } from './auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -59,7 +61,8 @@ import { ItemEditComponent } from './marketplace/item-edit/item-edit.component';
     MarketplaceComponent,
     ItemAddComponent,
     ItemDetailsComponent,
-    ItemEditComponent
+    ItemEditComponent,
+    SnackbarComponent
   ],
   imports: [
     BrowserModule,
@@ -84,9 +87,10 @@ import { ItemEditComponent } from './marketplace/item-edit/item-edit.component';
     MatTableModule,
     MatTabsModule,
     MatSelectModule,
-    MatRadioModule
+    MatRadioModule,
+    MatSnackBarModule
   ],
-  providers: [],
+  providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

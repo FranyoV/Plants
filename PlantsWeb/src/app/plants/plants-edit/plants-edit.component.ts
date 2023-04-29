@@ -8,6 +8,8 @@ import { DataService } from 'src/app/data.service';
 import { Plant } from 'src/app/models/Plant';
 import { WebApiService } from 'src/app/webapi.service';
 import { formatDate } from '@angular/common';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SnackbarComponent } from 'src/app/snackbar/snackbar.component';
 
 @Component({
   selector: 'app-plants-edit',
@@ -35,7 +37,8 @@ export class PlantsEditComponent implements OnInit{
     private data: DataService,
     private router: Router,
     private route: ActivatedRoute,
-    private webApi: WebApiService
+    private webApi: WebApiService,
+    private snackBar: MatSnackBar
   ){}
 
 
@@ -91,9 +94,12 @@ export class PlantsEditComponent implements OnInit{
             this.plants.splice(index, 1, result);
             
             this.newMessage(this.plants), 
-            this.router.navigate(['plants']);},
+            this.router.navigate(['plants'])
+            this.openSnackBar("Successfully edited plant!");},
             
-          error: (error) => {console.error('Adding failed', error)}
+          error: (error) => {
+            this.openSnackBar("Couldn't edit plant. Try again!"),
+            console.error('Editing failed', error)}
         });
 
       }
@@ -103,4 +109,10 @@ export class PlantsEditComponent implements OnInit{
     this.data.changePlantsMessage(updatedPlants);
   }
   
+  openSnackBar(message: string) {
+    this.snackBar.openFromComponent(SnackbarComponent, {
+      data: message,
+      duration: 3 * 1000,
+    });
+  }
 }

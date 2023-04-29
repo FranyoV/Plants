@@ -2,13 +2,13 @@
 
   <h2 class="text-center my-3">Feed</h2>
 
-  <div class="addButtonRow my-5">
+  <div class="addButtonRow my-5" [align]="'end'">
     <button mat-raised-button href="plantsadd" (click)="goToAddPostPage()" >Create a New Post</button>
   </div>
 
   <div>
     <mat-toolbar>
-      <mat-form-field style="width: 100%" >
+      <mat-form-field style="width: 100%" appearance="fill">
       <input  
              matInput 
              [(ngModel)]="searchText" 
@@ -17,7 +17,6 @@
     </mat-form-field>
     </mat-toolbar>
   </div>
-
 
   <mat-tab-group>
     <mat-tab label="All">
@@ -44,7 +43,7 @@
 
             <mat-card-actions [align]="'end'">
               
-                <button mat-stroked-button (click)="goToPostDetails(post.id)">See more details or leave a reply..</button>
+                <button mat-raised-button (click)="goToPostDetails(post.id)">See more details or leave a reply..</button>
               
             </mat-card-actions>
           </mat-card>
@@ -53,18 +52,15 @@
             
     </mat-tab>
     <mat-tab label="My Posts"> 
-      <div class="my-3" *ngFor="let post of posts | filter : searchText" >
+      <div class="my-3" *ngFor="let post of postsOfUser | filter : searchText" >
           
         <mat-card class="card width:fill">
           <mat-card-header>
             <div mat-card-avatar class="card-header-image"></div>
-              
-          
+                       
               <mat-card-title>{{post.userName}}</mat-card-title>
               <mat-card-subtitle>{{post.dateOfCreation | date : 'medium'}}</mat-card-subtitle>
-              <!--mat-card-title-group>
-            </mat-card-title-group-->
-            
+
           </mat-card-header>
 
           <mat-card-content>
@@ -75,15 +71,16 @@
 
           <mat-card-actions [align]="'end'">
             
-              <button mat-stroked-button (click)="goToPostDetails(post.id)">See more details or leave a reply..</button>
+              <button mat-raised-button (click)="goToPostDetails(post.id)">See more details or leave a reply..</button>
             
           </mat-card-actions>
         </mat-card>
 
     </div>
    </mat-tab>
+
     <mat-tab label="My Replies"> 
-      <div class="my-3" *ngFor="let post of posts | filter : searchText" >
+      <div class="my-3" *ngFor="let post of postsOfUserReplies | filter : searchText" >
           
         <mat-card class="card width:fill">
           <mat-card-header>
@@ -105,7 +102,7 @@
 
           <mat-card-actions [align]="'end'">
             
-              <button mat-stroked-button (click)="goToPostDetails(post.id)">See more details or leave a reply..</button>
+              <button mat-raised-button (click)="goToPostDetails(post.id)">See more details or leave a reply..</button>
             
           </mat-card-actions>
         </mat-card>

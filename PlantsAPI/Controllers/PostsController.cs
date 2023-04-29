@@ -4,6 +4,7 @@ using PlantsAPI.Models;
 
 namespace PlantsAPI.Controllers
 {
+    
     [Route("api/posts")]
     [ApiController]
     public class PostsController : ControllerBase
@@ -33,7 +34,7 @@ namespace PlantsAPI.Controllers
 
 
         [HttpGet]
-        [Route("api/posts/${userId}/posts")]
+        [Route("{userId}/posts")]
         public async Task<ActionResult<Post>> GetPostByUser(Guid userId)
         {
             var post = await unitOfWork.Posts.GetPostsByUser(userId);
@@ -42,7 +43,7 @@ namespace PlantsAPI.Controllers
 
 
         [HttpGet]
-        [Route("api/posts/${userId}/replies")]
+        [Route("{userId}/replies")]
         public async Task<ActionResult<Post>> GetPostByUserReplies(Guid userId)
         {
             var post = await unitOfWork.Posts.GetPostsByUserReplies(userId);

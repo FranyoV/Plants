@@ -19,14 +19,15 @@ namespace PlantsAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<User>> Register([FromBody] LoginRequest request)
+        [Route("register")]
+        public async Task<ActionResult<User>> Register([FromBody] RegisterRequest request)
         {
             string passwordSalt = unitOfWork.Auth.GenerateSalt(10);
             string passwordHash = unitOfWork.Auth.CreatePasswordHash(request.Password, passwordSalt);
             
             User newUser = new User();
             newUser.Name = request.Username;
-            newUser.EmailAddress = request.EmailAddress;
+            newUser.EmailAddress = request.Email;
            // newUser.ImageUrl = request.ImageUrl;
             newUser.PasswordHash = passwordHash;
             newUser.PasswordSalt = passwordSalt;
@@ -51,7 +52,7 @@ namespace PlantsAPI.Controllers
 
             string passwordHash = unitOfWork.Auth.CreatePasswordHash(request.Password, user.PasswordSalt);
 
-            if ( string.Compare(passwordHash, user.PasswordHash, true) != 0)
+            if (string.Compare(passwordHash, user.PasswordHash, true) != 0)
             {
                 return Ok(new LoginResponse(LoginStatus.WrongPassword));
             }
@@ -65,6 +66,12 @@ namespace PlantsAPI.Controllers
 
             return Ok(response);
 
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<string>> GetMe()
+        {
+            return unitOfWork.UserContext.GetMe();
         }
 
     }

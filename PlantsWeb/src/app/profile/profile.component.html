@@ -1,26 +1,38 @@
 
-<div class="container d-flex justify-content-center align-items-center ">
+<div class="container  ">
     <br>
     <mat-card align-center>
         <mat-card-header>
-            <div mat-card-avatar class="card-header-image"></div>
+            
+                <div mat-card-avatar class="card-header-image"></div>
            
-            <mat-card-title >{{this.currentUser?.name}}</mat-card-title>
+                <mat-card-title >{{this.currentUser?.name}}</mat-card-title>
+    
+            <mat-card-title-group>
+                <mat-card-actions >
+                    <button mat-stroked-button color="warn" (click)="deleteUser()">Delete profile</button>
+                    <button mat-stroked-button (click)="logout()">Logout</button>
+                </mat-card-actions>
+            </mat-card-title-group>
 
-            <button mat-raised-button>Delete profile</button>
-            <button mat-raised-button>Logout</button>
 
         </mat-card-header>
+
+        <mat-divider ></mat-divider>
     <mat-card-content>
+    
     <div class="row">
         <div class="col">
             <div class="chart-container">
                 <canvas id="profileInfo" #myChart></canvas>
             </div>
+            
         </div>
+        
+        <mat-divider [vertical]="true"></mat-divider>
         <div class="col">
 
-            <form [formGroup]="editForm">
+            <form [formGroup]="editForm" class="d-flex justify-content-center align-items-center">
 
                 <h3>Change profile data</h3>
         
@@ -59,12 +71,12 @@
                 <button type="submit" [disabled]="editForm.invalid" mat-raised-button>Edit profile</button>
             </form>
         
-                <mat-divider></mat-divider>
-        
-           
+                
         </div>
+        <mat-divider [vertical]="true"></mat-divider>
+
         <div class="col">
-            <form [formGroup]="changePasswordForm">
+            <form [formGroup]="changePasswordForm" class="d-flex justify-content-center align-items-center">
         
                 <h3>Change password</h3>
         

@@ -1,5 +1,6 @@
 ﻿using PlantsAPI.Data;
 using PlantsAPI.Repositories;
+using PlantsAPI.Services;
 
 namespace PlantsAPI.Configuration
 {
@@ -16,6 +17,7 @@ namespace PlantsAPI.Configuration
         public IReplyRepository Replies { get; private set; }
         public IItemsRepository Items { get; private set; }
         public IAuthRepository Auth { get; private set; }
+        public IUserContext UserContext {get; private set; }
 
         public UnitOfWork(PlantsDbContext _plantsDbContext, 
             ILoggerFactory _loggerFactory,
@@ -33,6 +35,7 @@ namespace PlantsAPI.Configuration
             this.Replies = new ReplyRepository(dbContext, logger);
             this.Items = new ItemsRepository(dbContext, logger);
             this.Auth = new AuthRepository(dbContext, logger, configuration);
+            this.UserContext = new UserContext(_httpContextAccessor);
         }
 
         public async Task SaveChangesAsync()

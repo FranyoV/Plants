@@ -53,9 +53,9 @@ namespace PlantsAPI.Repositories
                 var hashBuilder = new StringBuilder();
                 foreach (var currentByte in passwordHashBytes)
                 {
-                    hashBuilder.AppendFormat("{§:X2}", currentByte);
+                    hashBuilder.AppendFormat("{0:X2}", currentByte);
                 }
-
+               
                 return hashBuilder.ToString();
             }
         }

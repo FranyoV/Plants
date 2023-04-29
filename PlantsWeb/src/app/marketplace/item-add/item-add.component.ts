@@ -1,10 +1,12 @@
 import { formatDate } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { DataService } from 'src/app/data.service';
 import { Item } from 'src/app/models/Item';
 import { ItemType } from 'src/app/models/ItemType';
+import { SnackbarComponent } from 'src/app/snackbar/snackbar.component';
 import { WebApiService } from 'src/app/webapi.service';
 
 @Component({
@@ -27,7 +29,8 @@ export class ItemAddComponent {
     private formBuilder: FormBuilder,
     private webApi: WebApiService,
     private router: Router,
-    private data: DataService
+    private data: DataService,
+    private snackBar: MatSnackBar
     ){}
 
   addItem(){
@@ -50,8 +53,11 @@ export class ItemAddComponent {
       next: (res) => {
         this.items.push(res),
         this.newMessage(this.items),
-        this.router.navigate(['marketplace']); },
-      error: (err) => {console.log(err)}
+        this.router.navigate(['marketplace']),
+        this.openSnackBar("Successfully added item for sale!"); },
+      error: (err) => {
+        this.openSnackBar("Couldn't add item. Try again!"),
+        console.log(err)}
     })
     
     
@@ -65,4 +71,10 @@ export class ItemAddComponent {
     this.router.navigate(['/marketplace']);
   }
 
+  openSnackBar(message: string) {
+    this.snackBar.openFromComponent(SnackbarComponent, {
+      data: message,
+      duration: 3 * 1000,
+    });
+  }
 }

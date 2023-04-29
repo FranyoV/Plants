@@ -34,10 +34,10 @@ export class MarketplaceComponent  implements OnInit, AfterViewInit, OnDestroy {
     private router: Router,
     private webApi: WebApiService,
     private data : DataService,
-    ) {
+    ) 
+    {}
 
-
-  }
+    
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
@@ -68,17 +68,25 @@ export class MarketplaceComponent  implements OnInit, AfterViewInit, OnDestroy {
 
 
 
-  openDialog(): void {
+  openDialog(item: Item): void {
 
     const dialogRef = this.dialog.open(ItemDetailsComponent, {
-      data: {name: this.name, animal: this.animal},
+      data: {
+        name: item.name, 
+        description: item.description, 
+        type: item.type,
+        date: item.date,
+        price: item.price,
+        username: item.user?.name
+      },
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      this.animal = result;
+      
     });
   }
+
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;

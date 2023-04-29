@@ -1,19 +1,22 @@
+<div class="dialog">
+  <h1 mat-dialog-title>Item Details</h1>
+  <mat-dialog-content>
+      <p>Name: {{data.name}} </p>
+      <p>Description:{{data.name}} </p>
+      <p>Type: {{data.type}}</p>
+      <p>Price: {{data.price}}</p>
+      <p>Username: {{data.user?.name}}</p>
+      <p>Date: {{data.date | date }}</p>
+  
+    <mat-form-field appearance="outline">
+      <mat-label>Note</mat-label>
+      <input matInput >
+    </mat-form-field>
 
-<h1 mat-dialog-title>Hi {{data.name}}</h1>
-<div mat-dialog-content>
-    <p>Name: </p>
-    <p>Description</p>
-    <p>Type</p>
-    <p>Price</p>
-    <p>Username</p>
-    <p>Date</p>
-  <p>Note: </p>
-  <mat-form-field appearance="fill">
-    <mat-label>Favorite Animal</mat-label>
-    <input matInput [(ngModel)]="data.animal">
-  </mat-form-field>
-</div>
-<div mat-dialog-actions>
-  <button mat-button (click)="onNoClick()">Cancel</button>
-  <button mat-button [mat-dialog-close]="data.animal" cdkFocusInitial>Ok</button>
+    <mat-dialog-actions [align]="'end'">
+      <button mat-raised-button (click)="onNoClick()">Cancel</button>
+      <button mat-raised-button [mat-dialog-close]="data.name" cdkFocusInitial>Ok</button>
+    </mat-dialog-actions>
+  </mat-dialog-content>
+
 </div>

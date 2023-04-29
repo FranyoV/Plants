@@ -1,10 +1,12 @@
 import { formatDate } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/data.service';
 import { Plant } from 'src/app/models/Plant';
+import { SnackbarComponent } from 'src/app/snackbar/snackbar.component';
 import { WebApiService } from 'src/app/webapi.service';
 
 @Component({
@@ -31,7 +33,8 @@ export class PlantsAddComponent implements OnInit{
     private formBuilder: FormBuilder,
     private data: DataService,
     private router: Router,
-    private webApi: WebApiService
+    private webApi: WebApiService,
+    private snackBar: MatSnackBar
   ){}
 
 
@@ -67,8 +70,11 @@ export class PlantsAddComponent implements OnInit{
           next: (res) => {
             this.plants.push(res), 
             this.newMessage(this.plants),
-            this.router.navigate(['plants']);},
-          error: (err) => { console.error("Adding plant to database failed.", err)}
+            this.router.navigate(['plants'])
+            this.openSnackBar('Plant successfully created!');},
+          error: (err) => { 
+            this.openSnackBar("Couldn't add plant. Try again!"),
+            console.error("Adding plant to database failed.", err)}
         });
       }
      
@@ -76,6 +82,13 @@ export class PlantsAddComponent implements OnInit{
 
   newMessage(updatedPlants : Plant[]) {
     this.data.changePlantsMessage(updatedPlants);
+  }
+
+  openSnackBar(message: string) {
+    this.snackBar.openFromComponent(SnackbarComponent, {
+      data: message,
+      duration: 3 * 1000,
+    });
   }
 
 }

@@ -10,6 +10,7 @@ import { User } from './models/User';
 import { LoginRequest } from './models/LoginRequest';
 import { LoginResponse } from './models/LoginResponse';
 import { Item } from './models/Item';
+import { RegisterRequest } from './models/RegisterRequest';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +25,7 @@ export class WebApiService {
   constructor(public http: HttpClient) { }
 
   //Auth
-  register(request: LoginRequest): Observable<any> {
+  register(request: RegisterRequest): Observable<any> {
     let url = `${this.baseUrl}/api/auth/register`
     return this.http.post<any>(url, request);
   }
@@ -39,10 +40,14 @@ export class WebApiService {
     return this.http.get(url, {responseType: 'text'});
   }
 
-
-  getUserById(id: string): Observable<User> {
+   getUserById(id: string): Observable<User> {
     let url = `${this.baseUrl}/api/users/${id}`;
     return this.http.get<User>(url);
+  }
+
+  deleteUser(userId: string): Observable<User> {
+    let url = `${this.baseUrl}/api/users/${userId}`;
+    return this.http.delete<User> (url, this.httpOptions);
   }
 
 
@@ -130,14 +135,14 @@ export class WebApiService {
     return this.http.get<Post>(url);
   }
 
-  getPostByUser(userId: string): Observable<Post> {
+  getPostByUser(userId: string): Observable<Post[]> {
     let url = `${this.baseUrl}/api/posts/${userId}/posts`;
-    return this.http.get<Post>(url);
+    return this.http.get<Post[]>(url);
   }
 
-  getPostByUserReplies(userId: string): Observable<Post> {
+  getPostByUserReplies(userId: string): Observable<Post[]> {
     let url = `${this.baseUrl}/api/posts/${userId}/replies`;
-    return this.http.get<Post>(url);
+    return this.http.get<Post[]>(url);
   }
 
   getPostsCount(userId: string) : Observable<number>{
