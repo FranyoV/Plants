@@ -45,17 +45,19 @@ export class PostAddComponent implements OnInit{
 
 
   ngOnInit(): void {
+    this.webApi.getMe().subscribe({
+      next: (res) => {
+        this.currentUserId = res, console.log("You are logged in with user: ",this.currentUserId);
+      },
+      error: (err) => {this.openSnackBar("something went wrong. Try again later!")
+      },
+
+    })
+
     this.webApi.getPosts().subscribe({
       next: (res) => { this.posts = res },
       error: (err) => { console.error("Coutldn't get posts.", err)}
     })
-  }
-
-  openSnackBar(message: string) {
-    this.snackBar.openFromComponent(SnackbarComponent, {
-      data: message,
-      duration: 3 * 1000,
-    });
   }
 
 
@@ -66,7 +68,7 @@ export class PostAddComponent implements OnInit{
       this.addPostForm.value.content!,
       this.addPostForm.value.imageUrl!,
       new Date(),
-      "41b37237-054b-4bd5-79d1-08db48b0dc15",
+      this.currentUserId,
       null
     )
 
@@ -80,11 +82,20 @@ export class PostAddComponent implements OnInit{
            this.newMessage(this.posts),
            this.router.navigate(['main'])
            this.openSnackBar("New post created!"); },
-        error: (err) => { this.openSnackBar("Something went wrong!"), console.error("Failed to create the new post", err)}
+        error: (err) => { 
+          this.openSnackBar("Something went wrong!"), 
+          console.error("Failed to create the new post", err)}
       })
     }
   }
 
+  openSnackBar(message: string) {
+    this.snackBar.openFromComponent(SnackbarComponent, {
+      data: message,
+      duration: 3 * 1000,
+    });
+  }
+  
   newMessage(updatedPosts : Post[]) {
     this.data.changePostsMessage(updatedPosts);
   }
