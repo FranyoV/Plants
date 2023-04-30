@@ -1,6 +1,3 @@
-import { Guid } from "guid-typescript";
-import { Maintenance } from "./Maintenance";
-
 export class PlantDto {
 
     constructor(

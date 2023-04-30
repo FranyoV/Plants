@@ -24,11 +24,6 @@ namespace PlantsAPI.Repositories
                 {
                     var user = dbContext.Users.FirstOrDefault(x => x.Id == post.UserId);
 
-                   /* UserDto UserDto = new UserDto()
-                    {
-                        Id = user.Id,
-                        Name = user.Name
-                    };*/
                     PostDto postDto = new PostDto()
                     {
                         Id = post.Id,
@@ -49,33 +44,84 @@ namespace PlantsAPI.Repositories
         }
 
 
-        public async Task<IEnumerable<Post>> GetPostsByUser(Guid id)
+        public async Task<IEnumerable<PostDto>> GetPostsByUser(Guid id)
         {
             if (id == Guid.Empty) throw new ArgumentNullException(nameof(id));
 
             List<Post> postsOfUser = await dbSet.Where(p => p.UserId == id).ToListAsync();
+            List<PostDto> postDtos = new List<PostDto>();
+            
 
-            return postsOfUser;
+            if (postsOfUser.Count > 0)
+            {
+                foreach (var post in postsOfUser)
+                {
+                    var user = dbContext.Users.FirstOrDefault(x => x.Id == post.UserId);
+
+                    PostDto postDto = new PostDto()
+                    {
+                        Id = post.Id,
+                        Title = post.Title,
+                        Content = post.Content,
+                        DateOfCreation = post.DateOfCreation,
+                        ImageUrl = post.ImageUrl,
+                        UserName = user.Name,
+                        UserId = post.UserId
+                    };
+                    postDtos.Add(postDto);
+                }
+
+            }
+            var postsInOrder = postDtos.OrderByDescending(x => x.DateOfCreation);
+
+            return postsInOrder;
         }
 
 
-        public async Task<IEnumerable<Post>> GetPostsByUserReplies(Guid userid)
+        public async Task<IEnumerable<PostDto>> GetPostsByUserReplies(Guid userid)
         {
 
-            var repliesOfUser = await dbContext.Replies.Where(r => r.UserId == userid).ToListAsync();
+            List<Reply> repliesOfUser = await dbContext.Replies.Where(r => r.UserId == userid).ToListAsync();
+            var repliesOfUserOrdered = repliesOfUser.OrderByDescending(x => x.DateOfCreation);
 
             List<Post> postsWithUsersReplies = new List<Post>();
+            List<PostDto> postDtos = new List<PostDto>();
 
-            foreach (var reply in repliesOfUser){
+
+            foreach (var reply in repliesOfUserOrdered)
+            {
                 var post = await dbContext.Posts.Where(p => p.Id == reply.PostId).ToListAsync();
                 if (post != null)
                 {
                     postsWithUsersReplies.AddRange(post);
                 } 
             }
+            
 
-         
-            return postsWithUsersReplies;
+            if (postsWithUsersReplies.Count > 0)
+            {
+                foreach (var post in postsWithUsersReplies)
+                {
+                    var user = dbContext.Users.FirstOrDefault(x => x.Id == post.UserId);
+
+                    PostDto postDto = new PostDto()
+                    {
+                        Id = post.Id,
+                        Title = post.Title,
+                        Content = post.Content,
+                        DateOfCreation = post.DateOfCreation,
+                        ImageUrl = post.ImageUrl,
+                        UserName = user.Name,
+                        UserId = post.UserId
+                    };
+                    postDtos.Add(postDto);
+                }
+
+            }
+            //var postsInOrder = postDtos.OrderByDescending(x => x.DateOfCreation);
+
+
+            return postDtos;
         }
 
 

@@ -11,14 +11,14 @@ namespace PlantsAPI.Controllers
     public class PlantsController : ControllerBase
     {
         private readonly IUnitOfWork unitOfWork;
-        private Guid tokenId;
 
         public PlantsController(IUnitOfWork unitOFWork)
         {
             this.unitOfWork = unitOFWork;
-            tokenId = Guid.Parse(unitOfWork.UserContext.GetMe());
         }
 
+
+        //TODO AUTHORIZATION
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Plant>>> GetPlants()
         {
@@ -27,6 +27,8 @@ namespace PlantsAPI.Controllers
             return Ok(plants);
         }
 
+
+        //TODO AUTHORIZATION
         [HttpGet]
         [Route("{id}")]
         public async Task<ActionResult<Plant>> GetPlantById(Guid id)
@@ -40,10 +42,12 @@ namespace PlantsAPI.Controllers
         [Route("user/{userId}")]
         public async Task<ActionResult<IEnumerable<Plant>>> GetPlantsOfUser([FromRoute] Guid userId)
         {
-
-            var plants = await unitOfWork.Plants.GetPlantsOfUser(userId);
-            var context = unitOfWork.UserContext.GetMe();
-            return Ok(plants);
+            if (unitOfWork.UserContext.HasAuthorization(userId))
+            {
+                var plants = await unitOfWork.Plants.GetPlantsOfUser(userId);
+                return Ok(plants);
+            }
+            return Unauthorized();
         }
 
 
@@ -51,28 +55,42 @@ namespace PlantsAPI.Controllers
         [Route("user/{userId}/count")]
         public async Task<ActionResult<int>> GetPlantsCount ([FromRoute] Guid userId)
         {
-            var plants = await unitOfWork.Plants.GetPlantsCount(userId);
-            return Ok(plants);
+            if (unitOfWork.UserContext.HasAuthorization(userId))
+            {
+                var plants = await unitOfWork.Plants.GetPlantsCount(userId);
+                return Ok(plants);
+            }
+            return Unauthorized();
         }
 
-
+        
         [HttpPost]
         public async Task<ActionResult<Plant>> PostPlant([FromBody] Plant plant)
         {
-            var newPlant = await unitOfWork.Plants.AddPlant(plant);
-            await unitOfWork.SaveChangesAsync();
-            return Ok(newPlant);
+            if (unitOfWork.UserContext.HasAuthorization(plant.UserId))
+            {
+                var newPlant = await unitOfWork.Plants.AddPlant(plant);
+                await unitOfWork.SaveChangesAsync();
+                return Ok(newPlant);
+            }
+            return Unauthorized();
         }
+
 
         [HttpPut]
         [Route("{id}")]
         public async Task<ActionResult<Plant>> PutPlant([FromBody] Plant plant)
         {
-            var modifiedPlant = await unitOfWork.Plants.EditPlant(plant);
-            await unitOfWork.SaveChangesAsync();
-            return Ok(modifiedPlant);
+            if (unitOfWork.UserContext.HasAuthorization(plant.UserId))
+            {
+                var modifiedPlant = await unitOfWork.Plants.EditPlant(plant);
+                await unitOfWork.SaveChangesAsync();
+                return Ok(modifiedPlant);
+            }
+            return Unauthorized();
         }
 
+        //TODO AUTHORIZATION
         [HttpDelete]
         [Route("{id}")]
         public async Task<ActionResult<bool>> DeletePlant(Guid id)

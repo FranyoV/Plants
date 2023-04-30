@@ -57,20 +57,21 @@ export class ProfileComponent implements OnInit, OnChanges {
     this.route.paramMap.subscribe( (params) => {
       const id = params.get("userId");
       this.currentUserId = id!;
+      this.getPlantCount();
+      this.getReplyCount();
+      this.getPostCount();
+      this.renderMyChart();
     } )
 
     this.webApi.getUserById(this.currentUserId).subscribe({
       next: (res) => { this.currentUser = res;
+
         this.editForm.controls['username'].setValue(res.name);
         this.editForm.controls['email'].setValue(res.email);
         },
       error: (error) => {console.log("No user with this id.", error)}
     })
-    this.getPlantCount();
-    this.getReplyCount();
-    this.getPostCount();
 
-    this.renderMyChart();
     
   }
 
@@ -103,21 +104,21 @@ export class ProfileComponent implements OnInit, OnChanges {
  
   getReplyCount(){
     this.webApi.getRepliesCount(this.currentUserId).subscribe({
-      next: (res) => { this.repliesCount = res, console.log(res)},
+      next: (res) => { this.repliesCount = res, console.log(res), this.renderMyChart();},
       error: (err) => { console.error(err)}
     })
   }
 
   getPostCount(){
     this.webApi.getPostsCount(this.currentUserId).subscribe({
-      next: (res) => { this.postsCount = res, console.log(res)},
+      next: (res) => { this.postsCount = res, console.log(res), this.renderMyChart();},
       error: (err) => { console.error(err)}
     })
   }
 
   getPlantCount(){
     this.webApi.getPlantsCount(this.currentUserId).subscribe({
-      next: (res) => { this.plantCount = res, console.log(res)},
+      next: (res) => { this.plantCount = res, console.log(res), this.renderMyChart();},
       error: (err) => { console.error(err)}
     })
   }
@@ -144,7 +145,7 @@ export class ProfileComponent implements OnInit, OnChanges {
       datasets: [
         {
           //label: 'My First Dataset',
-          data: [this.postsCount, this.plantCount, this.repliesCount, 2],
+          data: [this.postsCount, this.plantCount, this.repliesCount, 1],
           backgroundColor: [
             'rgb(255, 99, 132)',
             'rgb(54, 162, 235)',

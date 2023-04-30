@@ -24,5 +24,18 @@ namespace PlantsAPI.Services
             }
             return result;
         }
+
+
+        public bool HasAuthorization(Guid userId)
+        {
+            bool hasAuthorization = false;
+            if (userId == Guid.Parse(GetMe()))
+            {
+                hasAuthorization = true;
+            } 
+            return hasAuthorization;
+        }
+
+        
     }
 }

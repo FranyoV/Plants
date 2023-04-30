@@ -15,7 +15,7 @@ import { ItemAddComponent } from './marketplace/item-add/item-add.component';
 import { ItemEditComponent } from './marketplace/item-edit/item-edit.component';
 
 const routes: Routes = [
-  {path: '', component: HeaderComponent,
+  {path: '', component: HeaderComponent, 
    children: [
     {path: 'main', component: PostsListComponent},
     {path: 'plants', component: PlantsListComponent},

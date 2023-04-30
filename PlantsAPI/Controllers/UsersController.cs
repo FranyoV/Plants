@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PlantsAPI.Configuration;
 using PlantsAPI.Models;
@@ -8,6 +9,7 @@ namespace PlantsAPI.Controllers
 {
     [Route("api/users")]
     [ApiController]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly IUnitOfWork unitOfWork;
@@ -17,6 +19,7 @@ namespace PlantsAPI.Controllers
             this.unitOfWork = unitOFWork;
         }
 
+        //TODO AUTHORIZATION
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
@@ -25,6 +28,7 @@ namespace PlantsAPI.Controllers
             return Ok(users);
         }
 
+        //TODO AUTHORIZATION
         [HttpGet]
         [Route("{id}")]
         public async Task<ActionResult<User>> GetUser(Guid id)
@@ -33,6 +37,7 @@ namespace PlantsAPI.Controllers
             return Ok(user);
         }
 
+        //TODO AUTHORIZATION
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(User user)
         {
@@ -45,18 +50,27 @@ namespace PlantsAPI.Controllers
         [Route("{id}")]
         public async Task<ActionResult<User>> PutUser(User user)
         {
-            var modifiedUser = await unitOfWork.Users.EditUser(user);
-            await unitOfWork.SaveChangesAsync();
-            return Ok(modifiedUser);
+            if (unitOfWork.UserContext.HasAuthorization(user.Id))
+            {
+                var modifiedUser = await unitOfWork.Users.EditUser(user);
+                await unitOfWork.SaveChangesAsync();
+                return Ok(modifiedUser);
+            }
+            return Unauthorized();
+
         }
 
         [HttpDelete]
         [Route("{id}")]
         public async Task<ActionResult<User>> DeleteUser(Guid id)
         {
-            var result = await unitOfWork.Users.DeleteUser(id);
-            await unitOfWork.SaveChangesAsync();
-            return Ok(result);
+            if (unitOfWork.UserContext.HasAuthorization(id))
+            {
+                var result = await unitOfWork.Users.DeleteUser(id);
+                await unitOfWork.SaveChangesAsync();
+                return Ok(result);
+            }
+            return Unauthorized();
         }
     }
 }

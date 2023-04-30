@@ -15,6 +15,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class PostDetailsComponent implements OnInit {
 
+  currentUserId!: string;
   currentPost: Post | undefined ;
   currentPostId: string = "";
   replies: Reply[] = [];
@@ -43,19 +44,31 @@ export class PostDetailsComponent implements OnInit {
       this.currentPostId = id!;
     } )
 
-    
+    this.webApi.getMe().subscribe({
+      next: (res) => {
+        this.currentUserId = res, 
+        console.log("You are logged in with user: ",this.currentUserId),
+        this.getPostById();
+        this.getRepliesOfPost();
+      },
+      error: (err) => {this.openSnackBar("something went wrong. Try again later!"),  console.error(err);
+      },
+    })
 
+  }
+
+  getPostById(){
     this.webApi.getPostById(this.currentPostId).subscribe({
       next: (result) => { this.currentPost = result},
-      error: (error) => { console.error("No matching posts found for this id.", error)}
+      error: (error) => {this.openSnackBar("something went wrong. Try again later!"), console.error("No matching posts found for this id.", error)}
     });
+  }
 
+  getRepliesOfPost(){
     this.webApi.getRepliesOfPost(this.currentPostId).subscribe({
       next: (res) => { this.replies = res},
-      error: (error) => { console.log( "NoReplies for this post.", error)}
-      
+      error: (error) => {this.openSnackBar("something went wrong. Try again later!"), console.log( "NoReplies for this post.", error)}
     })
-    
   }
 
   addReply(){
@@ -64,9 +77,8 @@ export class PostDetailsComponent implements OnInit {
       this.addReplyForm.value.content!,
       new Date(),
       this.currentPostId,
-      "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+      this.currentUserId
     )
-    //this.replies.push(newReply);
 
     this.webApi.addReplies(newReply).subscribe({
       next: (res) => { 

@@ -16,6 +16,7 @@ import { WebApiService } from 'src/app/webapi.service';
 })
 export class PlantsAddComponent implements OnInit{
 
+  currentUserId!: string;
   plants: Plant[] = [];
   subscription!: Subscription;
 
@@ -39,12 +40,22 @@ export class PlantsAddComponent implements OnInit{
 
 
   ngOnInit(){
-
-    this.webApi.getPlantsOfUser("3fa85f64-5717-4562-b3fc-2c963f66afa6").subscribe({
-      next: (plants) => {this.plants = plants},
-      error: (error) => {console.error('Getting plant for user failed.',error)}
+    this.webApi.getMe().subscribe({
+      next: (res) => {
+        this.currentUserId = res, 
+        console.log("You are logged in with user: ",this.currentUserId),
+        this.getPlantOfUser();
+      },
+      error: (err) => {this.openSnackBar("something went wrong. Try again later!"),  console.error(err);
+      },
     })
+  }
 
+  getPlantOfUser(){
+    this.webApi.getPlantsOfUser(this.currentUserId).subscribe({
+      next: (plants) => {this.plants = plants},
+      error: (error) => {this.openSnackBar("Something went wrong. Try again!"), console.error('Getting plant for user failed.',error)}
+    })
   }
 
 
@@ -59,7 +70,7 @@ export class PlantsAddComponent implements OnInit{
       new Date(this.addForm.value.lastNotification!),
       null ,
       null,
-      "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+      this.currentUserId
       );
 
 

@@ -7,7 +7,7 @@
   </div>
 
   <div>
-    <mat-toolbar>
+    
       <mat-form-field style="width: 100%" appearance="fill">
       <input  
              matInput 
@@ -15,7 +15,7 @@
              placeholder="Search" 
              autocomplete="off" >
     </mat-form-field>
-    </mat-toolbar>
+    
   </div>
 
   <mat-tab-group>
@@ -30,6 +30,11 @@
             
                 <mat-card-title>{{post.userName}}</mat-card-title>
                 <mat-card-subtitle>{{post.dateOfCreation | date : 'medium'}}</mat-card-subtitle>
+                <mat-card-actions [align]="'end'">
+                  <button *ngIf="post.userId==currentUserId" mat-raised-button color="warn">Delete</button>
+                </mat-card-actions>
+                
+            
                 <!--mat-card-title-group>
               </mat-card-title-group-->
               
@@ -87,10 +92,11 @@
             <div mat-card-avatar class="card-header-image"></div>
               
           
-              <mat-card-title>{{post.userName}}</mat-card-title>
+              <mat-card-title>{{post.userName}} </mat-card-title>
               <mat-card-subtitle>{{post.dateOfCreation | date : 'medium'}}</mat-card-subtitle>
               <!--mat-card-title-group>
             </mat-card-title-group-->
+            <button *ngIf="post.userId==currentUserId" mat-raised-button color="warn">Delete</button>
             
           </mat-card-header>
 

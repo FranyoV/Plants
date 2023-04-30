@@ -38,9 +38,10 @@ export class PostsListComponent implements OnInit, OnDestroy{
         this.currentUserId = res, console.log("You are logged in with user: ",this.currentUserId);
         this.getPostByUserReplies();
         this.getPostByUser();
-    }
-
-    })
+      },
+      error: (err) => {this.openSnackBar("Something went wrong. Try again!"), console.error('Getting plant for user failed.',err)}
+      })
+  
     
     this.data.currentUserIdMessage.subscribe({
       next: (res) => {this.currentUserId = res, console.log("You are logged in with user: ",this.currentUserId)}
@@ -105,7 +106,13 @@ export class PostsListComponent implements OnInit, OnDestroy{
       this.pageSlice = this.posts.slice(startIndex, endIndex);
 
   }
-  //this.router.navigate( [`${this.currentUserIdNumber}/details`] )
+  
+  openSnackBar(message: string) {
+    this.snackBar.openFromComponent(SnackbarComponent, {
+      data: message,
+      duration: 3 * 1000,
+    });
+  }
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();

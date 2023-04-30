@@ -35,7 +35,7 @@ namespace PlantsAPI.Configuration
             this.Replies = new ReplyRepository(dbContext, logger);
             this.Items = new ItemsRepository(dbContext, logger);
             this.Auth = new AuthRepository(dbContext, logger, configuration);
-            this.UserContext = new UserContext(_httpContextAccessor);
+            this.UserContext = new UserContext(httpContextAccessor);
         }
 
         public async Task SaveChangesAsync()

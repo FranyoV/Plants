@@ -1,6 +1,3 @@
-import { Guid } from "guid-typescript";
-import { UserDto } from "./UserDto";
-
 export class Post {
 
     constructor(

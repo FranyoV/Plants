@@ -9,6 +9,8 @@ import { MatDialog } from '@angular/material/dialog';
 import {MatMenuTrigger} from '@angular/material/menu';
 import { Dialog } from '@angular/cdk/dialog';
 import { DialogComponent } from 'src/app/plants/plants-list/dialog/dialog.component';
+import { SnackbarComponent } from 'src/app/snackbar/snackbar.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-plants',
@@ -17,6 +19,7 @@ import { DialogComponent } from 'src/app/plants/plants-list/dialog/dialog.compon
 })
 export class PlantsListComponent implements OnInit, OnDestroy {
 
+  currentUserId!: string;
   plants: Plant[] = [];
   subscription!: Subscription;
   menuTrigger!: MatMenuTrigger;
@@ -26,7 +29,8 @@ export class PlantsListComponent implements OnInit, OnDestroy {
     private router : Router,
     private data : DataService,
     private webApi : WebApiService,
-    private dialog : MatDialog
+    private dialog : MatDialog,
+    private snackBar : MatSnackBar
     ){}
 
 
@@ -34,11 +38,21 @@ export class PlantsListComponent implements OnInit, OnDestroy {
 
     this.subscription = this.data.currentPlantsMessage.subscribe( message => this.plants = message ) ;
 
-    this.webApi.getPlantsOfUser("3fa85f64-5717-4562-b3fc-2c963f66afa6").subscribe({
+    this.webApi.getMe().subscribe({
+      next: (res) => {
+        this.currentUserId = res, console.log("You are logged in with user: ",this.currentUserId);
+        this.getPlantsOfUser();
+    },
+    error: (err) => {this.openSnackBar("Something went wrong. Try again!"), console.error('Getting plant for user failed.',err)}
+    })
+
+  }
+
+  getPlantsOfUser(){
+    this.webApi.getPlantsOfUser(this.currentUserId).subscribe({
       next: (result) => {this.plants = result},
-      error: (error) => {console.error('Getting plant for user failed.',error)}
+      error: (error) => {this.openSnackBar("Something went wrong. Try again!"), console.error('Getting plant for user failed.',error)}
     }) 
-    
   }
 
   deletePlant(plantId: string){
@@ -69,6 +83,13 @@ export class PlantsListComponent implements OnInit, OnDestroy {
       enterAnimationDuration,
       exitAnimationDuration,
       
+    });
+  }
+
+  openSnackBar(message: string) {
+    this.snackBar.openFromComponent(SnackbarComponent, {
+      data: message,
+      duration: 3 * 1000,
     });
   }
 

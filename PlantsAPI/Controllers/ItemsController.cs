@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PlantsAPI.Configuration;
 using PlantsAPI.Models;
 
@@ -6,6 +7,7 @@ namespace PlantsAPI.Controllers
 {
     [Route("api/items")]
     [ApiController]
+    [Authorize]
     public class ItemsController : ControllerBase
     {
         private readonly IUnitOfWork unitOfWork;
@@ -15,6 +17,7 @@ namespace PlantsAPI.Controllers
             this.unitOfWork = unitOFWork;
         }
 
+        //TODO AUTHORIZATION
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Item>>> GetItems()
         {
@@ -22,6 +25,7 @@ namespace PlantsAPI.Controllers
             return Ok(items);
         }
 
+        //TODO AUTHORIZATION
         [HttpGet]
         [Route("{id}")]
         public async Task<ActionResult<Item>> GetItemById(Guid id)
@@ -34,35 +38,53 @@ namespace PlantsAPI.Controllers
         [Route("user/{userId}")]
         public async Task<ActionResult<IEnumerable<Item>>> GetItemsOfUser([FromRoute] Guid userId)
         {
-            var items = await unitOfWork.Items.GetItemsOfUser(userId);
-            return Ok(items);
+            if (unitOfWork.UserContext.HasAuthorization(userId))
+            {
+                var items = await unitOfWork.Items.GetItemsOfUser(userId);
+                return Ok(items);
+            }
+            return Unauthorized();
         }
 
         [HttpGet]
         [Route("user/{userId}/count")]
         public async Task<ActionResult<int>> GetItemsCount([FromRoute] Guid userId)
         {
-            var items = await unitOfWork.Plants.GetPlantsCount(userId);
-            return Ok(items);
+            if (unitOfWork.UserContext.HasAuthorization(userId))
+            {
+                var items = await unitOfWork.Plants.GetPlantsCount(userId);
+                return Ok(items);
+            }
+            return Unauthorized();
         }
 
         [HttpPost]
         public async Task<ActionResult<Item>> PostPlant([FromBody] Item item)
         {
-            var newItem = await unitOfWork.Items.AddItem(item);
-            await unitOfWork.SaveChangesAsync();
-            return Ok(newItem);
+            if (unitOfWork.UserContext.HasAuthorization(item.UserId))
+            {
+                var newItem = await unitOfWork.Items.AddItem(item);
+                await unitOfWork.SaveChangesAsync();
+                return Ok(newItem);
+            }
+            return Unauthorized();
         }
 
         [HttpPut]
         [Route("{id}")]
         public async Task<ActionResult<Item>> PutItem([FromBody] Item item)
         {
-            var modifiedPlant = await unitOfWork.Items.EditItem(item);
-            await unitOfWork.SaveChangesAsync();
-            return Ok(modifiedPlant);
+            if (unitOfWork.UserContext.HasAuthorization(item.UserId))
+            {
+                var modifiedPlant = await unitOfWork.Items.EditItem(item);
+                await unitOfWork.SaveChangesAsync();
+                return Ok(modifiedPlant);
+
+            }
+            return Unauthorized();
         }
 
+        //TODO AUTHORIZATION
         [HttpDelete]
         [Route("{id}")]
         public async Task<ActionResult<bool>> DeleteItem(Guid id)
