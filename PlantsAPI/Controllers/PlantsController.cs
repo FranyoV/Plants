@@ -14,7 +14,7 @@ namespace PlantsAPI.Controllers
 
         public PlantsController(IUnitOfWork unitOFWork)
         {
-            this.unitOfWork = unitOFWork;
+            this.unitOfWork = unitOFWork ?? throw new ArgumentNullException(nameof(unitOFWork));
         }
 
 

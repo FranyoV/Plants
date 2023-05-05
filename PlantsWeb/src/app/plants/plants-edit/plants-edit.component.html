@@ -58,14 +58,15 @@
             <h3 style="text-align: center;">Maintenance info:</h3>
            
             <mat-form-field appearance="outline" >
-              <mat-label>Input</mat-label>
+              <mat-label>Last maintenance date</mat-label>
+              <mat-hint>MM/DD/YYYY</mat-hint>
               <input 
               matInput 
               [matDatepicker]="dp3" 
               type="datetime"
               formControlName="lastNotification"
               >
-              <mat-hint>MM/DD/YYYY</mat-hint>
+              
               <mat-datepicker-toggle matIconSuffix [for]="dp3"></mat-datepicker-toggle>
               <mat-datepicker #dp3  ></mat-datepicker>
             </mat-form-field>

@@ -16,7 +16,7 @@ namespace PlantsAPI.Controllers
 
         public UsersController(IUnitOfWork unitOFWork)
         {
-            this.unitOfWork = unitOFWork;
+            this.unitOfWork = unitOFWork ?? throw new ArgumentNullException(nameof(unitOFWork));
         }
 
         //TODO AUTHORIZATION
@@ -31,7 +31,7 @@ namespace PlantsAPI.Controllers
         //TODO AUTHORIZATION
         [HttpGet]
         [Route("{id}")]
-        public async Task<ActionResult<User>> GetUser(Guid id)
+        public async Task<ActionResult<UserDto>> GetUser(Guid id)
         {
             var user = await unitOfWork.Users.GetUserById(id);
             return Ok(user);

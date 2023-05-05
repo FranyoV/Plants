@@ -12,12 +12,9 @@ namespace PlantsAPI.Repositories
     {
         private readonly IConfiguration configuration;
 
-        public AuthRepository(
-            PlantsDbContext dbContext,
-            ILogger logger,
-            IConfiguration configuration) : base(dbContext, logger)
+        public AuthRepository(PlantsDbContext dbContext, ILogger logger, IConfiguration configuration) : base(dbContext, logger)
         {
-            this.configuration = configuration;
+            this.configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
 

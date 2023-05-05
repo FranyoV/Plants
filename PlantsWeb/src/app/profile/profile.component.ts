@@ -24,8 +24,7 @@ export class ProfileComponent implements OnInit, OnChanges {
   chart!: Chart;
 
   
-  editForm = this.formBuilder.group({
-    username : ['', [Validators.required, Validators.maxLength(8)]],
+  changeEmailForm = this.formBuilder.group({
     email : ['', [ Validators.required, Validators.email]],
     imageUrl: '' ,
     password: [ '', [ Validators.required]]
@@ -65,9 +64,9 @@ export class ProfileComponent implements OnInit, OnChanges {
 
     this.webApi.getUserById(this.currentUserId).subscribe({
       next: (res) => { this.currentUser = res;
-
-        this.editForm.controls['username'].setValue(res.name);
-        this.editForm.controls['email'].setValue(res.email);
+        console.log(res)
+        console.log(this.currentUser)
+        this.changeEmailForm.controls['email'].setValue(this.currentUser.email);
         },
       error: (error) => {console.log("No user with this id.", error)}
     })

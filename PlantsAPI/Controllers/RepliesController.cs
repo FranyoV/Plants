@@ -14,7 +14,7 @@ namespace PlantsAPI.Controllers
 
         public RepliesController(IUnitOfWork unitOFWork)
         {
-            this.unitOfWork = unitOFWork;
+            this.unitOfWork = unitOFWork ?? throw new ArgumentNullException(nameof(unitOFWork));
         }
 
         //TODO AUTHORIZATION

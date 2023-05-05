@@ -29,7 +29,7 @@ export class PlantsEditComponent implements OnInit{
     imageUrl: "" ,
     interval: 0,
     note: "", 
-    lastNotification: formatDate( Date(), 'yyyy-MM-dd', 'en', '+0200')
+    lastNotification: formatDate( Date(), 'yyyy-MM-dd', 'en', '+0000')
   })
 
   constructor(
@@ -68,6 +68,15 @@ export class PlantsEditComponent implements OnInit{
 
 
   editPlant(){
+    let date = new Date(this.editForm.value.lastNotification!);
+    let utcDate = new Date(
+      date.getUTCFullYear(), 
+      date.getUTCMonth(),
+      date.getUTCDate(),
+      date.getUTCHours()+4,
+      date.getUTCMinutes(),
+      date.getUTCSeconds()
+    )
    
     const modifiedPlant: Plant= new Plant(
       this.currentPlantId,
@@ -76,12 +85,13 @@ export class PlantsEditComponent implements OnInit{
       this.editForm.value.imageUrl!,
       this.editForm.value.note!,
       this.editForm.value.interval!,
-      new Date(this.editForm.value.lastNotification!),
+      utcDate,
       null,
       null,
       this.currentPlant.userId,
       );
       console.log(modifiedPlant)
+      console.log(new Date(this.editForm.value.lastNotification!).getDate());
 
       if (modifiedPlant == null){
         //snackbar -> unsuccesful add

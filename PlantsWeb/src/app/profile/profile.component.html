@@ -32,22 +32,10 @@
         <mat-divider [vertical]="true"></mat-divider>
         <div class="col">
 
-            <form [formGroup]="editForm" class="d-flex justify-content-center align-items-center">
+            <form [formGroup]="changeEmailForm" class="d-flex justify-content-center align-items-center">
 
-                <h3>Change profile data</h3>
+                <h3>Change email address</h3>
         
-                <mat-form-field class="example-full-width">
-                  <mat-label>Username</mat-label>
-                  <input matInput 
-                    type="text" 
-                    formControlName="username" 
-                    placeholder="Username">
-                    <mat-error 
-                    *ngIf="editForm.get('username')?.touched && editForm.get('username')?.errors?.['required']
-                    && editForm.get('username')?.errors?.['maxlength']
-                    && editForm.get('username')?.errors?.['minLength']
-                    "></mat-error>
-                </mat-form-field>
               
                 <mat-form-field class="example-full-width">
                     <mat-label>Email</mat-label>
@@ -56,19 +44,24 @@
                     formControlName="email" 
                     placeholder="Email">
                     <mat-error 
-                    *ngIf="editForm.get('email')?.touched && editForm.get('email')?.errors?.['required']
-                    && editForm.get('email')?.errors?.['email']
+                    *ngIf="changeEmailForm.get('email')?.touched 
+                    && changeEmailForm.get('email')?.errors?.['required']
+                    && changeEmailForm.get('email')?.errors?.['email']
                     "></mat-error>
                   </mat-form-field>
                   
                 <mat-form-field class="example-full-width">
                     <mat-label>Password</mat-label>
-                    <input matInput type="password" formControlName="password">
+                    <input 
+                    matInput 
+                    type="password" 
+                    formControlName="password">
                     <mat-error 
-                    *ngIf="editForm.get('password')?.touched && editForm.get('password')?.errors?.['required']
+                    *ngIf="changeEmailForm.get('password')?.touched 
+                    && changeEmailForm.get('password')?.errors?.['required']
                     "></mat-error>
                 </mat-form-field>
-                <button type="submit" [disabled]="editForm.invalid" mat-raised-button>Edit profile</button>
+                <button type="submit" [disabled]="changeEmailForm.invalid" mat-raised-button>Edit profile</button>
             </form>
         
                 
@@ -86,10 +79,11 @@
                     formControlName="newPassword"
                     >
                     <mat-error 
-                    *ngIf="editForm.get('newPassword')?.touched && editForm.get('newPassword')?.errors?.['required']
-                    && editForm.get('newPassword')?.errors?.['maxlength']
-                    && editForm.get('newPassword')?.errors?.['minLength']
-                    && editForm.get('newPassword')?.errors?.['pattern']
+                    *ngIf="changePasswordForm.get('newPassword')?.touched 
+                    && changePasswordForm.get('newPassword')?.errors?.['required']
+                    && changePasswordForm.get('newPassword')?.errors?.['maxlength']
+                    && changePasswordForm.get('newPassword')?.errors?.['minLength']
+                    && changePasswordForm.get('newPassword')?.errors?.['pattern']
                     "></mat-error>
                   </mat-form-field>
                   
@@ -98,10 +92,11 @@
                     <input matInput  type="currentPassword"
                     formControlName="currentPassword">
                     <mat-error 
-                    *ngIf="editForm.get('currentPassword')?.touched && editForm.get('currentPassword')?.errors?.['required']
-                    && editForm.get('currentPassword')?.errors?.['maxlength']
-                    && editForm.get('currentPassword')?.errors?.['minLength']
-                    && editForm.get('currentPassword')?.errors?.['pattern']
+                    *ngIf="changePasswordForm.get('currentPassword')?.touched 
+                    && changePasswordForm.get('currentPassword')?.errors?.['required']
+                    && changePasswordForm.get('currentPassword')?.errors?.['maxlength']
+                    && changePasswordForm.get('currentPassword')?.errors?.['minLength']
+                    && changePasswordForm.get('currentPassword')?.errors?.['pattern']
                     "></mat-error>
                 </mat-form-field>
                 <button type="submit" [disabled]="changePasswordForm.invalid" mat-raised-button>Change password</button>

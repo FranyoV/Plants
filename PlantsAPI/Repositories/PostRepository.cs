@@ -9,7 +9,6 @@ namespace PlantsAPI.Repositories
     {
         public PostRepository(PlantsDbContext dbContext, ILogger logger) : base(dbContext, logger)
         {
-
         }
 
         public async Task<IEnumerable<PostDto>> GetPosts()

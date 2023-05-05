@@ -14,7 +14,7 @@ namespace PlantsAPI.Controllers
 
         public ItemsController(IUnitOfWork unitOFWork)
         {
-            this.unitOfWork = unitOFWork;
+            this.unitOfWork = unitOFWork ?? throw new ArgumentNullException(nameof(unitOFWork));
         }
 
         //TODO AUTHORIZATION
@@ -59,7 +59,7 @@ namespace PlantsAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Item>> PostPlant([FromBody] Item item)
+        public async Task<ActionResult<Item>> PostItem([FromBody] Item item)
         {
             if (unitOfWork.UserContext.HasAuthorization(item.UserId))
             {

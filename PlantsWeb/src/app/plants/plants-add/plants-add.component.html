@@ -59,14 +59,15 @@
             <h3 style="text-align: center;">Maintenance info:</h3>
            
             <mat-form-field appearance="outline" style="margin-bottom: 20px;">
-              <mat-label>Next notification date</mat-label>
+              <mat-label>Last maintenance date</mat-label>
               <mat-hint>MM/DD/YYYY</mat-hint>
               <input 
               matInput 
-              [matDatepicker]="myDatePicker" 
-              disabled>
-              <mat-datepicker-toggle matIconSuffix [for]="myDatePicker"></mat-datepicker-toggle>
-              <mat-datepicker #myDatePicker disabled="false" ></mat-datepicker>
+              [matDatepicker]="dp3" 
+              formControlName="lastNotification"
+              >
+              <mat-datepicker-toggle matIconSuffix [for]="dp3"></mat-datepicker-toggle>
+              <mat-datepicker #dp3 ></mat-datepicker>
             </mat-form-field>
 
             <mat-form-field appearance="outline">
@@ -80,7 +81,6 @@
             </mat-form-field>
 
             <mat-form-field appearance="outline">
-              
               <mat-label>Note</mat-label>
               <input 
               matTooltip="We will send you this note in the notification email."

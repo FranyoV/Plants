@@ -14,8 +14,8 @@ namespace PlantsAPI.Controllers
 
         public AuthorizationController(IUnitOfWork unitOfWork, IHttpContextAccessor contextAccessor)
         {
-            this.unitOfWork = unitOfWork;   
-            this.httpContextAccessor = contextAccessor;
+            this.unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            this.httpContextAccessor = contextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
         }
 
         [HttpPost]

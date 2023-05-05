@@ -24,10 +24,10 @@ namespace PlantsAPI.Configuration
             IConfiguration _configuration,
             IHttpContextAccessor _httpContextAccessor)
         {
-            this.dbContext = _plantsDbContext;
-            this.logger = _loggerFactory.CreateLogger("logs");
-            this.configuration = _configuration;
-            this.httpContextAccessor = _httpContextAccessor;
+            this.dbContext = _plantsDbContext ?? throw new ArgumentNullException(nameof(_plantsDbContext));
+            this.logger = _loggerFactory.CreateLogger("logs") ?? throw new ArgumentNullException(nameof(_loggerFactory));
+            this.configuration = _configuration ?? throw new ArgumentNullException(nameof(_configuration));
+            this.httpContextAccessor = _httpContextAccessor ?? throw new ArgumentNullException(nameof(_httpContextAccessor));
 
             this.Users = new UserRepository(dbContext, logger);
             this.Plants = new PlantRepository(dbContext, logger);

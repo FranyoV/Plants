@@ -26,7 +26,7 @@ export class PlantsAddComponent implements OnInit{
     imageUrl: "" ,
     interval: 0,
     note: "",
-    lastNotification: formatDate( Date(), 'yyyy-MM-dd', 'en', '+0200')
+    lastNotification: formatDate( Date(), 'yyyy-MM-dd', 'en', '+0000')
   })
 
 
@@ -60,6 +60,19 @@ export class PlantsAddComponent implements OnInit{
 
 
   addPlant(){
+
+    let date = new Date(this.addForm.value.lastNotification!);
+    let utcDate = new Date(
+      date.getUTCFullYear(), 
+      date.getUTCMonth(),
+      date.getUTCDate(),
+      date.getUTCHours()+4,
+      date.getUTCMinutes(),
+      date.getUTCSeconds()
+    )
+      console.log("date entered: ", date);
+      console.log("converted to utc: ", utcDate);
+
     const newPlant: Plant = new Plant(
       "00000000-0000-0000-0000-000000000000",
       this.addForm.value.name!,
@@ -67,13 +80,13 @@ export class PlantsAddComponent implements OnInit{
       this.addForm.value.imageUrl!,
       this.addForm.value.note!,
       this.addForm.value.interval!,
-      new Date(this.addForm.value.lastNotification!),
+      utcDate,
       null ,
       null,
       this.currentUserId
       );
 
-
+      console.log(newPlant);
       if (newPlant == null){
         //snackbar -> unsuccesful add
       }else{

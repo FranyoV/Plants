@@ -17,15 +17,27 @@ namespace PlantsAPI.Repositories
 
         }
 
-       public async Task<User> GetUserById(Guid id)
+       public async Task<UserDto> GetUserById(Guid id)
         {
             var user = await dbSet.Where(u => u.Id == id).FirstOrDefaultAsync();
-            return user;
+            var userDto = new UserDto()
+            {
+                Id = id,
+                Name = user.Name,
+                EmailAddress = user.EmailAddress,
+            };
+            return userDto;
         }
 
         public async Task<User> GetUserByName(string username)
         {
             var user = await dbSet.Where(u => u.Name == username).FirstOrDefaultAsync();
+            var userDto = new UserDto()
+            {
+                Id = user.Id,
+                Name = user.Name,
+                EmailAddress = user.EmailAddress,
+            };
             return user;
         }
 
@@ -38,6 +50,8 @@ namespace PlantsAPI.Repositories
             return result.Entity;
         }
 
+
+        //TODO for profil editing
         public async Task<User> EditUser(User user)
         {
             if (user == null) throw new NotImplementedException(nameof(user));

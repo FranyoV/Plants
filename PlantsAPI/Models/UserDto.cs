@@ -9,7 +9,7 @@ namespace PlantsAPI.Models
         
         
 
-        // public string EmailAddress { get; set; }    
+        public string EmailAddress { get; set; }    
 
     }
 }

@@ -15,7 +15,7 @@ namespace PlantsAPI.Controllers
 
         public PostsController(IUnitOfWork unitOFWork)
         {
-            this.unitOfWork = unitOFWork;
+            this.unitOfWork = unitOFWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         }
 
         //TODO AUTHORIZATION
@@ -100,6 +100,7 @@ namespace PlantsAPI.Controllers
             }
             return Unauthorized();
         }
+
 
         //TODO AUTHORIZATION
         [HttpDelete]

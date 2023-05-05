@@ -8,7 +8,7 @@ namespace PlantsAPI.Services
 
         public UserContext(IHttpContextAccessor httpContextAccessor)
         {
-            _httpcontextaccesor = httpContextAccessor;
+            _httpcontextaccesor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
         }
 
         public string GetMe()

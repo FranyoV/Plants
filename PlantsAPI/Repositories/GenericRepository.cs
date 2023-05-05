@@ -11,9 +11,9 @@ namespace PlantsAPI.Repositories
 
         public GenericRepository(PlantsDbContext dbContext, ILogger logger)
         {
-            this.dbContext = dbContext;
-            this.dbSet = dbContext.Set<T>();
-            this.logger = logger;
+            this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+            this.dbSet = dbContext.Set<T>() ?? throw new ArgumentNullException(nameof(dbContext));
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
     }
