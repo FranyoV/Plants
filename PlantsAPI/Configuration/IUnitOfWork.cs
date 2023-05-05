@@ -12,6 +12,7 @@ namespace PlantsAPI.Configuration
         IItemsRepository Items { get; }
         IAuthRepository Auth { get; }
         IUserContext UserContext { get; }
+        INotificationService NotificationService { get; }
         Task SaveChangesAsync();
         void Dispose();
     }

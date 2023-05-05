@@ -8,7 +8,6 @@ namespace PlantsAPI.Repositories
     {
         public ItemsRepository(PlantsDbContext dbContext, ILogger logger) : base(dbContext, logger)
         {
-
         }
 
         public async Task<IEnumerable<Item>> GetItems()

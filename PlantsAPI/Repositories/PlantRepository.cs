@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using PlantsAPI.Data;
 using PlantsAPI.Models;
+using PlantsAPI.Services;
 
 namespace PlantsAPI.Repositories
 {
@@ -55,7 +56,7 @@ namespace PlantsAPI.Repositories
                 plant.NextNotification = plant.LastNotification.Value.AddDays((double)plant.Interval);
             }
            
-            var result = dbSet.Add(plant);
+            var result = await dbSet.AddAsync(plant);
             return result.Entity;
         }
 
@@ -96,7 +97,7 @@ namespace PlantsAPI.Repositories
 
         public async Task<bool> DeletePlant(Guid plantId)
         {
-            if (plantId == Guid.Empty) throw new NotImplementedException();
+            if (plantId == Guid.Empty) throw new ArgumentNullException();
 
             var toBeDeleted = await dbSet.Where(p => p.Id == plantId).FirstAsync();
             if (toBeDeleted != null)
@@ -107,6 +108,7 @@ namespace PlantsAPI.Repositories
 
             return false;
         }
+
 
     }
 }

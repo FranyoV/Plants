@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PlantsAPI.Configuration;
 using PlantsAPI.Models;
+using PlantsAPI.Services;
 
 namespace PlantsAPI.Controllers
 {
@@ -40,9 +41,14 @@ namespace PlantsAPI.Controllers
         [Route("{userId}/posts")]
         public async Task<ActionResult<Post>> GetPostByUser(Guid userId)
         {
+
             if (unitOfWork.UserContext.HasAuthorization(userId))
             {
-                var post = await unitOfWork.Posts.GetPostsByUser(userId);
+
+                
+                var post = await unitOfWork.Posts.GetPostsOfUser(userId);
+
+                
                 return Ok(post);
             }
             return Unauthorized();

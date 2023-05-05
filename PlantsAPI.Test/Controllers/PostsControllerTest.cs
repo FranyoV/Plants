@@ -62,7 +62,7 @@ namespace PlantsAPI.Test
                 .Returns(true);
 
             helper.mockUnitOfWork.Setup(
-                x => x.Posts.GetPostsByUser(It.IsAny<Guid>()))
+                x => x.Posts.GetPostsOfUser(It.IsAny<Guid>()))
                 .ReturnsAsync(postDtos);
 
             var response = helper.Controller.GetPostByUser(Guid.NewGuid());

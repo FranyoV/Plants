@@ -43,7 +43,7 @@ namespace PlantsAPI.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<LoginResponse>> Login([FromBody] LoginRequest request)
         {
-            var user = unitOfWork.Users.GetUserByName(request.Username).Result;
+            var user = await unitOfWork.Users.GetUserByName(request.Username);
 
             if (user == null)
             {
@@ -69,7 +69,7 @@ namespace PlantsAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<string>> GetMe()
+        public ActionResult<string> GetMe()
         {
             return unitOfWork.UserContext.GetMe();
         }

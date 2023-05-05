@@ -46,7 +46,7 @@ namespace PlantsAPI.Repositories
         {
             if (user == null) throw new NotImplementedException(nameof(user));
 
-            var result = dbSet.Add(user);
+            var result = await dbSet.AddAsync(user);
             return result.Entity;
         }
 

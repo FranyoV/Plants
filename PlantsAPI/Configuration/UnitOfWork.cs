@@ -19,6 +19,8 @@ namespace PlantsAPI.Configuration
         public IAuthRepository Auth { get; private set; }
         public IUserContext UserContext {get; private set; }
 
+        public INotificationService NotificationService { get; private set; }
+
         public UnitOfWork(PlantsDbContext _plantsDbContext, 
             ILoggerFactory _loggerFactory,
             IConfiguration _configuration,
@@ -28,14 +30,16 @@ namespace PlantsAPI.Configuration
             this.logger = _loggerFactory.CreateLogger("logs") ?? throw new ArgumentNullException(nameof(_loggerFactory));
             this.configuration = _configuration ?? throw new ArgumentNullException(nameof(_configuration));
             this.httpContextAccessor = _httpContextAccessor ?? throw new ArgumentNullException(nameof(_httpContextAccessor));
+            this.NotificationService = new NotificationService(_configuration);
 
             this.Users = new UserRepository(dbContext, logger);
             this.Plants = new PlantRepository(dbContext, logger);
             this.Posts = new PostRepository(dbContext, logger);
-            this.Replies = new ReplyRepository(dbContext, logger);
+            this.Replies = new ReplyRepository(dbContext, logger,  NotificationService );
             this.Items = new ItemsRepository(dbContext, logger);
             this.Auth = new AuthRepository(dbContext, logger, configuration);
             this.UserContext = new UserContext(httpContextAccessor);
+            this.NotificationService = new NotificationService(configuration);
         }
 
         public async Task SaveChangesAsync()

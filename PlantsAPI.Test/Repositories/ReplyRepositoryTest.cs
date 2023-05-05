@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using PlantsAPI.Data;
 using PlantsAPI.Repositories;
+using PlantsAPI.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,8 +18,9 @@ namespace PlantsAPI.Test.Repositories
     {
         private readonly PlantsDbContext context;
         private readonly Mock<ILogger> logger;
-        private readonly Mock<IReplyRepository> mockReplyRepository;
+        private readonly IReplyRepository replyRepository;
         private readonly Mock<IConfiguration> configuration;
+        private readonly Mock<INotificationService> notificationService;
 
         public ReplyRepositoryTest()
         {
@@ -28,14 +30,95 @@ namespace PlantsAPI.Test.Repositories
             configuration = new Mock<IConfiguration>();
             context = new PlantsDbContext(dbOptions.Options);
             logger = new Mock<ILogger>();
-            mockReplyRepository = new Mock<IReplyRepository>();
+            notificationService = new Mock<INotificationService>();
+            replyRepository = new ReplyRepository(context, logger.Object, notificationService.Object);
         }
 
+        #region Constructor
         [Fact]
         public void ContructorShouldCreateObject()
         {
-            Assert.NotNull(new ReplyRepository(context, logger.Object));
+            Assert.NotNull(new ReplyRepository(context, logger.Object, notificationService.Object));
         }
+
+        [Fact]
+        public void Contructor_ShoulThrowArgumentNullException_1()
+        {
+            Assert.Throws<ArgumentNullException>(() => new ReplyRepository(context, null, notificationService.Object));
+        }
+
+        [Fact]
+        public void Contructor_ShoulThrowArgumentNullException_2()
+        {
+            Assert.Throws<ArgumentNullException>(() => new ReplyRepository(null, logger.Object, notificationService.Object));
+        }
+
+        [Fact]
+        public void Contructor_ShoulThrowArgumentNullException_3()
+        {
+            Assert.Throws<ArgumentNullException>(() => new ReplyRepository(context, logger.Object, null));
+        }
+        #endregion
+
+        #region GetReplies
+        [Fact]
+        public void GetReplies_ShouldReturnResult()
+        {
+            var itemList = replyRepository.GetReplies();
+            Assert.NotNull(itemList.Result);
+            Assert.NotEmpty(itemList.Result);
+        }
+        #endregion
+
+
+        #region GetRepliesOfPost
+        public void GetRepliesOfPost_ShouldThrowArgumentNullException()
+        {
+            Assert.ThrowsAsync<ArgumentNullException>(() => replyRepository.GetRepliesOfPost(Guid.Empty));
+        }
+        #endregion
+
+
+        #region GetRepliesCount
+
+        [Fact]
+        public void GetRepliesCount_ShouldThrowArgumentNullException()
+        {
+            Assert.ThrowsAsync<ArgumentNullException>(() => replyRepository.GetRepliesCount(Guid.Empty));
+        }
+
+        #endregion
+
+
+        #region AddReply
+
+        [Fact]
+        public void AddReply_ShouldThrowArgumentNullException()
+        {
+            Assert.ThrowsAsync<ArgumentNullException>(() => replyRepository.AddReply(null));
+        }
+
+        #endregion
+
+        #region EditReply
+
+        [Fact]
+        public void EditReply_ShouldThrowArgumentNullException()
+        {
+            Assert.ThrowsAsync<ArgumentNullException>(() => replyRepository.EditReply(null));
+        }
+
+        #endregion
+
+        #region DeleteReply
+
+        [Fact]
+        public void DeleteReply_ShouldThrowArgumentNullException()
+        {
+            Assert.ThrowsAsync<ArgumentNullException>(() => replyRepository.DeleteReply(Guid.Empty));
+        }
+
+        #endregion
 
     }
 }

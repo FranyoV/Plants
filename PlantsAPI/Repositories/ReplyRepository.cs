@@ -2,14 +2,16 @@
 using Microsoft.EntityFrameworkCore;
 using PlantsAPI.Data;
 using PlantsAPI.Models;
+using PlantsAPI.Services;
 
 namespace PlantsAPI.Repositories
 {
     public class ReplyRepository : GenericRepository<Reply>, IReplyRepository
     {
-        public ReplyRepository(PlantsDbContext dbContext, ILogger logger) : base(dbContext, logger)
+        private readonly INotificationService notificationService;
+        public ReplyRepository(PlantsDbContext dbContext, ILogger logger, INotificationService notificationService) : base(dbContext, logger)
         {
-
+            this.notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
         }
 
         public async Task<IEnumerable<Reply>> GetReplies()
@@ -48,8 +50,25 @@ namespace PlantsAPI.Repositories
         {
             if (reply == null) throw new ArgumentNullException(nameof(reply));
             reply.Id = Guid.NewGuid();
-            var added = dbSet.Add(reply);
+            var added = await dbSet.AddAsync(reply);
+            
+             
+            if (added != null)
+            {
+                Post post = dbContext.Posts.Where(p => p.Id == reply.PostId).First();
+                EmailData emailData = new EmailData()
+                {
 
+                    Recipicent = "ryann.rempel@ethereal.email",
+                    Subject = "New Reply",
+                    DataName = post.Title,
+                    Url = "http://localhost:4200/post/" + post.Id,
+                    Body = "2dl víz"
+                };
+
+                notificationService.SendEmail(emailData, EmailTemplate.NEWREPLY);
+
+            }
             //var result = await GetReplyById(reply.Id);
             return added.Entity;
         }

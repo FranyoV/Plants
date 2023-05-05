@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
 using PlantsAPI.Data;
+using PlantsAPI.Models;
 using PlantsAPI.Repositories;
 using System;
 using Xunit;
@@ -10,10 +11,9 @@ using Xunit;
 namespace PlantsAPI.Test.Repositories
 {
     //implementing IDisposable needed?
-    public class GenericRepositoryTest<T> where T : class 
+    public class GenericRepositoryTest 
     {
         private readonly PlantsDbContext context;
-        private readonly DbSet<T> dbSet;
         private readonly Mock<ILogger> logger;
         private readonly Mock<IGenericRepository> mockGenericRepository;
         private readonly Mock<IConfiguration> configuration;
@@ -27,25 +27,24 @@ namespace PlantsAPI.Test.Repositories
             context = new PlantsDbContext(dbOptions.Options);
             logger = new Mock<ILogger>();
             mockGenericRepository = new Mock<IGenericRepository>();
-            dbSet = context.Set<T>();
         }
 
         [Fact]
         public void Constructor_ShouldCreateObject()
         {
-            Assert.NotNull(new GenericRepository<T>(context, logger.Object));
+            Assert.NotNull(new GenericRepository<Plant>(context, logger.Object));
         }
 
         [Fact]
         public void Constructor_ShouldThrowArgumentNullException_1()
         {
-            Assert.Throws<ArgumentNullException>(() => new GenericRepository<T>(null, logger.Object));
+            Assert.Throws<ArgumentNullException>(() => new GenericRepository<Plant>(null, logger.Object));
         }
 
         [Fact]
         public void Constructor_ShouldThrowArgumentNullException_2()
         {
-            Assert.Throws<ArgumentNullException>(() => new GenericRepository<T>(context, null));
+            Assert.Throws<ArgumentNullException>(() => new GenericRepository<Plant>(context, null));
         }
     }
 

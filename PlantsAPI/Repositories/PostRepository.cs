@@ -43,7 +43,17 @@ namespace PlantsAPI.Repositories
         }
 
 
-        public async Task<IEnumerable<PostDto>> GetPostsByUser(Guid id)
+        public async Task<Post> GetPostById(Guid id)
+        {
+            if (id == Guid.Empty) throw new ArgumentNullException(nameof(id));
+
+            var post = await dbSet.Where(p => p.Id == id).FirstAsync();
+
+            return post;
+        }
+
+
+        public async Task<IEnumerable<PostDto>> GetPostsOfUser(Guid id)
         {
             if (id == Guid.Empty) throw new ArgumentNullException(nameof(id));
 
@@ -77,10 +87,11 @@ namespace PlantsAPI.Repositories
         }
 
 
-        public async Task<IEnumerable<PostDto>> GetPostsByUserReplies(Guid userid)
+        public async Task<IEnumerable<PostDto>> GetPostsByUserReplies(Guid userId)
         {
+            if (userId == Guid.Empty) throw new ArgumentNullException(nameof(userId));
 
-            List<Reply> repliesOfUser = await dbContext.Replies.Where(r => r.UserId == userid).ToListAsync();
+            List<Reply> repliesOfUser = await dbContext.Replies.Where(r => r.UserId == userId).ToListAsync();
             var repliesOfUserOrdered = repliesOfUser.OrderByDescending(x => x.DateOfCreation);
 
             List<Post> postsWithUsersReplies = new List<Post>();
@@ -134,20 +145,11 @@ namespace PlantsAPI.Repositories
         }
 
 
-        public async Task<Post> GetPostById(Guid id)
-        {
-            if (id == Guid.Empty) throw new ArgumentNullException(nameof(id));
-
-            var post = await dbSet.Where(p => p.Id == id).FirstAsync();
-
-            return post;
-        }
-
         public async Task<Post> AddPost(Post post)
         {
             if (post == null) throw new ArgumentNullException(nameof(post));
 
-            var result = dbSet.Add(post);
+            var result = await dbSet.AddAsync(post);
             return result.Entity;
         }
 
