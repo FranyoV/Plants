@@ -4,18 +4,42 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using PlantsAPI.Configuration;
 using PlantsAPI.Data;
+using PlantsAPI.Jobs;
 using PlantsAPI.Services;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 using System.Text.Json.Serialization;
+using Quartz;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 
-builder.Services.AddDbContext<PlantsDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("PlantsDatabase")));
+builder.Services.AddDbContext<PlantsDbContext>(options => 
+    options.UseSqlServer(builder.Configuration.GetConnectionString("PlantsDatabase")));
+
+builder.Services.AddQuartz(q =>
+{
+    q.UseMicrosoftDependencyInjectionJobFactory();
+    var jobKey = new JobKey("SendMaintenanceEmailJob");
+    q.AddJob<SendMaintenanceEmailJob>(opt => opt.WithIdentity(jobKey));
+    q.AddTrigger(opts =>
+
+        opts.ForJob(jobKey)
+        .WithIdentity("SendMaintenanceEmailJob-trigger")
+        .WithCronSchedule("0 * * * * ?"));
+
+});
+
+builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
+
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IUserContext, UserContext>();
+
 builder.Services.AddScoped<INotificationService, NotificationService>();
+//builder.Services.Configure<SendMaintenanceEmailJob>(builder.Configuration.GetSection("SendMaintenanceEmailJob"));
+
+
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddControllers();

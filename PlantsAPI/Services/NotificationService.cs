@@ -20,8 +20,8 @@ namespace PlantsAPI.Services
             
             var email = new MimeMessage();
 
-            email.From.Add(MailboxAddress.Parse("ryann.rempel@ethereal.email"));
-            email.To.Add(MailboxAddress.Parse(emailData.Recipicent));
+            email.From.Add(MailboxAddress.Parse("verla.schneider@ethereal.email"));
+            email.To.Add(MailboxAddress.Parse("verla.schneider@ethereal.email"));
 
             if(template == EmailTemplate.NEWREPLY)
             {
@@ -47,7 +47,7 @@ namespace PlantsAPI.Services
             
             using var smtp = new SmtpClient();
             smtp.Connect("smtp.ethereal.email", 587, MailKit.Security.SecureSocketOptions.StartTls);
-            smtp.Authenticate("ryann.rempel@ethereal.email", "wuuECj5zkww3maSeNr");
+            smtp.Authenticate("verla.schneider@ethereal.email", "uPScnTxGjgAHrpWQ9y");
             smtp.Send(email);
             smtp.Disconnect(true);
         }
