@@ -1,5 +1,5 @@
 import { formatDate } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
@@ -16,6 +16,7 @@ import { WebApiService } from 'src/app/webapi.service';
 })
 export class PlantsAddComponent implements OnInit{
 
+  maintenance: boolean = false;
   currentUserId!: string;
   plants: Plant[] = [];
   subscription!: Subscription;
@@ -24,9 +25,9 @@ export class PlantsAddComponent implements OnInit{
     name : ['', [Validators.required, Validators.maxLength(50)]],
     description : "",
     imageUrl: "" ,
-    interval: 0,
-    note: "",
-    lastNotification: formatDate( Date(), 'yyyy-MM-dd', 'en', '+0000')
+    interval: [{value: 0, disabled: true}, [Validators.required]],
+    note: [{value: '', disabled: true},[Validators.required]],
+    lastNotification: [{value: formatDate( Date(), 'yyyy-MM-dd', 'en', '+0000'), disabled: true }, [Validators.required]]
   })
 
 
@@ -40,6 +41,7 @@ export class PlantsAddComponent implements OnInit{
 
 
   ngOnInit(){
+    console.log( this.maintenance)
     this.webApi.getMe().subscribe({
       next: (res) => {
         this.currentUserId = res, 
@@ -51,6 +53,8 @@ export class PlantsAddComponent implements OnInit{
     })
   }
 
+
+
   getPlantOfUser(){
     this.webApi.getPlantsOfUser(this.currentUserId).subscribe({
       next: (plants) => {this.plants = plants},
@@ -60,7 +64,7 @@ export class PlantsAddComponent implements OnInit{
 
 
   addPlant(){
-
+    
     let date = new Date(this.addForm.value.lastNotification!);
     let utcDate = new Date(
       date.getUTCFullYear(), 
@@ -113,6 +117,23 @@ export class PlantsAddComponent implements OnInit{
       data: message,
       duration: 3 * 1000,
     });
+  }
+
+  showMaintenance(){
+    console.log("before: ", this.maintenance)
+    this.maintenance = !this.maintenance;
+    console.log("after: ", this.maintenance)
+    if(this.maintenance){
+      this.addForm.controls['note'].enable();
+      this.addForm.controls['lastNotification'].enable();
+      this.addForm.controls['interval'].enable();
+      
+    }else{
+      this.addForm.controls['note'].disable();
+      this.addForm.controls['lastNotification'].disable();
+      this.addForm.controls['interval'].disable();
+    }
+    
   }
 
 }

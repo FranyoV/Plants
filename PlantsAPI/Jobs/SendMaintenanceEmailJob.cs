@@ -31,6 +31,7 @@ namespace PlantsAPI.Jobs
                 {
                     if (plant.LastNotification.Value.AddDays((double)plant.Interval) == DateTime.Today.Date)
                     {
+                        
                         EmailData emailData = new()
                         {
                             DataName = plant.Name,
@@ -40,7 +41,8 @@ namespace PlantsAPI.Jobs
                         };
 
                         _notificationService.SendEmail(emailData, EmailTemplate.MAINTENANCE);
-
+                        plant.LastNotification = DateTime.Now;
+                        plant.NextNotification = DateTime.Now.AddDays((double) plant.Interval);
                     }
                 }
             }

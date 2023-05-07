@@ -19,77 +19,83 @@
                 <mat-form-field  appearance="outline">
                   <mat-label >Name</mat-label>
                   <input  
-                  
-                  type="text" 
-                  formControlName="name" 
-                  placeholder="Name" matInput>
+                    type="text" 
+                    formControlName="name" 
+                    placeholder="Name" matInput>
                   <mat-hint 
-                     *ngIf="addForm.get('name')?.touched && addForm.get('name')?.errors?.['required']
-                     "></mat-hint>
+                    *ngIf="addForm.get('name')?.touched || addForm.get('name')?.errors?.['required']
+                    ">This field is required.</mat-hint>
                 </mat-form-field>
     
                 <mat-form-field appearance="outline">
                   <mat-label>Description</mat-label>
                   <textarea 
-                  
-                  type="text"
-                  formControlName="description"
-                  placeholder="Add description"
-                  rows="3"
-                  matInput></textarea>
+                    type="text"
+                    formControlName="description"
+                    placeholder="Add description"
+                    rows="3"
+                    matInput></textarea>
                 </mat-form-field>
     
                 <mat-form-field appearance="outline">
                   <mat-label>Image</mat-label>
                   <input 
-                 
-                  type="text" 
-                  formControlName="imageUrl"
-                  id="UploadImage" 
-                  placeholder="Paste th url."
-                  matInput>
+                    type="text" 
+                    formControlName="imageUrl"
+                    id="UploadImage" 
+                    placeholder="Paste th url."
+                    matInput>
                 </mat-form-field>
               </div>
-    
-              </div>
+              
 
-          
-          <div class="col">
-
-            <h3 style="text-align: center;">Maintenance info:</h3>
+            <!--button mat-raised-button type="button" (click)="showMaintenance()">I want reminder notifications of the maintenance of the plant. </button-->
+            <div >
+              
+              <mat-slide-toggle (toggleChange)="showMaintenance()" >I want reminder notifications of the maintenance of the plant.</mat-slide-toggle>
+              <h3 style="text-align: center;">Maintenance info:</h3>
            
-            <mat-form-field appearance="outline" style="margin-bottom: 20px;">
-              <mat-label>Last maintenance date</mat-label>
-              <mat-hint>MM/DD/YYYY</mat-hint>
-              <input 
-              matInput 
-              [matDatepicker]="dp3" 
-              formControlName="lastNotification"
-              >
-              <mat-datepicker-toggle matIconSuffix [for]="dp3"></mat-datepicker-toggle>
-              <mat-datepicker #dp3 ></mat-datepicker>
-            </mat-form-field>
-
-            <mat-form-field appearance="outline">
-              <mat-label>Interval of days</mat-label>
-              <input 
-              type="number" 
-              formControlName="interval"
-              id="Interval" 
-              placeholder="1"
-              matInput>
-            </mat-form-field>
-
-            <mat-form-field appearance="outline">
-              <mat-label>Note</mat-label>
-              <input 
-              matTooltip="We will send you this note in the notification email."
-              type="text" 
-              formControlName="note"
-              id="Note" 
-              placeholder="..."
-              matInput>
-            </mat-form-field>
+              <mat-form-field appearance="outline" style="margin-bottom: 20px;">
+                <mat-label>Last maintenance date</mat-label>
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <input 
+                matInput 
+                [matDatepicker]="dp3" 
+                formControlName="lastNotification"
+                >
+                <mat-error 
+                    *ngIf="addForm.get('lastNotification')?.touched || addForm.get('lastNotification')?.errors?.['required']
+                    ">This field is required.</mat-error>
+                <mat-datepicker-toggle matIconSuffix [for]="dp3"></mat-datepicker-toggle>
+                <mat-datepicker #dp3 ></mat-datepicker>
+              </mat-form-field>
+  
+              <mat-form-field appearance="outline">
+                <mat-label>Interval of days</mat-label>
+                <mat-hint>The frequency of notifications. (eg. 2 days) </mat-hint>
+                <input 
+                type="number" 
+                formControlName="interval"
+                id="Interval" 
+                placeholder="1"
+                matInput>
+                
+              </mat-form-field>
+  
+              <mat-form-field appearance="outline">
+                <mat-label>Note</mat-label>
+                <mat-hint>This note will be included in the notification email. (watering amount)</mat-hint>
+                <input 
+                matTooltip="We will send you this note in the notification email."
+                type="text" 
+                formControlName="note"
+                id="Note" 
+                placeholder="..."
+                matInput>
+                
+              </mat-form-field>
+            </div>
+            
 
           </div>
           

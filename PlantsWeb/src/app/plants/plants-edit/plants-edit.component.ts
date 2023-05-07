@@ -18,18 +18,20 @@ import { SnackbarComponent } from 'src/app/snackbar/snackbar.component';
 })
 export class PlantsEditComponent implements OnInit{
 
+  maintenance : boolean = false;
   subscription! : Subscription;
   currentPlantId : string = ""; 
   currentPlant!: Plant;
   plants: Plant[] = [];
 
+
   editForm = this.formBuilder.group({
     name : ['', [Validators.required, Validators.maxLength(50)]],
     description : "",
     imageUrl: "" ,
-    interval: 0,
-    note: "", 
-    lastNotification: formatDate( Date(), 'yyyy-MM-dd', 'en', '+0000')
+    interval: [{value: 0, disabled: true}, [Validators.required]],
+    note: [{value: '', disabled: true},[Validators.required]],
+    lastNotification: [{value: formatDate( Date(), 'yyyy-MM-dd', 'en', '+0000'), disabled: true }, [Validators.required]]
   })
 
   constructor(
@@ -124,5 +126,22 @@ export class PlantsEditComponent implements OnInit{
       data: message,
       duration: 3 * 1000,
     });
+  }
+
+  showMaintenance(){
+    console.log("before: ", this.maintenance)
+    this.maintenance = !this.maintenance;
+    console.log("after: ", this.maintenance)
+    if(this.maintenance){
+      this.editForm.controls['note'].enable();
+      this.editForm.controls['lastNotification'].enable();
+      this.editForm.controls['interval'].enable();
+      
+    }else{
+      this.editForm.controls['note'].disable();
+      this.editForm.controls['lastNotification'].disable();
+      this.editForm.controls['interval'].disable();
+    }
+    
   }
 }

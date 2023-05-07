@@ -30,7 +30,7 @@ namespace PlantsAPI.Services
                 {
                     Text = "<p> Heey! <br><br>" +
                     "Someone left a comment on your post. <br>" +
-                    "Check it out on the website:<a>" + emailData.Url + "</a> . <br>" +
+                    "Check it out on the website:<a> " + emailData.Url + "</a> . <br>" +
                     "Have a great day!</p> "
                 };
             }else if(template == EmailTemplate.MAINTENANCE)

@@ -3,16 +3,12 @@ h2 {
     margin: 10px;
 }
 
-.form-container {
+form {
     display: flex;
     flex-direction: column;
-    /*align-items: flex-start;*/
-    
+    align-items: flex-start;
   }
-
-mat-form-field {
-    width: 25vw;
-}
+  
 
 .btn {
 margin: 3px;
@@ -28,12 +24,13 @@ img {
     max-width: 200px;
 }
 
-.row {
-    height: 100%;
-}
+
 
 .col {
     text-align: center;
     
 }
 
+mat-form-field{
+    min-width: 400px;
+}
