@@ -49,13 +49,22 @@ namespace PlantsAPI.Repositories
         {
             if (plant == null) throw new ArgumentNullException(nameof(plant));
 
-            plant.Id = Guid.NewGuid();  
+            plant.Id = Guid.NewGuid();
 
-            if(plant.LastNotification != null && (plant.Interval != null || plant.Interval != 0) )
+
+            if (plant.LastNotification != null)
             {
-                plant.NextNotification = plant.LastNotification.Value.AddDays((double)plant.Interval);
+                
+                if (plant.LastNotification.Value.AddDays(plant.Interval.Value) < DateTime.Now)
+                {
+                    plant.NextNotification = DateTime.Now;
+                }
+                else
+                {
+                    plant.NextNotification = plant.LastNotification.Value.AddDays(plant.Interval.Value);
+                }
             }
-           
+
             var result = await dbSet.AddAsync(plant);
             return result.Entity;
         }
@@ -63,23 +72,30 @@ namespace PlantsAPI.Repositories
         public async Task<Plant> EditPlant(Plant plant)
         {
             if (plant == null) throw new ArgumentNullException(nameof(plant));
-            
-            Plant originalPlant = await dbSet.FirstAsync(p => p.Id == plant.Id);
+
+            Plant originalPlant = new();
+            originalPlant = await dbSet.FirstAsync(p => p.Id == plant.Id);
 
             if (originalPlant != null)
             {
-                originalPlant.ImageUrl = plant.ImageUrl;
-                originalPlant.Name = plant.Name;
+                
+                if ( plant.Name != null)
+                {
+                    originalPlant.Name = plant.Name;
+                }
+               
                 originalPlant.Description = plant.Description;
+
                 originalPlant.ImageUrl = plant.ImageUrl;
-                originalPlant.Note = plant.Note;
-                originalPlant.Interval = plant.Interval;
+                
 
                 if (plant.LastNotification != null)
                 {
                     originalPlant.LastNotification = plant.LastNotification;
+                    originalPlant.Note = plant.Note;
+                    originalPlant.Interval = plant.Interval;
 
-                    if (plant.LastNotification < DateTime.Now)
+                    if (plant.LastNotification.Value.AddDays(plant.Interval.Value) < DateTime.Now)
                     {
                         originalPlant.NextNotification = DateTime.Now;
                     }
@@ -88,10 +104,16 @@ namespace PlantsAPI.Repositories
                         originalPlant.NextNotification = originalPlant.LastNotification.Value.AddDays(originalPlant.Interval.Value);
                     }
                 }
+                else
+                {
+                    originalPlant.LastNotification = null;
+                    originalPlant.Note = null;
+                    originalPlant.Interval = null;
+                    originalPlant.NextNotification = null;
+                }
 
             }
-
-            return (originalPlant != null) ? originalPlant : new Plant();
+            return originalPlant ?? new Plant();
         }
 
 

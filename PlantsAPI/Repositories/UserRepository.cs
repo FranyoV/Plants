@@ -31,17 +31,25 @@ namespace PlantsAPI.Repositories
 
         public async Task<User> GetUserByName(string username)
         {
-            var user = await dbSet.Where(u => u.Name == username).FirstOrDefaultAsync();
-            var userDto = new UserDto()
+            User user = new();
+            user = await dbSet.Where(u => u.Name == username).FirstOrDefaultAsync();
+
+            UserDto userDto = new UserDto();
+            if (user != null)
             {
-                Id = user.Id,
-                Name = user.Name,
-                EmailAddress = user.EmailAddress,
-            };
+                userDto = new UserDto()
+                {
+                    Id = user.Id,
+                    Name = user.Name,
+                    EmailAddress = user.EmailAddress,
+                };
+            }
+
             return user;
         }
 
 
+        //used in registration
         public async Task<User> AddUser(User user)
         {
             if (user == null) throw new NotImplementedException(nameof(user));

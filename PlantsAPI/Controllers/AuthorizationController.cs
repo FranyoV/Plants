@@ -20,22 +20,31 @@ namespace PlantsAPI.Controllers
 
         [HttpPost]
         [Route("register")]
-        public async Task<ActionResult<User>> Register([FromBody] RegisterRequest request)
+        public async Task<ActionResult> Register([FromBody] RegisterRequest request)
         {
-            string passwordSalt = unitOfWork.Auth.GenerateSalt(10);
-            string passwordHash = unitOfWork.Auth.CreatePasswordHash(request.Password, passwordSalt);
-            
-            User newUser = new User();
-            newUser.Name = request.Username;
-            newUser.EmailAddress = request.Email;
-           // newUser.ImageUrl = request.ImageUrl;
-            newUser.PasswordHash = passwordHash;
-            newUser.PasswordSalt = passwordSalt;
+            if (request == null) throw new ArgumentNullException(nameof(request));
+            try
+            {
+                string passwordSalt = unitOfWork.Auth.GenerateSalt(10);
+                string passwordHash = unitOfWork.Auth.CreatePasswordHash(request.Password, passwordSalt);
 
-            await unitOfWork.Users.AddUser(newUser);
-            await unitOfWork.SaveChangesAsync();
+                User newUser = new User();
+                newUser.Name = request.Username;
+                newUser.EmailAddress = request.Email;
+                // newUser.ImageUrl = request.ImageUrl;
+                newUser.PasswordHash = passwordHash;
+                newUser.PasswordSalt = passwordSalt;
 
-            return Ok(newUser);
+                await unitOfWork.Users.AddUser(newUser);
+                await unitOfWork.SaveChangesAsync();
+
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
+
             //handle the case where the register is unsuccessful
         }
 
@@ -43,6 +52,7 @@ namespace PlantsAPI.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<LoginResponse>> Login([FromBody] LoginRequest request)
         {
+            if (request == null) throw new ArgumentNullException();
             var user = await unitOfWork.Users.GetUserByName(request.Username);
 
             if (user == null)

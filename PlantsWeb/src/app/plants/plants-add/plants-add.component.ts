@@ -25,7 +25,7 @@ export class PlantsAddComponent implements OnInit{
     name : ['', [Validators.required, Validators.maxLength(50)]],
     description : "",
     imageUrl: "" ,
-    interval: [{value: 0, disabled: true}, [Validators.required]],
+    interval: [{value: 0, disabled: true}, [Validators.required, Validators.min(1)]],
     note: [{value: '', disabled: true},[Validators.required]],
     lastNotification: [{value: formatDate( Date(), 'yyyy-MM-dd', 'en', '+0000'), disabled: true }, [Validators.required]]
   })
@@ -77,18 +77,37 @@ export class PlantsAddComponent implements OnInit{
       console.log("date entered: ", date);
       console.log("converted to utc: ", utcDate);
 
-    const newPlant: Plant = new Plant(
-      "00000000-0000-0000-0000-000000000000",
-      this.addForm.value.name!,
-      this.addForm.value.description!,
-      this.addForm.value.imageUrl!,
-      this.addForm.value.note!,
-      this.addForm.value.interval!,
-      utcDate,
-      null ,
-      null,
-      this.currentUserId
-      );
+      let newPlant : Plant;
+      if (this.maintenance){
+        //yes maintenance
+          newPlant = new Plant(
+          "00000000-0000-0000-0000-000000000000",
+          this.addForm.value.name!,
+          this.addForm.value.description!,
+          this.addForm.value.imageUrl!,
+          this.addForm.value.note!,
+          this.addForm.value.interval!,
+          utcDate,
+          null ,
+          null,
+          this.currentUserId
+          );
+      }else{
+        //no maintenance
+        newPlant = new Plant(
+          "00000000-0000-0000-0000-000000000000",
+          this.addForm.value.name!,
+          this.addForm.value.description!,
+          this.addForm.value.imageUrl!,
+          null,
+          null,
+          null,
+          null ,
+          null,
+          this.currentUserId
+          );
+      }
+     
 
       console.log(newPlant);
       if (newPlant == null){

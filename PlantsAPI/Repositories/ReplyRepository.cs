@@ -73,6 +73,7 @@ namespace PlantsAPI.Repositories
             return added.Entity;
         }
 
+        /*
         public async Task<Reply> EditReply(Reply reply)
         {
             if (reply == null) throw new ArgumentNullException(nameof(reply));
@@ -85,7 +86,7 @@ namespace PlantsAPI.Repositories
                 originalReply.DateOfCreation = reply.DateOfCreation;
             }
             return originalReply;
-        }
+        }*/
 
         public async Task<bool> DeleteReply(Guid replyId)
         {

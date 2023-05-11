@@ -100,6 +100,7 @@ namespace PlantsAPI.Test.Repositories
 
         #endregion
 
+        /*
         #region EditReply
 
         [Fact]
@@ -108,7 +109,7 @@ namespace PlantsAPI.Test.Repositories
             Assert.ThrowsAsync<ArgumentNullException>(() => replyRepository.EditReply(null));
         }
 
-        #endregion
+        #endregion*/
 
         #region DeleteReply
 

@@ -7,7 +7,7 @@ namespace PlantsAPI.Controllers
 {
     [Route("api/replies")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class RepliesController : ControllerBase
     {
         private readonly IUnitOfWork unitOfWork;
@@ -18,21 +18,35 @@ namespace PlantsAPI.Controllers
         }
 
         //TODO AUTHORIZATION
-        [HttpGet]
+       /* [HttpGet]
         public async Task<ActionResult<IEnumerable<Reply>>> GetReplies()
         {
+            try
+            {
+                var replies = await unitOfWork.Replies.GetReplies();
+                return Ok(replies);
+            }
+            catch
+            {
+                return BadRequest();
+            }
 
-            var replies = await unitOfWork.Replies.GetReplies();
-            return Ok(replies);
-        }
+        }*/
 
         //TODO AUTHORIZATION
         [HttpGet]
         [Route("{id}")]
         public async Task<ActionResult<Reply>> GetReplyById(Guid id)
         {
-            var reply = await unitOfWork.Replies.GetReplyById(id);
-            return Ok(reply);
+            try
+            {
+                var reply = await unitOfWork.Replies.GetReplyById(id);
+                return Ok(reply);
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         //TODO AUTHORIZATION
@@ -40,57 +54,95 @@ namespace PlantsAPI.Controllers
         [Route("post/{postid}")]
         public async Task<ActionResult<IEnumerable<Reply>>> GetRepliesOfPost([FromRoute] Guid postid) 
         {
-
+            try
+            {
                 var replies = await unitOfWork.Replies.GetRepliesOfPost(postid);
                 return Ok(replies);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+
         }
 
         [HttpGet]
         [Route("user/{userId}/count")]
         public async Task<ActionResult<int>> GetRepliesCount([FromRoute] Guid userId)
         {
-            if (unitOfWork.UserContext.HasAuthorization(userId))
+            try
             {
-                var replies = await unitOfWork.Replies.GetRepliesCount(userId);
-                return Ok(replies);
+                if (unitOfWork.UserContext.HasAuthorization(userId))
+                {
+                    var replies = await unitOfWork.Replies.GetRepliesCount(userId);
+                    return Ok(replies);
+                }
+                return Unauthorized();
             }
-            return Unauthorized();
+            catch
+            {
+                return BadRequest();
+            }
+           
         }
 
         [HttpPost]
         public async Task<ActionResult<Reply>> PostReply(Reply reply)
         {
-            if (unitOfWork.UserContext.HasAuthorization(reply.UserId))
+            try
             {
-                var newReply = await unitOfWork.Replies.AddReply(reply);
-                await unitOfWork.SaveChangesAsync();
-                return Ok(newReply);
+                if (unitOfWork.UserContext.HasAuthorization(reply.UserId))
+                {
+                    var newReply = await unitOfWork.Replies.AddReply(reply);
+                    await unitOfWork.SaveChangesAsync();
+                    return Ok(newReply);
+                }
+                return Unauthorized();
             }
-            return Unauthorized();
+            catch
+            {
+                return BadRequest();
+            }
         }
 
-
+        /*
         [HttpPut]
         [Route("{id}")]
         public async Task<ActionResult<Reply>> PutReply(Reply reply)
         {
-            if (unitOfWork.UserContext.HasAuthorization(reply.UserId))
+            try
             {
-                var modifiedReply = await unitOfWork.Replies.EditReply(reply);
-                await unitOfWork.SaveChangesAsync();
-                return Ok(modifiedReply);
+                if (unitOfWork.UserContext.HasAuthorization(reply.UserId))
+                {
+                    var modifiedReply = await unitOfWork.Replies.EditReply(reply);
+                    await unitOfWork.SaveChangesAsync();
+                    return Ok(modifiedReply);
+                }
+                return Unauthorized();
             }
-            return Unauthorized();
-        }
+            catch
+            {
+                return BadRequest();
+            }
+
+        }*/
 
         //TODO AUTHORIZATION
         [HttpDelete]
         [Route("{id}")]
         public async Task<ActionResult<bool>> DeleteReply(Guid id)
         {
-            var result = await unitOfWork.Replies.DeleteReply(id);
-            await unitOfWork.SaveChangesAsync();
-            return Ok(result);
+            try
+            {
+                var result = await unitOfWork.Replies.DeleteReply(id);
+                await unitOfWork.SaveChangesAsync();
+                return Ok(result);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+
         }
     }
 }

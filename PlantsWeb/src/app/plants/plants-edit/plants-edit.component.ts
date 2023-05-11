@@ -29,7 +29,7 @@ export class PlantsEditComponent implements OnInit{
     name : ['', [Validators.required, Validators.maxLength(50)]],
     description : "",
     imageUrl: "" ,
-    interval: [{value: 0, disabled: true}, [Validators.required]],
+    interval: [{value: 0, disabled: true}, [Validators.required, Validators.min(1)]],
     note: [{value: '', disabled: true},[Validators.required]],
     lastNotification: [{value: formatDate( Date(), 'yyyy-MM-dd', 'en', '+0000'), disabled: true }, [Validators.required]]
   })
@@ -55,12 +55,13 @@ export class PlantsEditComponent implements OnInit{
       if(this.currentPlant == null){
         this.webApi.getPlantById(this.currentPlantId).subscribe({
           next: (result) => {
-             this.currentPlant = result; console.log("currentplant:", this.currentPlant);
+             this.currentPlant = result; 
+             console.log("currentplant:", this.currentPlant);
              this.editForm.controls['name'].setValue(this.currentPlant.name);
              this.editForm.controls['description'].setValue(this.currentPlant.description);
              this.editForm.controls['imageUrl'].setValue(this.currentPlant.imageUrl ),
              this.editForm.controls['interval'].setValue(this.currentPlant.interval ),
-             this.editForm.controls['lastNotification'].setValue('hm'),
+             this.editForm.controls['lastNotification'].setValue(this.currentPlant.lastNotification?.toLocaleString()!),
              this.editForm.controls['note'].setValue(this.currentPlant.note)},
           error: (error) => { console.error("No plants with this id.", error)}
         });
@@ -79,8 +80,40 @@ export class PlantsEditComponent implements OnInit{
       date.getUTCMinutes(),
       date.getUTCSeconds()
     )
+
+    let modifiedPlant : Plant;
+    if (this.maintenance){
+      //yes maintenance
+      modifiedPlant = new Plant(
+        this.currentPlantId,
+        this.editForm.value.name!,
+        this.editForm.value.description!,
+        this.editForm.value.imageUrl!,
+        this.editForm.value.note!,
+        this.editForm.value.interval!,
+        utcDate,
+        null ,
+        null,
+        this.currentPlant.userId
+        );
+    }else{
+      //no maintenance
+      modifiedPlant = new Plant(
+        this.currentPlantId,
+        this.editForm.value.name!,
+        this.editForm.value.description!,
+        this.editForm.value.imageUrl!,
+        null,
+        null,
+        null,
+        null ,
+        null,
+        this.currentPlant.userId
+        );
+    }
    
-    const modifiedPlant: Plant= new Plant(
+   
+   /* const modifiedPlant: Plant= new Plant(
       this.currentPlantId,
       this.editForm.value.name!,
       this.editForm.value.description!,
@@ -91,7 +124,7 @@ export class PlantsEditComponent implements OnInit{
       null,
       null,
       this.currentPlant.userId,
-      );
+      );*/
       console.log(modifiedPlant)
       console.log(new Date(this.editForm.value.lastNotification!).getDate());
 

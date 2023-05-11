@@ -12,7 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace PlantsAPI.Test
+namespace PlantsAPI.Test.Controllers
 {
     public class PostsControllerTest
     {
@@ -33,7 +33,53 @@ namespace PlantsAPI.Test
         #endregion
 
 
+        #region GetPosts
+
+
+        [Fact]
+        public void GetPost_ShouldReturnOk()
+        {
+            TestHelper helper = new();
+
+            helper.mockUnitOfWork.Setup(
+                x => x.Posts.GetPosts())
+                .ReturnsAsync(It.IsAny<List<PostDto>>);
+
+            var response = helper.Controller.GetPosts();
+
+            Assert.True((response.Result.Result as ObjectResult).StatusCode == (int)HttpStatusCode.OK);
+        }
+        #endregion
+
+
+        #region GetPostById
+
+        [Fact]
+        public void GetPostById_ShouldThrowArgumentNullException()
+        {
+            TestHelper helper = new();
+            Assert.ThrowsAsync<ArgumentNullException>(() => helper.Controller.GetPostById(Guid.Empty));
+        }
+
+
+        [Fact]
+        public void GetPostById_ShouldReturnOk()
+        {
+            TestHelper helper = new();
+
+            helper.mockUnitOfWork.Setup(
+                x => x.Posts.GetPostById(It.IsAny<Guid>()))
+                .ReturnsAsync(It.IsAny<Post>);
+
+            var response = helper.Controller.GetPostById(Guid.NewGuid());
+
+            Assert.True((response.Result.Result as ObjectResult).StatusCode == (int)HttpStatusCode.OK);
+        }
+        #endregion
+
+
         #region GetPostByUser
+
         [Fact]
         public void GetPostByUser_ShouldThrowArgumentNullException()
         {
@@ -43,19 +89,9 @@ namespace PlantsAPI.Test
 
 
         [Fact]
-        public void GetPostByUser_ShouldReturnResult()
+        public void GetPostByUser_ShouldReturnOk()
         {
             TestHelper helper = new();
-
-            PostDto post = new PostDto()
-            {
-                Id = Guid.NewGuid(),
-                UserName = "testName",
-                Content = "testContent",
-                DateOfCreation = DateTime.Now
-            };
-
-            IEnumerable<PostDto> postDtos = new List<PostDto>() { post };
 
             helper.mockUnitOfWork.Setup(
                 x => x.UserContext.HasAuthorization(It.IsAny<Guid>()))
@@ -63,13 +99,120 @@ namespace PlantsAPI.Test
 
             helper.mockUnitOfWork.Setup(
                 x => x.Posts.GetPostsOfUser(It.IsAny<Guid>()))
-                .ReturnsAsync(postDtos);
+                .ReturnsAsync(It.IsAny<List<PostDto>>);
 
             var response = helper.Controller.GetPostByUser(Guid.NewGuid());
-            //Assert.True((response.Result.Result as OkObjectResult).StatusCode == (int)HttpStatusCode.OK);
+            
             Assert.True((response.Result.Result as ObjectResult).StatusCode == (int)HttpStatusCode.OK);
         }
+
+
+        [Fact]
+        public void GetPostByUser_ShouldReturnUnauthorized()
+        {
+            TestHelper helper = new();
+
+            helper.mockUnitOfWork.Setup(
+                x => x.UserContext.HasAuthorization(It.IsAny<Guid>()))
+                .Returns(false);
+
+            var response = helper.Controller.GetPostByUser(Guid.NewGuid());
+            
+            Assert.True((response?.Result.Result as UnauthorizedResult).StatusCode == (int)HttpStatusCode.Unauthorized);
+        }
+
         #endregion
+
+        #region GetPostByUserReplies
+
+        [Fact]
+        public void GetPostByUserReplies_ShouldThrowArgumentNullException()
+        {
+            TestHelper helper = new();
+            Assert.ThrowsAsync<ArgumentNullException>(() => helper.Controller.GetPostByUserReplies(Guid.Empty));
+        }
+
+
+        [Fact]
+        public void GetPostByUserReplies_ShouldReturnOk()
+        {
+            TestHelper helper = new();
+
+            helper.mockUnitOfWork.Setup(
+                x => x.UserContext.HasAuthorization(It.IsAny<Guid>()))
+                .Returns(true);
+
+            helper.mockUnitOfWork.Setup(
+                x => x.Posts.GetPostsByUserReplies(It.IsAny<Guid>()))
+                .ReturnsAsync(It.IsAny<List<PostDto>>);
+
+            var response = helper.Controller.GetPostByUserReplies(Guid.NewGuid());
+
+            Assert.True((response.Result.Result as ObjectResult).StatusCode == (int)HttpStatusCode.OK);
+        }
+
+
+        [Fact]
+        public void GetPostByUserReplies_ShouldReturnUnauthorized()
+        {
+            TestHelper helper = new();
+
+            helper.mockUnitOfWork.Setup(
+                x => x.UserContext.HasAuthorization(It.IsAny<Guid>()))
+                .Returns(false);
+
+            var response = helper.Controller.GetPostByUserReplies(Guid.NewGuid());
+
+            Assert.True((response?.Result.Result as UnauthorizedResult).StatusCode == (int)HttpStatusCode.Unauthorized);
+        }
+
+        #endregion
+
+
+        #region GetPostsCount
+        [Fact]
+        public void GetPostsCount_ShouldThrowArgumentNullException()
+        {
+            TestHelper helper = new();
+            Assert.ThrowsAsync<ArgumentNullException>(() => helper.Controller.GetPostsCount(Guid.Empty));
+        }
+
+
+        [Fact]
+        public void GetPostsCount_ShouldReturnOk()
+        {
+            TestHelper helper = new();
+
+            helper.mockUnitOfWork.Setup(
+                x => x.UserContext.HasAuthorization(It.IsAny<Guid>()))
+                .Returns(true);
+
+            helper.mockUnitOfWork.Setup(
+                x => x.Posts.GetPostsCount(It.IsAny<Guid>()))
+                .ReturnsAsync(It.IsAny<int>);
+
+            var response = helper.Controller.GetPostsCount(Guid.NewGuid());
+
+            Assert.True((response.Result.Result as ObjectResult).StatusCode == (int)HttpStatusCode.OK);
+        }
+
+
+        [Fact]
+        public void GetPostsCount_ShouldReturnUnauthorized()
+        {
+            TestHelper helper = new();
+
+            helper.mockUnitOfWork.Setup(
+                x => x.UserContext.HasAuthorization(It.IsAny<Guid>()))
+                .Returns(false);
+
+            var response = helper.Controller.GetPostsCount(Guid.NewGuid());
+
+            Assert.True((response?.Result.Result as UnauthorizedResult).StatusCode == (int)HttpStatusCode.Unauthorized);
+        }
+
+        #endregion
+
 
 
         #region PostPost
@@ -78,6 +221,39 @@ namespace PlantsAPI.Test
         {
             TestHelper helper = new();
             Assert.ThrowsAsync<ArgumentNullException>(() => helper.Controller.PostPost(null));
+        }
+
+
+        [Fact]
+        public void PostPost_ShouldReturnOk()
+        {
+            TestHelper helper = new();
+           
+            helper.mockUnitOfWork.Setup(
+                x => x.UserContext.HasAuthorization(It.IsAny<Guid>()))
+                .Returns(true);
+
+            helper.mockUnitOfWork.Setup(
+                x => x.Posts.AddPost(It.IsAny<Post>()))
+                .ReturnsAsync(It.IsAny<Post>);
+
+            var response = helper.Controller.PostPost(new Post());
+            
+            Assert.True((response.Result.Result as ObjectResult).StatusCode == (int)HttpStatusCode.OK);
+        }
+
+        [Fact]
+        public void PostPost_ShouldReturnUnauthorized()
+        {
+            TestHelper helper = new();
+
+            helper.mockUnitOfWork.Setup(
+                x => x.UserContext.HasAuthorization(It.IsAny<Guid>()))
+                .Returns(false);
+
+            var response = helper.Controller.PostPost(new Post());
+
+            Assert.True((response.Result.Result as UnauthorizedResult).StatusCode == (int)HttpStatusCode.Unauthorized);
         }
         #endregion
 
@@ -89,15 +265,46 @@ namespace PlantsAPI.Test
             TestHelper helper = new();
             Assert.ThrowsAsync<ArgumentNullException>(() => helper.Controller.PutPost(null, Guid.NewGuid()));
         }
-        #endregion
 
-
-        #region PutPost
         [Fact]
         public void PutPost_ShouldThrowArgumentNullException_2()
         {
             TestHelper helper = new();
             Assert.ThrowsAsync<ArgumentNullException>(() => helper.Controller.PutPost(new Post(), Guid.Empty));
+        }
+
+
+        [Fact]
+        public void PutPost_ShouldReturnOk()
+        {
+            TestHelper helper = new();
+
+            helper.mockUnitOfWork.Setup(
+                x => x.UserContext.HasAuthorization(It.IsAny<Guid>()))
+                .Returns(true);
+
+            helper.mockUnitOfWork.Setup(
+                x => x.Posts.EditPost(It.IsAny<Post>()))
+                .ReturnsAsync(It.IsAny<Post>);
+
+            var response = helper.Controller.PutPost( new Post(), Guid.NewGuid());
+
+            Assert.True((response.Result.Result as ObjectResult).StatusCode == (int)HttpStatusCode.OK);
+        }
+
+
+        [Fact]
+        public void PutPost_ShouldReturnUnauthorized()
+        {
+            TestHelper helper = new();
+
+            helper.mockUnitOfWork.Setup(
+                x => x.UserContext.HasAuthorization(It.IsAny<Guid>()))
+                .Returns(false);
+
+            var response = helper.Controller.PutPost(new Post(), Guid.NewGuid());
+
+            Assert.True((response.Result.Result as UnauthorizedResult).StatusCode == (int)HttpStatusCode.Unauthorized);
         }
         #endregion
 
@@ -108,6 +315,38 @@ namespace PlantsAPI.Test
         {
             TestHelper helper = new();
             Assert.ThrowsAsync<ArgumentNullException>(() => helper.Controller.DeletePost(Guid.Empty));
+        }
+
+        [Fact]
+        public void DeletePost_ShouldReturnOk()
+        {
+            TestHelper helper = new();
+
+            helper.mockUnitOfWork.Setup(
+                x => x.UserContext.HasAuthorization(It.IsAny<Guid>()))
+                .Returns(true);
+
+            helper.mockUnitOfWork.Setup(
+                x => x.Posts.DeletePost(It.IsAny<Guid>()))
+                .ReturnsAsync(It.IsAny<bool>);
+
+            var response = helper.Controller.DeletePost( Guid.NewGuid());
+
+            Assert.True((response.Result.Result as ObjectResult).StatusCode == (int)HttpStatusCode.OK);
+        }
+
+        [Fact]
+        public void DeletePost_ShouldReturnUnauthorized()
+        {
+            TestHelper helper = new();
+
+            helper.mockUnitOfWork.Setup(
+                x => x.UserContext.HasAuthorization(It.IsAny<Guid>()))
+                .Returns(false);
+
+            var response = helper.Controller.DeletePost(Guid.NewGuid());
+
+            Assert.True((response.Result.Result as UnauthorizedResult).StatusCode == (int)HttpStatusCode.Unauthorized);
         }
         #endregion
 

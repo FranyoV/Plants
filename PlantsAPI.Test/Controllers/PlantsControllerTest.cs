@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Collections.Generic;
 
-namespace PlantsAPI.Test
+namespace PlantsAPI.Test.Controllers
 {
 
     public class PlantsControllerTest
@@ -31,7 +31,15 @@ namespace PlantsAPI.Test
         }
         #endregion
 
+
         #region GetByPlantId
+
+        [Fact]
+        private void GetPlantById_ShouldReturnArgumentNullException()
+        {
+            TestHelper helper = new();
+            Assert.ThrowsAsync<ArgumentNullException>(() => helper.Controller.GetPlantById(Guid.Empty));
+        }
 
         [Fact]
         public void GetPlantById_ShouldReturnResult()
@@ -48,7 +56,7 @@ namespace PlantsAPI.Test
         #endregion
 
 
-        #region
+        #region GetPlantByUser
         [Fact]
         public void GetPlantByUser_ShouldThrowArgumentNullException()
         {
@@ -61,27 +69,15 @@ namespace PlantsAPI.Test
         [Fact]
         public void GetPlantByUser_ShouldReturnUnathorized()
         {
-            Plant plant = new()
-            {
-                Id = Guid.NewGuid(),
-                Name = "testName",
-            };
-
-            IEnumerable<Plant> plantsResult = new List<Plant>() { plant };
-
             TestHelper helper = new();
 
             helper.mockUnitOfWork.Setup(
                 x => x.UserContext.HasAuthorization(It.IsAny<Guid>()))
                 .Returns(false);
 
-           /* helper.mockUnitOfWork.Setup(
-                x => x.Plants.GetPlantsOfUser(It.IsAny<Guid>()))
-                .ReturnsAsync(plantsResult);*/
-
             var response = helper.Controller.GetPlantsOfUser(Guid.NewGuid())?.Result;
 
-            Assert.True((response?.Result as ObjectResult).StatusCode == (int)HttpStatusCode.Unauthorized);
+            Assert.True((response?.Result as UnauthorizedResult).StatusCode == (int)HttpStatusCode.Unauthorized);
         }
 
 
@@ -89,13 +85,6 @@ namespace PlantsAPI.Test
         [Fact]
         public void GetPlantByUser_ShouldReturnResult()
         {
-            Plant plant = new()
-            {
-                Id = Guid.NewGuid(),
-                Name = "testName",
-
-            };
-            IEnumerable<Plant> plantsResult = new List<Plant>() { plant };
 
             TestHelper helper = new();
 
@@ -105,14 +94,13 @@ namespace PlantsAPI.Test
 
             helper.mockUnitOfWork.Setup(
                 x => x.Plants.GetPlantsOfUser(It.IsAny<Guid>()))
-                .ReturnsAsync(plantsResult);
+                .ReturnsAsync(It.IsAny<List<Plant>>);
 
             var response = helper.Controller.GetPlantsOfUser(Guid.NewGuid())?.Result;
 
             Assert.True((response?.Result as OkObjectResult).StatusCode == (int)HttpStatusCode.OK);
         }
         #endregion
-
 
 
         #region GetPlantsCount
@@ -125,7 +113,7 @@ namespace PlantsAPI.Test
 
 
         [Fact]
-        public void GetPlantsCount_ShouldReturnResult()
+        public void GetPlantsCount_ShouldReturnOk()
         {
             TestHelper helper = new();
 
@@ -142,6 +130,22 @@ namespace PlantsAPI.Test
             Assert.True((response?.Result as OkObjectResult).StatusCode == (int)HttpStatusCode.OK);
 
         }
+
+
+        [Fact]
+        public void GetPlantsCount_ShouldReturnUnauthorized()
+        {
+            TestHelper helper = new();
+
+            helper.mockUnitOfWork.Setup(
+                x => x.UserContext.HasAuthorization(It.IsAny<Guid>()))
+                .Returns(false);
+
+            var response = helper.Controller.GetPlantsCount(Guid.NewGuid())?.Result;
+
+            Assert.True((response?.Result as UnauthorizedResult).StatusCode == (int)HttpStatusCode.Unauthorized);
+
+        }
         #endregion
 
 
@@ -151,6 +155,41 @@ namespace PlantsAPI.Test
         {
             TestHelper helper = new();
             Assert.ThrowsAsync<ArgumentNullException>(() => helper.Controller.PostPlant(null));
+        }
+
+        [Fact]
+        public void PostPlant_ShouldReturnOk()
+        {
+            TestHelper helper = new();
+
+            helper.mockUnitOfWork.Setup(
+                x => x.UserContext.HasAuthorization(It.IsAny<Guid>()))
+                .Returns(true);
+
+            helper.mockUnitOfWork.Setup(
+                x => x.Plants.AddPlant(It.IsAny<Plant>()))
+                .ReturnsAsync(It.IsAny<Plant>());
+
+            var response = helper.Controller.PostPlant(new Plant())?.Result;
+
+            Assert.True((response?.Result as OkObjectResult).StatusCode == (int)HttpStatusCode.OK);
+
+        }
+
+
+        [Fact]
+        public void PostPlant_ShouldReturnUnauthorized()
+        {
+            TestHelper helper = new();
+
+            helper.mockUnitOfWork.Setup(
+                x => x.UserContext.HasAuthorization(It.IsAny<Guid>()))
+                .Returns(false);
+
+            var response = helper.Controller.PostPlant(new Plant())?.Result;
+
+            Assert.True((response?.Result as UnauthorizedResult).StatusCode == (int)HttpStatusCode.Unauthorized);
+
         }
         #endregion
 
@@ -162,6 +201,41 @@ namespace PlantsAPI.Test
             TestHelper helper = new();
             Assert.ThrowsAsync<ArgumentNullException>(() => helper.Controller.PutPlant( null));
         }
+
+        [Fact]
+        public void PutPlant_ShouldReturnOk()
+        {
+            TestHelper helper = new();
+
+            helper.mockUnitOfWork.Setup(
+                x => x.UserContext.HasAuthorization(It.IsAny<Guid>()))
+                .Returns(true);
+
+            helper.mockUnitOfWork.Setup(
+                x => x.Plants.EditPlant(It.IsAny<Plant>()))
+                .ReturnsAsync(It.IsAny<Plant>());
+
+            var response = helper.Controller.PutPlant(new Plant())?.Result;
+
+            Assert.True((response?.Result as OkObjectResult).StatusCode == (int)HttpStatusCode.OK);
+
+        }
+
+
+        [Fact]
+        public void PutPlant_ShouldReturnUnauthorized()
+        {
+            TestHelper helper = new();
+
+            helper.mockUnitOfWork.Setup(
+                x => x.UserContext.HasAuthorization(It.IsAny<Guid>()))
+                .Returns(false);
+
+            var response = helper.Controller.PutPlant(new Plant())?.Result;
+
+            Assert.True((response?.Result as UnauthorizedResult).StatusCode == (int)HttpStatusCode.Unauthorized);
+
+        }
         #endregion
 
 
@@ -171,6 +245,42 @@ namespace PlantsAPI.Test
         {
             TestHelper helper = new();
             Assert.ThrowsAsync<ArgumentNullException>(() => helper.Controller.DeletePlant(Guid.Empty));
+        }
+
+
+        [Fact]
+        public void DeletePlant_ShouldReturnOk()
+        {
+            TestHelper helper = new();
+
+            helper.mockUnitOfWork.Setup(
+                x => x.UserContext.HasAuthorization(It.IsAny<Guid>()))
+                .Returns(true);
+
+            helper.mockUnitOfWork.Setup(
+                x => x.Plants.DeletePlant(It.IsAny<Guid>()))
+                .ReturnsAsync(It.IsAny<bool>());
+
+            var response = helper.Controller.DeletePlant(Guid.NewGuid())?.Result;
+
+            Assert.True((response?.Result as OkObjectResult).StatusCode == (int)HttpStatusCode.OK);
+
+        }
+
+
+        [Fact]
+        public void DeletePlant_ShouldReturnUnauthorized()
+        {
+            TestHelper helper = new();
+
+            helper.mockUnitOfWork.Setup(
+                x => x.UserContext.HasAuthorization(It.IsAny<Guid>()))
+                .Returns(false);
+
+            var response = helper.Controller.DeletePlant(Guid.NewGuid())?.Result;
+
+            Assert.True((response?.Result as UnauthorizedResult).StatusCode == (int)HttpStatusCode.Unauthorized);
+
         }
         #endregion
 

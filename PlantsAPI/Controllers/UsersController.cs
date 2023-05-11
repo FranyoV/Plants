@@ -23,9 +23,15 @@ namespace PlantsAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
-            
-            var users = await unitOfWork.Users.GetUsers();
-            return Ok(users);
+            try
+            {
+                var users = await unitOfWork.Users.GetUsers();
+                return Ok(users);
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         //TODO AUTHORIZATION
@@ -33,30 +39,51 @@ namespace PlantsAPI.Controllers
         [Route("{id}")]
         public async Task<ActionResult<UserDto>> GetUser(Guid id)
         {
-            var user = await unitOfWork.Users.GetUserById(id);
-            return Ok(user);
+            try
+            {
+                var user = await unitOfWork.Users.GetUserById(id);
+                return Ok(user);
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         //TODO AUTHORIZATION
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(User user)
         {
-            var newUser = await unitOfWork.Users.AddUser(user);
-            await unitOfWork.SaveChangesAsync();
-            return Ok(newUser);
+            try
+            {
+                var newUser = await unitOfWork.Users.AddUser(user);
+                await unitOfWork.SaveChangesAsync();
+                return Ok(newUser);
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         [HttpPut]
         [Route("{id}")]
         public async Task<ActionResult<User>> PutUser(User user)
         {
-            if (unitOfWork.UserContext.HasAuthorization(user.Id))
+            try
             {
-                var modifiedUser = await unitOfWork.Users.EditUser(user);
-                await unitOfWork.SaveChangesAsync();
-                return Ok(modifiedUser);
+                if (unitOfWork.UserContext.HasAuthorization(user.Id))
+                {
+                    var modifiedUser = await unitOfWork.Users.EditUser(user);
+                    await unitOfWork.SaveChangesAsync();
+                    return Ok(modifiedUser);
+                }
+                return Unauthorized();
             }
-            return Unauthorized();
+            catch
+            {
+                return BadRequest();
+            }
 
         }
 
@@ -64,13 +91,20 @@ namespace PlantsAPI.Controllers
         [Route("{id}")]
         public async Task<ActionResult<User>> DeleteUser(Guid id)
         {
-            if (unitOfWork.UserContext.HasAuthorization(id))
+            try
             {
-                var result = await unitOfWork.Users.DeleteUser(id);
-                await unitOfWork.SaveChangesAsync();
-                return Ok(result);
+                if (unitOfWork.UserContext.HasAuthorization(id))
+                {
+                    var result = await unitOfWork.Users.DeleteUser(id);
+                    await unitOfWork.SaveChangesAsync();
+                    return Ok(result);
+                }
+                return Unauthorized();
             }
-            return Unauthorized();
+            catch
+            {
+                return BadRequest();
+            } 
         }
     }
 }

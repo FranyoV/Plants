@@ -1,5 +1,3 @@
-import { Guid } from "guid-typescript";
-import { Maintenance } from "./Maintenance";
 import { User } from "./User";
 
 export class Plant {

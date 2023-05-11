@@ -21,8 +21,16 @@ namespace PlantsAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Item>>> GetItems()
         {
-            var items = await unitOfWork.Items.GetItems();
-            return Ok(items);
+            try
+            {
+                var items = await unitOfWork.Items.GetItems();
+                return Ok(items);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+
         }
 
         //TODO AUTHORIZATION
@@ -30,58 +38,95 @@ namespace PlantsAPI.Controllers
         [Route("{id}")]
         public async Task<ActionResult<Item>> GetItemById(Guid id)
         {
-            var item = await unitOfWork.Items.GetItemById(id);
-            return Ok(item);
+            try
+            {
+                var item = await unitOfWork.Items.GetItemById(id);
+                return Ok(item);
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
+
 
         [HttpGet]
         [Route("user/{userId}")]
         public async Task<ActionResult<IEnumerable<Item>>> GetItemsOfUser([FromRoute] Guid userId)
         {
-            if (unitOfWork.UserContext.HasAuthorization(userId))
+            try
             {
-                var items = await unitOfWork.Items.GetItemsOfUser(userId);
-                return Ok(items);
+                if (unitOfWork.UserContext.HasAuthorization(userId))
+                {
+                    var items = await unitOfWork.Items.GetItemsOfUser(userId);
+                    return Ok(items);
+                }
+                return Unauthorized();
             }
-            return Unauthorized();
+            catch
+            {
+                return BadRequest();
+            }
+
         }
 
         [HttpGet]
         [Route("user/{userId}/count")]
         public async Task<ActionResult<int>> GetItemsCount([FromRoute] Guid userId)
         {
-            if (unitOfWork.UserContext.HasAuthorization(userId))
+            try
             {
-                var items = await unitOfWork.Plants.GetPlantsCount(userId);
-                return Ok(items);
+                if (unitOfWork.UserContext.HasAuthorization(userId))
+                {
+                    var items = await unitOfWork.Plants.GetPlantsCount(userId);
+                    return Ok(items);
+                }
+                return Unauthorized();
             }
-            return Unauthorized();
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         [HttpPost]
         public async Task<ActionResult<Item>> PostItem([FromBody] Item item)
         {
-            if (unitOfWork.UserContext.HasAuthorization(item.UserId))
+            try
             {
-                var newItem = await unitOfWork.Items.AddItem(item);
-                await unitOfWork.SaveChangesAsync();
-                return Ok(newItem);
+                if (unitOfWork.UserContext.HasAuthorization(item.UserId))
+                {
+                    var newItem = await unitOfWork.Items.AddItem(item);
+                    await unitOfWork.SaveChangesAsync();
+                    return Ok(newItem);
+                }
+                return Unauthorized();
             }
-            return Unauthorized();
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         [HttpPut]
         [Route("{id}")]
         public async Task<ActionResult<Item>> PutItem([FromBody] Item item)
         {
-            if (unitOfWork.UserContext.HasAuthorization(item.UserId))
+            try
             {
-                var modifiedPlant = await unitOfWork.Items.EditItem(item);
-                await unitOfWork.SaveChangesAsync();
-                return Ok(modifiedPlant);
+                if (unitOfWork.UserContext.HasAuthorization(item.UserId))
+                {
+                    var modifiedPlant = await unitOfWork.Items.EditItem(item);
+                    await unitOfWork.SaveChangesAsync();
+                    return Ok(modifiedPlant);
 
+                }
+                return Unauthorized();
             }
-            return Unauthorized();
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         //TODO AUTHORIZATION
@@ -89,9 +134,16 @@ namespace PlantsAPI.Controllers
         [Route("{id}")]
         public async Task<ActionResult<bool>> DeleteItem(Guid id)
         {
-            var result = await unitOfWork.Items.DeleteItem(id);
-            await unitOfWork.SaveChangesAsync();
-            return Ok(result);
+            try
+            {
+                var result = await unitOfWork.Items.DeleteItem(id);
+                await unitOfWork.SaveChangesAsync();
+                return Ok(result);
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
     }
