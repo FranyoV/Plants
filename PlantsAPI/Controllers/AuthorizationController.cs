@@ -53,28 +53,37 @@ namespace PlantsAPI.Controllers
         public async Task<ActionResult<LoginResponse>> Login([FromBody] LoginRequest request)
         {
             if (request == null) throw new ArgumentNullException();
-            var user = await unitOfWork.Users.GetUserByName(request.Username);
 
-            if (user == null)
+            try
             {
-                return Ok(new LoginResponse(LoginStatus.UserNotFound));
+                var user = await unitOfWork.Users.GetUserByName(request.Username);
+
+                if (user == null)
+                {
+                    return Ok(new LoginResponse(LoginStatus.UserNotFound));
+                }
+
+                string passwordHash = unitOfWork.Auth.CreatePasswordHash(request.Password, user.PasswordSalt);
+
+                if (string.Compare(passwordHash, user.PasswordHash, true) != 0)
+                {
+                    return Ok(new LoginResponse(LoginStatus.WrongPassword));
+                }
+
+                LoginResponse response = new()
+                {
+                    Status = LoginStatus.Successful,
+                    UserId = user.Id,
+                    Token = unitOfWork.Auth.CreateToken(user)
+                };
+
+                return Ok(response);
             }
-
-            string passwordHash = unitOfWork.Auth.CreatePasswordHash(request.Password, user.PasswordSalt);
-
-            if (string.Compare(passwordHash, user.PasswordHash, true) != 0)
+            catch
             {
-                return Ok(new LoginResponse(LoginStatus.WrongPassword));
+                return BadRequest();
             }
-
-            LoginResponse response = new()
-            {
-                Status = LoginStatus.Successful,
-                UserId = user.Id,
-                Token = unitOfWork.Auth.CreateToken(user)
-            };
-
-            return Ok(response);
+            
 
         }
 

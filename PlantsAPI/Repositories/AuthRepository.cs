@@ -24,6 +24,7 @@ namespace PlantsAPI.Repositories
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.Name)
+                //new Claim(ClaimTypes.Role, "admin")
             };
 
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
@@ -31,6 +32,7 @@ namespace PlantsAPI.Repositories
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
 
+            //add issuer and other properties
             var token = new JwtSecurityToken(
                 claims: claims,
                 expires: DateTime.Now.AddDays(1),

@@ -53,15 +53,32 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 
 builder.Services.AddSwaggerGen(options =>
 {
-    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
         Description = "Standard Authorization header using the Bearer scheme (\"bearer {token}\")",
         In = ParameterLocation.Header,
         Name = "Authorization",
-        Type = SecuritySchemeType.ApiKey
+        Type = SecuritySchemeType.Http
     });
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Id = "Bearer",
+                    Type=ReferenceType.SecurityScheme
+                }
+            },
+            new List<string>()
+        }
+  
+    }) ;
 
-    options.OperationFilter<SecurityRequirementsOperationFilter>();
+    //options.OperationFilter<SecurityRequirementsOperationFilter>();
 });
 
 

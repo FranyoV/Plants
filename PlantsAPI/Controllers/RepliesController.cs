@@ -7,7 +7,7 @@ namespace PlantsAPI.Controllers
 {
     [Route("api/replies")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class RepliesController : ControllerBase
     {
         private readonly IUnitOfWork unitOfWork;
