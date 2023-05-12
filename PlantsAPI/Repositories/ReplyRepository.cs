@@ -9,7 +9,7 @@ namespace PlantsAPI.Repositories
     public class ReplyRepository : GenericRepository<Reply>, IReplyRepository
     {
         private readonly INotificationService notificationService;
-        public ReplyRepository(PlantsDbContext dbContext, ILogger logger, INotificationService notificationService) : base(dbContext, logger)
+        public ReplyRepository(PlantsDbContext dbContext, IUserContext userContext, INotificationService notificationService) : base(dbContext, userContext)
         {
             this.notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
         }
@@ -30,33 +30,53 @@ namespace PlantsAPI.Repositories
         public async Task<IEnumerable<Reply>> GetRepliesOfPost(Guid postId)
         {
             if (postId == Guid.Empty) throw new ArgumentNullException(nameof(postId));
-            List<Reply> replies = await dbSet.Where(r => r.PostId == postId).ToListAsync();
 
-            var repliesInOrder = replies.OrderBy(x => x.DateOfCreation);
+            
+            var post = _dbContext.Posts.Where(x => x.Id == postId).FirstOrDefault();
 
-            return repliesInOrder;
+            if (post != null && _userContext.HasAuthorization(post.UserId))
+            {
+                List<Reply> replies = await dbSet.Where(r => r.PostId == postId).ToListAsync();
+
+                var repliesInOrder = replies.OrderBy(x => x.DateOfCreation);
+                return repliesInOrder;
+            }
+            else
+            {
+                throw new UnauthorizedAccessException();
+            }
+
         }
 
         public async Task<int> GetRepliesCount(Guid userId)
         {
             if (userId == Guid.Empty) throw new ArgumentNullException(nameof(userId));
 
-            List<Reply> result = await dbSet.Where(p => p.UserId == userId).ToListAsync();
-            return result.Count;
+            if (_userContext.HasAuthorization(userId))
+            {
+                List<Reply> result = await dbSet.Where(p => p.UserId == userId).ToListAsync();
+                return result.Count;
+            }
+            else
+            {
+                throw new UnauthorizedAccessException();
+            }
+           
 
         }
 
         public async Task<Reply> AddReply(Reply reply)
         {
             if (reply == null) throw new ArgumentNullException(nameof(reply));
+
             reply.Id = Guid.NewGuid();
             var added = await dbSet.AddAsync(reply);
             
              
             if (added != null)
             {
-                Post post = dbContext.Posts.Where(p => p.Id == reply.PostId).First();
-                EmailData emailData = new EmailData()
+                Post post = _dbContext.Posts.Where(p => p.Id == reply.PostId).First();
+                EmailData emailData = new()
                 {
 
                     Recipicent = "ryann.rempel@ethereal.email",
@@ -69,8 +89,8 @@ namespace PlantsAPI.Repositories
                 notificationService.SendEmail(emailData, EmailTemplate.NEWREPLY);
 
             }
-            //var result = await GetReplyById(reply.Id);
-            return added.Entity;
+            var result = await GetReplyById(reply.Id);
+            return added?.Entity ;
         }
 
         /*

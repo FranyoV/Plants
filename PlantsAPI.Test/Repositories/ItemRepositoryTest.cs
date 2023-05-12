@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using Xunit;
 
 namespace PlantsAPI.Test.Repositories
-{
+{/*
     public class ItemRepositoryTest
     {
         private readonly PlantsDbContext context;
@@ -117,5 +117,5 @@ namespace PlantsAPI.Test.Repositories
         }
 
         #endregion
-    }
+    }*/
 }

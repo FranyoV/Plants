@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit} from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Plant } from '../../models/Plant';
 import { WebApiService } from 'src/app/webapi.service';
 import { Subscription } from 'rxjs';
@@ -30,7 +30,8 @@ export class PlantsListComponent implements OnInit, OnDestroy {
     private data : DataService,
     private webApi : WebApiService,
     private dialog : MatDialog,
-    private snackBar : MatSnackBar
+    private snackBar : MatSnackBar,
+    private route : ActivatedRoute
     ){}
 
 
@@ -38,13 +39,20 @@ export class PlantsListComponent implements OnInit, OnDestroy {
 
     this.subscription = this.data.currentPlantsMessage.subscribe( message => this.plants = message ) ;
 
-    this.webApi.getMe().subscribe({
+    /*this.webApi.getMe().subscribe({
       next: (res) => {
         this.currentUserId = res, console.log("You are logged in with user: ",this.currentUserId);
         this.getPlantsOfUser();
     },
     error: (err) => {this.openSnackBar("Something went wrong. Try again!"), console.error('Getting plant for user failed.',err)}
-    })
+    })*/
+    this.route.parent?.params.subscribe({
+      next: (params) => {
+        const id = params["userId"];
+        this.currentUserId = id!;
+      },
+      error: (err) => this.openSnackBar("Something went wrong!")
+    });
 
   }
 

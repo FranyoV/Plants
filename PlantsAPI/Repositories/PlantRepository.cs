@@ -8,9 +8,13 @@ namespace PlantsAPI.Repositories
 {
     public class PlantRepository : GenericRepository<Plant>,IPlantRepository
     {
-        public PlantRepository(PlantsDbContext dbContext, ILogger logger) : base(dbContext, logger)
-        {
+        //private readonly IUserContext _userContext;
+        private readonly INotificationService _notificationService;
 
+        public PlantRepository(PlantsDbContext dbContext, IUserContext userContext, INotificationService notificationService) : base(dbContext, userContext)
+        {
+            ///_userContext = userContext;
+            _notificationService = notificationService;
         }
 
         public async Task<IEnumerable<Plant>> GetPlants()
@@ -25,6 +29,16 @@ namespace PlantsAPI.Repositories
             var result = await dbSet.Where(p => p.Id == id).FirstAsync();
 
             return result;
+            /*
+            if (_userContext.HasAuthorization(result.UserId))
+            {
+               
+            }
+            else 
+            {
+                return new Plant();
+            }*/
+            
         }
 
         public async Task<IEnumerable<Plant>> GetPlantsOfUser(Guid userId)
@@ -52,7 +66,7 @@ namespace PlantsAPI.Repositories
             plant.Id = Guid.NewGuid();
 
 
-            if (plant.LastNotification != null)
+            if (plant.LastNotification.HasValue && plant.Interval.HasValue)
             {
                 
                 if (plant.LastNotification.Value.AddDays(plant.Interval.Value) < DateTime.Now)
@@ -119,7 +133,7 @@ namespace PlantsAPI.Repositories
 
         public async Task<bool> DeletePlant(Guid plantId)
         {
-            if (plantId == Guid.Empty) throw new ArgumentNullException();
+            if (plantId == Guid.Empty) throw new ArgumentNullException(nameof(plantId));
 
             var toBeDeleted = await dbSet.Where(p => p.Id == plantId).FirstAsync();
             if (toBeDeleted != null)

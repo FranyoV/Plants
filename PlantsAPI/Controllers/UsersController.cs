@@ -72,13 +72,11 @@ namespace PlantsAPI.Controllers
         {
             try
             {
-                if (unitOfWork.UserContext.HasAuthorization(user.Id))
-                {
+ 
                     var modifiedUser = await unitOfWork.Users.EditUser(user);
                     await unitOfWork.SaveChangesAsync();
                     return Ok(modifiedUser);
-                }
-                return Unauthorized();
+
             }
             catch
             {
@@ -93,13 +91,11 @@ namespace PlantsAPI.Controllers
         {
             try
             {
-                if (unitOfWork.UserContext.HasAuthorization(id))
-                {
+  
                     var result = await unitOfWork.Users.DeleteUser(id);
                     await unitOfWork.SaveChangesAsync();
                     return Ok(result);
-                }
-                return Unauthorized();
+
             }
             catch
             {

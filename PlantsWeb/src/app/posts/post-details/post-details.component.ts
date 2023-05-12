@@ -44,16 +44,29 @@ export class PostDetailsComponent implements OnInit {
       this.currentPostId = id!;
     } )
 
+    this.route.parent?.params.subscribe({
+      next: (params) => {
+        const id = params["userId"];
+        
+        this.currentUserId = id!;
+        
+      },
+      error: (err) => this.openSnackBar("Something went wrong!")
+  });
+  /*
     this.webApi.getMe().subscribe({
       next: (res) => {
         this.currentUserId = res, 
         console.log("You are logged in with user: ",this.currentUserId),
         this.getPostById();
         this.getRepliesOfPost();
+
       },
-      error: (err) => {this.openSnackBar("something went wrong. Try again later!"),  console.error(err);
+      error: (err) => {
+        this.openSnackBar("something went wrong. Try again later!")
+        
       },
-    })
+    })*/
 
   }
 

@@ -2,12 +2,13 @@
 using Microsoft.EntityFrameworkCore;
 using PlantsAPI.Data;
 using PlantsAPI.Models;
+using PlantsAPI.Services;
 
 namespace PlantsAPI.Repositories
 {
     public class UserRepository : GenericRepository<User>, IUserRepository
     {
-        public UserRepository(PlantsDbContext dbContext, ILogger logger) : base(dbContext, logger) 
+        public UserRepository(PlantsDbContext dbContext, IUserContext userContext) : base(dbContext, userContext) 
         { 
         }
 
@@ -34,7 +35,7 @@ namespace PlantsAPI.Repositories
             User user = new();
             user = await dbSet.Where(u => u.Name == username).FirstOrDefaultAsync();
 
-            UserDto userDto = new UserDto();
+            UserDto userDto = new();
             if (user != null)
             {
                 userDto = new UserDto()

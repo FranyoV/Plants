@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Post } from '../../models/Post';
 import { WebApiService } from '../../webapi.service';
 import { PageEvent } from '@angular/material/paginator';
@@ -29,34 +29,50 @@ export class PostsListComponent implements OnInit, OnDestroy{
     private router : Router,
     private webApi : WebApiService,
     private data : DataService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private route : ActivatedRoute
   ){}
 
   ngOnInit() : void {
-    this.webApi.getMe().subscribe({
+   /* this.webApi.getMe().subscribe({
       next: (res) => {
         this.currentUserId = res, console.log("You are logged in with user: ",this.currentUserId);
         this.getPostByUserReplies();
         this.getPostByUser();
+        this.openSnackBar("You are not logged in!");
+        if (res == null) this.router.navigate(['/login']);
       },
-      error: (err) => {this.openSnackBar("Something went wrong. Try again!"), console.error('Getting plant for user failed.',err)}
-      })
-  
+      error: (err) => {this.openSnackBar("Something went wrong. Try again!"),
+        
+       console.error('Getting plant for user failed.',err)}
+      })*/
+      
+
+      this.route.parent?.params.subscribe({
+        next: (params) => {
+          const id = params["userId"];
+          
+          this.currentUserId = id!;
+          
+          this.getPostByUserReplies();
+          this.getPostByUser();
+        },
+        error: (err) => this.openSnackBar("Something went wrong!")
+    });
+      
     
-    this.data.currentUserIdMessage.subscribe({
+   /* this.data.currentUserIdMessage.subscribe({
       next: (res) => {this.currentUserId = res, console.log("You are logged in with user: ",this.currentUserId)}
-    })
+    })*/
     this.subscription = this.data.currentPostsMessage
     .subscribe( message => this.posts = message ) ;
 
     this.getPosts();
-    this.getReplyCount();
-
-
   
   }
 
   getPostByUser(){
+    console.log(this.currentUserId)
     this.webApi.getPostByUser(this.currentUserId).subscribe({
       next: (res) => {this.postsOfUser = res},
       error: (err) => {console.log(err)}
@@ -64,6 +80,7 @@ export class PostsListComponent implements OnInit, OnDestroy{
   }
 
   getPostByUserReplies(){
+    console.log(this.currentUserId)
     this.webApi.getPostByUserReplies(this.currentUserId).subscribe({
       next: (res) => {this.postsOfUserReplies = res},
       error: (err) => {console.log(err)}

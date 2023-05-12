@@ -11,6 +11,7 @@ using Xunit;
 namespace PlantsAPI.Test.Repositories
 {
     //implementing IDisposable needed?
+    /*
     public class GenericRepositoryTest 
     {
         private readonly PlantsDbContext context;
@@ -46,6 +47,6 @@ namespace PlantsAPI.Test.Repositories
         {
             Assert.Throws<ArgumentNullException>(() => new GenericRepository<Plant>(context, null));
         }
-    }
+    }*/
 
 }

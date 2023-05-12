@@ -34,6 +34,7 @@ export class MarketplaceComponent  implements OnInit, AfterViewInit, OnDestroy {
     private router: Router,
     private webApi: WebApiService,
     private data : DataService,
+    
     ) 
     {}
 
@@ -46,6 +47,14 @@ export class MarketplaceComponent  implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit(): void {
     this.subscription = this.data.currentItemsMessage
     .subscribe( message => this.items = message ) ;
+
+   /* this.route.parent?.params.subscribe({
+      next: (params) => {
+        const id = params["userId"];
+        this.currentUserId = id!;
+      },
+      error: (err) => this.openSnackBar("Something went wrong!")
+    });*/
 
     this.getItems();
       

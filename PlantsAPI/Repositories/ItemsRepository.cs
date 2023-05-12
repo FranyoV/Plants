@@ -1,12 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PlantsAPI.Data;
 using PlantsAPI.Models;
+using PlantsAPI.Services;
 
 namespace PlantsAPI.Repositories
 {
     public class ItemsRepository : GenericRepository<Item>, IItemsRepository
     {
-        public ItemsRepository(PlantsDbContext dbContext, ILogger logger) : base(dbContext, logger)
+        public ItemsRepository(PlantsDbContext dbContext, IUserContext userContext) : base(dbContext, userContext )
         {
         }
 
@@ -49,7 +50,7 @@ namespace PlantsAPI.Repositories
             item.Id = Guid.NewGuid();
 
 
-            var result = dbSet.Add(item);
+            var result = await dbSet.AddAsync(item);
             return result.Entity;
         }
 
@@ -69,7 +70,7 @@ namespace PlantsAPI.Repositories
                 originalItem.Price = item.Price;
             }
 
-            return (originalItem != null) ? originalItem : new Item();
+            return originalItem ?? new Item();
         }
 
         public async Task<bool> DeleteItem(Guid itemId)

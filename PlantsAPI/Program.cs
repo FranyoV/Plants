@@ -18,6 +18,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<PlantsDbContext>(options => 
     options.UseSqlServer(builder.Configuration.GetConnectionString("PlantsDatabase")));
 
+
+
+
 builder.Services.AddQuartz(q =>
 {
     q.UseMicrosoftDependencyInjectionJobFactory();
@@ -78,7 +81,7 @@ builder.Services.AddSwaggerGen(options =>
   
     }) ;
 
-    //options.OperationFilter<SecurityRequirementsOperationFilter>();
+    options.OperationFilter<SecurityRequirementsOperationFilter>();
 });
 
 

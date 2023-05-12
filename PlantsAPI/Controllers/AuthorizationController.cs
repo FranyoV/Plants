@@ -15,7 +15,7 @@ namespace PlantsAPI.Controllers
         public AuthorizationController(IUnitOfWork unitOfWork, IHttpContextAccessor contextAccessor)
         {
             this.unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-            this.httpContextAccessor = contextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
+            this.httpContextAccessor = contextAccessor ?? throw new ArgumentNullException(nameof(contextAccessor));
         }
 
         [HttpPost]
@@ -28,7 +28,7 @@ namespace PlantsAPI.Controllers
                 string passwordSalt = unitOfWork.Auth.GenerateSalt(10);
                 string passwordHash = unitOfWork.Auth.CreatePasswordHash(request.Password, passwordSalt);
 
-                User newUser = new User();
+                User newUser = new();
                 newUser.Name = request.Username;
                 newUser.EmailAddress = request.Email;
                 // newUser.ImageUrl = request.ImageUrl;
@@ -52,7 +52,7 @@ namespace PlantsAPI.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<LoginResponse>> Login([FromBody] LoginRequest request)
         {
-            if (request == null) throw new ArgumentNullException();
+            if (request == null) throw new ArgumentNullException(nameof(request));
 
             try
             {
@@ -87,11 +87,7 @@ namespace PlantsAPI.Controllers
 
         }
 
-        [HttpGet]
-        public ActionResult<string> GetMe()
-        {
-            return unitOfWork.UserContext.GetMe();
-        }
+
 
     }
 }

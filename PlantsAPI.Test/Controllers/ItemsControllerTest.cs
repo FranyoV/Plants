@@ -6,10 +6,7 @@ using PlantsAPI.Models;
 using PlantsAPI.Repositories;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace PlantsAPI.Test.Controllers
@@ -78,10 +75,6 @@ namespace PlantsAPI.Test.Controllers
             TestHelper helper = new();
 
             helper.mockUnitOfWork.Setup(
-               x => x.UserContext.HasAuthorization(It.IsAny<Guid>()))
-               .Returns(true);
-
-            helper.mockUnitOfWork.Setup(
                  x => x.Items.GetItemById(It.IsAny<Guid>()))
                  .ReturnsAsync(It.IsAny<Item>);
 
@@ -92,31 +85,17 @@ namespace PlantsAPI.Test.Controllers
 
 
         [Fact]
-        public void GetItemById_ShouldReturnUnauthorized()
-        {
-            TestHelper helper = new();
-
-            helper.mockUnitOfWork.Setup(
-                x => x.UserContext.HasAuthorization(It.IsAny<Guid>()))
-                .Returns(false);
-
-
-            var response = helper.Controller.GetItemById(Guid.NewGuid());
-
-            Assert.NotNull(response);
-            Assert.True((response.Result.Result as UnauthorizedResult).StatusCode == (int)HttpStatusCode.Unauthorized);
-
-        }
-
-        [Fact]
         public void GetItemById_ShouldReturnBadRequest()
         {
             TestHelper helper = new();
 
             var response = helper.Controller.GetItemById(Guid.NewGuid());
 
-            Assert.True((response?.Result.Result as BadRequestResult).StatusCode == (int)HttpStatusCode.BadRequest);
+            Assert.NotNull(response);
+            Assert.True((response.Result.Result as BadRequestResult).StatusCode == (int)HttpStatusCode.BadRequest);
+
         }
+
         #endregion
 
 
@@ -136,10 +115,6 @@ namespace PlantsAPI.Test.Controllers
             TestHelper helper = new();
 
             helper.mockUnitOfWork.Setup(
-               x => x.UserContext.HasAuthorization(It.IsAny<Guid>()))
-               .Returns(true);
-
-            helper.mockUnitOfWork.Setup(
                  x => x.Items.GetItemsOfUser(It.IsAny<Guid>()))
                  .ReturnsAsync(It.IsAny<List<Item>>);
 
@@ -148,23 +123,6 @@ namespace PlantsAPI.Test.Controllers
             Assert.True((response?.Result.Result as OkObjectResult).StatusCode == (int)HttpStatusCode.OK);
         }
 
-
-        [Fact]
-        public void GetItemsOfUser_ShouldReturnUnauthorized()
-        {
-            TestHelper helper = new();
-
-            helper.mockUnitOfWork.Setup(
-                x => x.UserContext.HasAuthorization(It.IsAny<Guid>()))
-                .Returns(false);
-
-
-            var response = helper.Controller.GetItemsOfUser(Guid.NewGuid());
-
-            Assert.NotNull(response);
-            Assert.True((response.Result.Result as UnauthorizedResult).StatusCode == (int)HttpStatusCode.Unauthorized);
-
-        }
 
         [Fact]
         public void GetItemOfUser_ShouldReturnBadRequest()
@@ -193,10 +151,6 @@ namespace PlantsAPI.Test.Controllers
             TestHelper helper = new();
 
             helper.mockUnitOfWork.Setup(
-               x => x.UserContext.HasAuthorization(It.IsAny<Guid>()))
-               .Returns(true);
-
-            helper.mockUnitOfWork.Setup(
                  x => x.Items.GetItemsCount(It.IsAny<Guid>()))
                  .ReturnsAsync(It.IsAny<int>);
 
@@ -206,22 +160,6 @@ namespace PlantsAPI.Test.Controllers
         }
 
 
-        [Fact]
-        public void GetItemsCount_ShouldReturnUnauthorized()
-        {
-            TestHelper helper = new();
-
-            helper.mockUnitOfWork.Setup(
-                x => x.UserContext.HasAuthorization(It.IsAny<Guid>()))
-                .Returns(false);
-
-
-            var response = helper.Controller.GetItemsCount(Guid.NewGuid());
-
-            Assert.NotNull(response);
-            Assert.True((response.Result.Result as UnauthorizedResult).StatusCode == (int)HttpStatusCode.Unauthorized);
-
-        }
 
         [Fact]
         public void GetItemsCount_ShouldReturnBadRequest()
@@ -249,10 +187,6 @@ namespace PlantsAPI.Test.Controllers
             TestHelper helper = new();
 
             helper.mockUnitOfWork.Setup(
-               x => x.UserContext.HasAuthorization(It.IsAny<Guid>()))
-               .Returns(true);
-
-            helper.mockUnitOfWork.Setup(
                  x => x.Items.AddItem(It.IsAny<Item>()))
                  .ReturnsAsync(It.IsAny<Item>);
 
@@ -263,31 +197,17 @@ namespace PlantsAPI.Test.Controllers
 
 
         [Fact]
-        public void PostItem_ShouldReturnUnauthorized()
-        {
-            TestHelper helper = new();
-
-            helper.mockUnitOfWork.Setup(
-                x => x.UserContext.HasAuthorization(It.IsAny<Guid>()))
-                .Returns(false);
-
-
-            var response = helper.Controller.PostItem(new Item());
-
-            Assert.NotNull(response);
-            Assert.True((response.Result.Result as UnauthorizedResult).StatusCode == (int)HttpStatusCode.Unauthorized);
-
-        }
-
-        [Fact]
         public void PostItem_ShouldReturnBadRequest()
         {
             TestHelper helper = new();
 
             var response = helper.Controller.PostItem(new Item());
 
-            Assert.True((response?.Result.Result as BadRequestResult).StatusCode == (int)HttpStatusCode.BadRequest);
+            Assert.NotNull(response);
+            Assert.True((response.Result.Result as BadRequestResult).StatusCode == (int)HttpStatusCode.BadRequest);
+
         }
+
         #endregion
 
 
@@ -306,10 +226,6 @@ namespace PlantsAPI.Test.Controllers
             TestHelper helper = new();
 
             helper.mockUnitOfWork.Setup(
-               x => x.UserContext.HasAuthorization(It.IsAny<Guid>()))
-               .Returns(true);
-
-            helper.mockUnitOfWork.Setup(
                  x => x.Items.EditItem(It.IsAny<Item>()))
                  .ReturnsAsync(It.IsAny<Item>);
 
@@ -320,19 +236,14 @@ namespace PlantsAPI.Test.Controllers
 
 
         [Fact]
-        public void PutItem_ShouldReturnUnauthorized()
+        public void PutItem_ShouldReturnBadRequest()
         {
             TestHelper helper = new();
-
-            helper.mockUnitOfWork.Setup(
-                x => x.UserContext.HasAuthorization(It.IsAny<Guid>()))
-                .Returns(false);
-
 
             var response = helper.Controller.PutItem(new Item());
 
             Assert.NotNull(response);
-            Assert.True((response.Result.Result as UnauthorizedResult).StatusCode == (int)HttpStatusCode.Unauthorized);
+            Assert.True((response.Result.Result as BadRequestResult).StatusCode == (int)HttpStatusCode.BadRequest);
 
         }
         #endregion
@@ -353,10 +264,6 @@ namespace PlantsAPI.Test.Controllers
             TestHelper helper = new();
 
             helper.mockUnitOfWork.Setup(
-               x => x.UserContext.HasAuthorization(It.IsAny<Guid>()))
-               .Returns(true);
-
-            helper.mockUnitOfWork.Setup(
                  x => x.Items.DeleteItem(It.IsAny<Guid>()))
                  .ReturnsAsync(It.IsAny<bool>);
 
@@ -367,30 +274,15 @@ namespace PlantsAPI.Test.Controllers
 
 
         [Fact]
-        public void DeleteItem_ShouldReturnUnauthorized()
+        public void DeleteItem_ShouldReturnBadRequest()
         {
             TestHelper helper = new();
-
-            helper.mockUnitOfWork.Setup(
-                x => x.UserContext.HasAuthorization(It.IsAny<Guid>()))
-                .Returns(false);
-
 
             var response = helper.Controller.DeleteItem(Guid.NewGuid());
 
             Assert.NotNull(response);
-            Assert.True((response.Result.Result as UnauthorizedResult).StatusCode == (int)HttpStatusCode.Unauthorized);
+            Assert.True((response.Result.Result as BadRequestResult).StatusCode == (int)HttpStatusCode.BadRequest);
 
-        }
-
-        [Fact]
-        public void DeleteItem()
-        {
-            TestHelper helper = new();
-
-            var response = helper.Controller.DeleteItem(Guid.NewGuid());
-
-            Assert.True((response?.Result.Result as BadRequestResult).StatusCode == (int)HttpStatusCode.BadRequest);
         }
 
         #endregion

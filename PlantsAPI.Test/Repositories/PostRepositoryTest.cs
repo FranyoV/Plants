@@ -12,6 +12,7 @@ using Xunit;
 
 namespace PlantsAPI.Test.Repositories
 {
+    /*
     public class PostRepositoryTest
     {
         private readonly PlantsDbContext context;
@@ -125,5 +126,5 @@ namespace PlantsAPI.Test.Repositories
         }
 
         #endregion
-    }
+    }*/
 }

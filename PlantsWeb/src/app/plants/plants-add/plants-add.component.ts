@@ -2,7 +2,7 @@ import { formatDate } from '@angular/common';
 import { Component, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/data.service';
 import { Plant } from 'src/app/models/Plant';
@@ -36,13 +36,14 @@ export class PlantsAddComponent implements OnInit{
     private data: DataService,
     private router: Router,
     private webApi: WebApiService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private route : ActivatedRoute
   ){}
 
 
   ngOnInit(){
     console.log( this.maintenance)
-    this.webApi.getMe().subscribe({
+    /*this.webApi.getMe().subscribe({
       next: (res) => {
         this.currentUserId = res, 
         console.log("You are logged in with user: ",this.currentUserId),
@@ -50,7 +51,14 @@ export class PlantsAddComponent implements OnInit{
       },
       error: (err) => {this.openSnackBar("something went wrong. Try again later!"),  console.error(err);
       },
-    })
+    })*/
+    this.route.parent?.params.subscribe({
+      next: (params) => {
+        const id = params["userId"];
+        this.currentUserId = id!;
+      },
+      error: (err) => this.openSnackBar("Something went wrong!")
+    });
   }
 
 

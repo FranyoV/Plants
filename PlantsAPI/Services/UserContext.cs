@@ -17,9 +17,8 @@ namespace PlantsAPI.Services
             if (_httpcontextaccesor.HttpContext != null)
 
             {
-                var claims = _httpcontextaccesor.HttpContext.User.Claims.ToList();
+                
                 result = _httpcontextaccesor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-
 
             }
             return result;

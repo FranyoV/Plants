@@ -15,13 +15,15 @@ import { ItemAddComponent } from './marketplace/item-add/item-add.component';
 import { ItemEditComponent } from './marketplace/item-edit/item-edit.component';
 
 const routes: Routes = [
-  {path: '', component: HeaderComponent, 
+  {path: 'login', component: LoginComponent},
+  {path: 'register', component: RegisterComponent},  
+  {path: ':userId', component: HeaderComponent, 
    children: [
     {path: 'main', component: PostsListComponent},
     {path: 'plants', component: PlantsListComponent},
     {path: 'plants/:plantId', component: PlantsEditComponent},
     {path: 'plant/new', component: PlantsAddComponent},
-    {path: 'profile/:userId', component: ProfileComponent},
+    {path: 'profile', component: ProfileComponent},
     {path: 'post/:postId', component: PostDetailsComponent},
     {path: 'posts/new', component: PostAddComponent},
     {path: 'marketplace', component: MarketplaceComponent},
@@ -31,9 +33,7 @@ const routes: Routes = [
     //rerouting --> { path: '', redirectTo: 'component-one', pathMatch: 'full' },
   },
 
-  {path: 'login', component: LoginComponent},
-  {path: 'register', component: RegisterComponent}
-  
+
 ];
 
 @NgModule({

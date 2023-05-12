@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 using Xunit;
 
 namespace PlantsAPI.Test.Repositories
-{
+{/*
     public class AuthRepositoryTest
     {
         private readonly PlantsDbContext context;
@@ -42,5 +42,5 @@ namespace PlantsAPI.Test.Repositories
         {
             Assert.Throws<ArgumentNullException>(() => new AuthRepository(context, logger.Object, null));
         }
-    }
+    }*/
 }

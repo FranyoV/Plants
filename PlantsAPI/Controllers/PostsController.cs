@@ -59,12 +59,10 @@ namespace PlantsAPI.Controllers
         {
             try
             {
-                if (unitOfWork.UserContext.HasAuthorization(userId))
-                {
+
                     var post = await unitOfWork.Posts.GetPostsOfUser(userId);
                     return Ok(post);
-                }
-                return Unauthorized();
+
             }
             catch
             {
@@ -80,12 +78,10 @@ namespace PlantsAPI.Controllers
         {
             try
             {
-                if (unitOfWork.UserContext.HasAuthorization(userId))
-                {
+
                     var post = await unitOfWork.Posts.GetPostsByUserReplies(userId);
                     return Ok(post);
-                }
-                return Unauthorized();
+
             }
             catch
             {
@@ -101,12 +97,10 @@ namespace PlantsAPI.Controllers
         {
             try
             {
-                if (unitOfWork.UserContext.HasAuthorization(userId))
-                {
+
                     var posts = await unitOfWork.Posts.GetPostsCount(userId);
                     return Ok(posts);
-                }
-                return Unauthorized();
+
             }
             catch
             {
@@ -120,13 +114,11 @@ namespace PlantsAPI.Controllers
         {
             try
             {
-                if (unitOfWork.UserContext.HasAuthorization(post.UserId))
-                {
+
                     var newPost = await unitOfWork.Posts.AddPost(post);
                     await unitOfWork.SaveChangesAsync();
                     return Ok(newPost);
-                }
-                return Unauthorized();
+
             }
             catch
             {
@@ -141,13 +133,10 @@ namespace PlantsAPI.Controllers
         {
             try
             {
-                if (unitOfWork.UserContext.HasAuthorization(post.Id))
-                {
+
                     var modifiedPost = await unitOfWork.Posts.EditPost(post);
                     await unitOfWork.SaveChangesAsync();
                     return Ok(modifiedPost);
-                }
-                return Unauthorized();
             }
             catch
             { 

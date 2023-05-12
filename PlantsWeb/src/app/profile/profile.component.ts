@@ -53,15 +53,18 @@ export class ProfileComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
 
-    this.route.paramMap.subscribe( (params) => {
-      const id = params.get("userId");
-      this.currentUserId = id!;
-      this.getPlantCount();
-      this.getReplyCount();
-      this.getPostCount();
-      this.renderMyChart();
-    } )
+    this.route.parent?.params.subscribe({
+      next: (params) => {
+        const id = params["userId"];
+        this.currentUserId = id!;
+        this.getUserById();
+      },
+      error: (err) => this.openSnackBar("Something went wrong!")
+    });    
+  }
 
+
+  getUserById(){
     this.webApi.getUserById(this.currentUserId).subscribe({
       next: (res) => { this.currentUser = res;
         console.log(res)
@@ -70,8 +73,6 @@ export class ProfileComponent implements OnInit, OnChanges {
         },
       error: (error) => {console.log("No user with this id.", error)}
     })
-
-    
   }
 
   ngOnChanges(){

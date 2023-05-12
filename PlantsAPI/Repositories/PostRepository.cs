@@ -2,28 +2,29 @@
 using Microsoft.EntityFrameworkCore;
 using PlantsAPI.Data;
 using PlantsAPI.Models;
+using PlantsAPI.Services;
 
 namespace PlantsAPI.Repositories
 {
     public class PostRepository : GenericRepository<Post>, IPostRepository
     {
-        public PostRepository(PlantsDbContext dbContext, ILogger logger) : base(dbContext, logger)
+        public PostRepository(PlantsDbContext dbContext, IUserContext userContext) : base(dbContext, userContext)
         {
         }
 
         public async Task<IEnumerable<PostDto>> GetPosts()
         {
-            List<Post> posts = new List<Post>();
-            List<PostDto> postDtos = new List<PostDto>();
+            List<Post> posts = new();
+            List<PostDto> postDtos = new();
             posts = await dbSet.ToListAsync();
 
             if (posts.Count > 0)
             {
                 foreach (var post in posts)
                 {
-                    var user = dbContext.Users.FirstOrDefault(x => x.Id == post.UserId);
+                    var user = _dbContext.Users.FirstOrDefault(x => x.Id == post.UserId);
 
-                    PostDto postDto = new PostDto()
+                    PostDto postDto = new()
                     {
                         Id = post.Id,
                         Title = post.Title,
@@ -58,28 +59,30 @@ namespace PlantsAPI.Repositories
             if (id == Guid.Empty) throw new ArgumentNullException(nameof(id));
 
             List<Post> postsOfUser = await dbSet.Where(p => p.UserId == id).ToListAsync();
-            List<PostDto> postDtos = new List<PostDto>();
+            List<PostDto> postDtos = new();
             
 
             if (postsOfUser.Count > 0)
             {
                 foreach (var post in postsOfUser)
                 {
-                    var user = dbContext.Users.FirstOrDefault(x => x.Id == post.UserId);
+                    var user = _dbContext.Users.FirstOrDefault(x => x.Id == post.UserId);
 
-                    PostDto postDto = new PostDto()
+                    if (user != null)
                     {
-                        Id = post.Id,
-                        Title = post.Title,
-                        Content = post.Content,
-                        DateOfCreation = post.DateOfCreation,
-                        ImageUrl = post.ImageUrl,
-                        UserName = user.Name,
-                        UserId = post.UserId
-                    };
-                    postDtos.Add(postDto);
+                        PostDto postDto = new()
+                        {
+                            Id = post.Id,
+                            Title = post.Title,
+                            Content = post.Content,
+                            DateOfCreation = post.DateOfCreation,
+                            ImageUrl = post.ImageUrl,
+                            UserName = user.Name,
+                            UserId = post.UserId
+                        };
+                        postDtos.Add(postDto);
+                    }
                 }
-
             }
             var postsInOrder = postDtos.OrderByDescending(x => x.DateOfCreation);
 
@@ -91,16 +94,16 @@ namespace PlantsAPI.Repositories
         {
             if (userId == Guid.Empty) throw new ArgumentNullException(nameof(userId));
 
-            List<Reply> repliesOfUser = await dbContext.Replies.Where(r => r.UserId == userId).ToListAsync();
+            List<Reply> repliesOfUser = await _dbContext.Replies.Where(r => r.UserId == userId).ToListAsync();
             var repliesOfUserOrdered = repliesOfUser.OrderByDescending(x => x.DateOfCreation);
 
-            List<Post> postsWithUsersReplies = new List<Post>();
-            List<PostDto> postDtos = new List<PostDto>();
+            List<Post> postsWithUsersReplies = new();
+            List<PostDto> postDtos = new();
 
 
             foreach (var reply in repliesOfUserOrdered)
             {
-                var post = await dbContext.Posts.Where(p => p.Id == reply.PostId).ToListAsync();
+                var post = await _dbContext.Posts.Where(p => p.Id == reply.PostId).ToListAsync();
                 if (post != null)
                 {
                     postsWithUsersReplies.AddRange(post);
@@ -112,19 +115,22 @@ namespace PlantsAPI.Repositories
             {
                 foreach (var post in postsWithUsersReplies)
                 {
-                    var user = dbContext.Users.FirstOrDefault(x => x.Id == post.UserId);
-
-                    PostDto postDto = new PostDto()
+                    var user = _dbContext.Users.FirstOrDefault(x => x.Id == post.UserId);
+                    if (user != null)
                     {
-                        Id = post.Id,
-                        Title = post.Title,
-                        Content = post.Content,
-                        DateOfCreation = post.DateOfCreation,
-                        ImageUrl = post.ImageUrl,
-                        UserName = user.Name,
-                        UserId = post.UserId
-                    };
-                    postDtos.Add(postDto);
+                        PostDto postDto = new()
+                        {
+                            Id = post.Id,
+                            Title = post.Title,
+                            Content = post.Content,
+                            DateOfCreation = post.DateOfCreation,
+                            ImageUrl = post.ImageUrl,
+                            UserName = user.Name,
+                            UserId = post.UserId
+                        };
+                        postDtos.Add(postDto);
+
+                    }
                 }
 
             }
