@@ -59,12 +59,10 @@ export class PostAddComponent implements OnInit{
     this.route.parent?.params.subscribe({
       next: (params) => {
         const id = params["userId"];
-        
         this.currentUserId = id!;
-        
       },
       error: (err) => this.openSnackBar("Something went wrong!")
-  });
+    });
 
     this.webApi.getPosts().subscribe({
       next: (res) => { this.posts = res },
@@ -90,7 +88,7 @@ export class PostAddComponent implements OnInit{
     else{
       this.webApi.addPost(newPost).subscribe({
         next: (res) => { 
-          this.posts.push(res),
+           this.posts.push(res),
            this.newMessage(this.posts),
            this.router.navigate(['main'])
            this.openSnackBar("New post created!"); },
