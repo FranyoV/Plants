@@ -13,10 +13,6 @@
       <div class="col"style="float:none;margin:auto;">
       <form [formGroup]="editForm" (ngSubmit)="editPlant()">
 
-
-           
-              
-
                 <h3 style="text-align: center;">Plant info:</h3>
 
                 <mat-form-field  appearance="outline" >
@@ -52,7 +48,8 @@
                 </mat-form-field>
 
           
-            <button mat-raised-button type="button" (click)="showMaintenance()">I want reminder notifications of the maintenance of the plant. </button>
+            
+            <mat-slide-toggle (toggleChange)="showMaintenance()" >I want reminder notifications of the maintenance of the plant.</mat-slide-toggle>
             <h3 style="text-align: center;">Maintenance info:</h3>
            
             <mat-form-field appearance="outline" >

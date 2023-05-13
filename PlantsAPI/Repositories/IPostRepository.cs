@@ -11,7 +11,7 @@ namespace PlantsAPI.Repositories
         Task<int> GetPostsCount(Guid userId);
         Task<Post> GetPostById(Guid id);
         Task<Post> AddPost(Post post);
-        Task<Post> EditPost(Post post);
+        //Task<Post> EditPost(Post post);
         Task<bool> DeletePost(Guid postId);
     }
 }

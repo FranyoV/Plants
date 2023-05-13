@@ -50,6 +50,7 @@ export class PlantsListComponent implements OnInit, OnDestroy {
       next: (params) => {
         const id = params["userId"];
         this.currentUserId = id!;
+        this.getPlantsOfUser();
       },
       error: (err) => this.openSnackBar("Something went wrong!")
     });
@@ -75,12 +76,12 @@ export class PlantsListComponent implements OnInit, OnDestroy {
   }
 
   goToEditPlantPage(plantId: string){
-    this.router.navigate([`plants/${plantId}`]);
+    this.router.navigate([`${this.currentUserId}/plants/${plantId}`]);
 
   }
 
   goToAddPlantPage(){
-    this.router.navigate(['plant/new']);
+    this.router.navigate([`${this.currentUserId}/plant/new`]);
   }
 
   openDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {

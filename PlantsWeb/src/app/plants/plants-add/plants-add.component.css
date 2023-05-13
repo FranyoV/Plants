@@ -27,4 +27,6 @@ img {
     text-align: center;
 }
 
-
+.file-input {
+    display: none;
+  }

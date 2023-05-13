@@ -9,6 +9,25 @@
 
           <div class="col" style="float:none;margin:auto;align-items: center;">
             <img src="assets/plant-icon.avif" alt="">
+            
+            <input  type="file" class="file-input"
+                  (change)="onFileChanged($event)" #fileUpload
+                   accept="image/png">
+                  
+
+            <div class="file-upload">
+                <button mat-raised-button color="primary" type="button" class="upload-btn"
+                  (click)="fileUpload.click()">
+                    Upload image
+                </button>
+                {{fileName || "No file uploaded yet."}}
+                <button mat-raised-button class="cancel-upload" (click)="cancelUpload()" 
+                        >Cancel upload</button>
+            </div>
+            
+
+            <!--button mat-raised-button (click)="fileInput.click()">Upload image</button-->
+            <!--input #fileInput matInput type="file" (change)="onFileChanged($event)" /-->
           </div>
 
           <div class=" col" style="float:none;margin:auto;">

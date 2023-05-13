@@ -31,7 +31,7 @@
                 <mat-card-title>{{post.userName}}</mat-card-title>
                 <mat-card-subtitle>{{post.dateOfCreation | date : 'medium'}}</mat-card-subtitle>
                 <mat-card-actions [align]="'end'">
-                  <button *ngIf="post.userId==currentUserId" mat-raised-button color="warn">Delete</button>
+                  <button *ngIf="post.userId==currentUserId" (click)="deletePost(post.id)" mat-raised-button color="warn">Delete</button>
                 </mat-card-actions>
                 
             

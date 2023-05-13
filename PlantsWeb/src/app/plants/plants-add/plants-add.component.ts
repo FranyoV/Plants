@@ -1,9 +1,12 @@
 import { formatDate } from '@angular/common';
-import { Component, OnChanges, OnDestroy, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { EventListenerOptions } from 'rxjs/internal/observable/fromEvent';
 import { DataService } from 'src/app/data.service';
 import { Plant } from 'src/app/models/Plant';
 import { SnackbarComponent } from 'src/app/snackbar/snackbar.component';
@@ -20,6 +23,11 @@ export class PlantsAddComponent implements OnInit{
   currentUserId!: string;
   plants: Plant[] = [];
   subscription!: Subscription;
+  
+  
+  fileName = '';
+  
+  uploadSub! : Subscription | null ;
 
   addForm = this.formBuilder.group({
     name : ['', [Validators.required, Validators.maxLength(50)]],
@@ -37,7 +45,8 @@ export class PlantsAddComponent implements OnInit{
     private router: Router,
     private webApi: WebApiService,
     private snackBar: MatSnackBar,
-    private route : ActivatedRoute
+    private route : ActivatedRoute,
+    private http : HttpClient 
   ){}
 
 
@@ -55,13 +64,39 @@ export class PlantsAddComponent implements OnInit{
     this.route.parent?.params.subscribe({
       next: (params) => {
         const id = params["userId"];
+        console.log("You are logged in with user: ",this.currentUserId),
         this.currentUserId = id!;
+        this.getPlantOfUser();
       },
       error: (err) => this.openSnackBar("Something went wrong!")
     });
   }
 
+  onFileChanged(event : any ){
+    
+    const file:File = event.target.files[0];
 
+    if (file) {
+
+        this.fileName = file.name;
+
+        const formData = new FormData();
+
+        formData.append("thumbnail", file);
+
+        //const upload$ = this.http.post("/api/thumbnail-upload", formData);
+
+        
+    }
+  }
+  cancelUpload() {
+    
+    this.reset();
+  }
+
+  reset() {
+    this.fileName = '';
+  }
 
   getPlantOfUser(){
     this.webApi.getPlantsOfUser(this.currentUserId).subscribe({

@@ -155,10 +155,10 @@ export class WebApiService {
     return this.http.post<Post>(url, post, this.httpOptions);
   }
 
-  updatePost(id: string, post: Post): Observable<any> {
+ /* updatePost(id: string, post: Post): Observable<any> {
     let url = `${this.baseUrl}/api/posts/${id}`;
     return this.http.put(url, post, this.httpOptions);
-  }
+  }*/
 
   deletePost(id: string): Observable<Post> {
     let url = `${this.baseUrl}/api/posts/${id}`;

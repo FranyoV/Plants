@@ -12,6 +12,7 @@ namespace PlantsAPI.Repositories
         {
         }
 
+        //anonymousaccess
         public async Task<IEnumerable<PostDto>> GetPosts()
         {
             List<Post> posts = new();
@@ -22,7 +23,7 @@ namespace PlantsAPI.Repositories
             {
                 foreach (var post in posts)
                 {
-                    var user = _dbContext.Users.FirstOrDefault(x => x.Id == post.UserId);
+                    User user = await _dbContext.Users.Where(x => x.Id == post.UserId).FirstAsync();
 
                     PostDto postDto = new()
                     {
@@ -43,101 +44,122 @@ namespace PlantsAPI.Repositories
             return postsInOrder;
         }
 
-
-        public async Task<Post> GetPostById(Guid id)
+        //throws exception
+        public async Task<Post> GetPostById(Guid postId)
         {
-            if (id == Guid.Empty) throw new ArgumentNullException(nameof(id));
+            if (postId == Guid.Empty) throw new ArgumentNullException(nameof(postId));
 
-            var post = await dbSet.Where(p => p.Id == id).FirstAsync();
+            Guid currentUserId = Guid.Parse(_userContext.GetMe()); ;
 
-            return post;
+            var isPostUsers = dbSet.Where(p => p.Id == postId).Any(up => up.UserId == currentUserId);
+
+            Post post = new();
+
+            if (isPostUsers)
+            {
+                post = await dbSet.Where(p => p.Id == postId).FirstAsync();
+                return post;
+            }
+
+            else
+            {
+                throw new UnauthorizedAccessException();
+            }
         }
 
-
+        //üres lista
         public async Task<IEnumerable<PostDto>> GetPostsOfUser(Guid id)
         {
             if (id == Guid.Empty) throw new ArgumentNullException(nameof(id));
 
-            List<Post> postsOfUser = await dbSet.Where(p => p.UserId == id).ToListAsync();
-            List<PostDto> postDtos = new();
-            
-
-            if (postsOfUser.Count > 0)
+            if (_userContext.HasAuthorization(id))
             {
-                foreach (var post in postsOfUser)
-                {
-                    var user = _dbContext.Users.FirstOrDefault(x => x.Id == post.UserId);
+                List<Post> postsOfUser = await dbSet.Where(p => p.UserId == id).ToListAsync();
+                List<PostDto> postDtos = new();
 
-                    if (user != null)
+
+                if (postsOfUser.Count > 0)
+                {
+                    foreach (var post in postsOfUser)
                     {
-                        PostDto postDto = new()
+                        var user = _dbContext.Users.FirstOrDefault(x => x.Id == post.UserId);
+
+                        if (user != null)
                         {
-                            Id = post.Id,
-                            Title = post.Title,
-                            Content = post.Content,
-                            DateOfCreation = post.DateOfCreation,
-                            ImageUrl = post.ImageUrl,
-                            UserName = user.Name,
-                            UserId = post.UserId
-                        };
-                        postDtos.Add(postDto);
+                            PostDto postDto = new()
+                            {
+                                Id = post.Id,
+                                Title = post.Title,
+                                Content = post.Content,
+                                DateOfCreation = post.DateOfCreation,
+                                ImageUrl = post.ImageUrl,
+                                UserName = user.Name,
+                                UserId = post.UserId
+                            };
+                            postDtos.Add(postDto);
+                        }
                     }
                 }
-            }
-            var postsInOrder = postDtos.OrderByDescending(x => x.DateOfCreation);
+                var postsInOrder = postDtos.OrderByDescending(x => x.DateOfCreation);
 
-            return postsInOrder;
+                return postsInOrder;
+            }
+            return new List<PostDto>();
+
         }
 
-
+        //üres lista
         public async Task<IEnumerable<PostDto>> GetPostsByUserReplies(Guid userId)
         {
-            if (userId == Guid.Empty) throw new ArgumentNullException(nameof(userId));
+            if ( userId == Guid.Empty ) throw new ArgumentNullException(nameof(userId));
 
-            List<Reply> repliesOfUser = await _dbContext.Replies.Where(r => r.UserId == userId).ToListAsync();
-            var repliesOfUserOrdered = repliesOfUser.OrderByDescending(x => x.DateOfCreation);
-
-            List<Post> postsWithUsersReplies = new();
-            List<PostDto> postDtos = new();
-
-
-            foreach (var reply in repliesOfUserOrdered)
+            if ( _userContext.HasAuthorization(userId) )
             {
-                var post = await _dbContext.Posts.Where(p => p.Id == reply.PostId).ToListAsync();
-                if (post != null)
-                {
-                    postsWithUsersReplies.AddRange(post);
-                } 
-            }
-            
+                List<Reply> repliesOfUser = await _dbContext.Replies.Where(r => r.UserId == userId).ToListAsync();
+                var repliesOfUserOrdered = repliesOfUser.OrderByDescending(x => x.DateOfCreation);
 
-            if (postsWithUsersReplies.Count > 0)
-            {
-                foreach (var post in postsWithUsersReplies)
+                List<Post> postsWithUsersReplies = new();
+                List<PostDto> postDtos = new();
+
+
+                foreach (var reply in repliesOfUserOrdered)
                 {
-                    var user = _dbContext.Users.FirstOrDefault(x => x.Id == post.UserId);
-                    if (user != null)
+                    var post = await _dbContext.Posts.Where(p => p.Id == reply.PostId).ToListAsync();
+                    if (post != null)
                     {
-                        PostDto postDto = new()
-                        {
-                            Id = post.Id,
-                            Title = post.Title,
-                            Content = post.Content,
-                            DateOfCreation = post.DateOfCreation,
-                            ImageUrl = post.ImageUrl,
-                            UserName = user.Name,
-                            UserId = post.UserId
-                        };
-                        postDtos.Add(postDto);
-
+                        postsWithUsersReplies.AddRange(post);
                     }
                 }
 
+
+                if (postsWithUsersReplies.Count > 0)
+                {
+                    foreach (var post in postsWithUsersReplies)
+                    {
+                        var user = _dbContext.Users.FirstOrDefault(x => x.Id == post.UserId);
+                        if (user != null)
+                        {
+                            PostDto postDto = new()
+                            {
+                                Id = post.Id,
+                                Title = post.Title,
+                                Content = post.Content,
+                                DateOfCreation = post.DateOfCreation,
+                                ImageUrl = post.ImageUrl,
+                                UserName = user.Name,
+                                UserId = post.UserId
+                            };
+                            postDtos.Add(postDto);
+
+                        }
+                    }
+                }
+                //var postsInOrder = postDtos.OrderByDescending(x => x.DateOfCreation);
+
+
+                return postDtos;
             }
-            //var postsInOrder = postDtos.OrderByDescending(x => x.DateOfCreation);
-
-
-            return postDtos;
+            return new List<PostDto>();
         }
 
 
@@ -145,49 +167,80 @@ namespace PlantsAPI.Repositories
         {
             if (userId == Guid.Empty) throw new ArgumentNullException(nameof(userId));
 
-            List<Post> result = await dbSet.Where(p => p.UserId == userId).ToListAsync();
-            return result.Count;
+            List<Post> result = new();
+
+            if (_userContext.HasAuthorization(userId))
+            {
+                result = await dbSet.Where(p => p.UserId == userId).ToListAsync();
+                return result.Count;
+            }
+            return result.Count ;
 
         }
 
 
+        //throw exception
         public async Task<Post> AddPost(Post post)
         {
             if (post == null) throw new ArgumentNullException(nameof(post));
 
-            var result = await dbSet.AddAsync(post);
-            return result.Entity;
-        }
-
-        public async Task<Post> EditPost(Post post)
-        {
-            if (post == null) throw new ArgumentNullException(nameof(post));
-
-            var originalPost = await dbSet.FirstAsync(p => p.Id == post.Id);
-
-            if (originalPost != null)
+            if (_userContext.HasAuthorization(post.UserId))
             {
-                originalPost.Title = post.Title;
-                originalPost.Content = post.Content;
-                originalPost.DateOfCreation = post.DateOfCreation;
+                var result = await dbSet.AddAsync(post);
+                return result.Entity;
             }
-
-            return originalPost;
+            else
+            {
+                throw new UnauthorizedAccessException();
+            }
         }
 
 
+        //NOT USED
+        
+        //public async Task<Post> EditPost(Post post)
+        //{
+        //    if (post == null) throw new ArgumentNullException(nameof(post));
+
+        //    if ( _userContext.HasAuthorization(post.UserId) )
+        //    {
+        //        var originalPost = await dbSet.FirstAsync(p => p.Id == post.Id);
+
+        //        if (originalPost != null)
+        //        {
+        //            originalPost.Title = post.Title;
+        //            originalPost.Content = post.Content;
+        //            originalPost.DateOfCreation = post.DateOfCreation;
+        //        }
+
+        //        return originalPost;
+        //    }
+        //    else
+        //    {
+        //        throw new UnauthorizedAccessException();
+        //    }
+        //}
+
+        //return false
         public async Task<bool> DeletePost(Guid postId)
         {
             if (postId == Guid.Empty) throw new ArgumentNullException(nameof(postId));
 
-            var toBeDeleted = await dbSet.Where(p => p.Id == postId).FirstAsync();
-            if (toBeDeleted != null)
-            {
-                var result = dbSet.Remove(toBeDeleted);
-                return result.State == EntityState.Deleted;
-            }
+            Guid currentUserId = Guid.Parse(_userContext.GetMe()); ;
+            
+            var isPostUsers = dbSet.Where(p => p.Id == postId).Any(up => up.UserId == currentUserId);
 
+            if (isPostUsers)
+            {
+                var toBeDeleted = await dbSet.Where(p => p.Id == postId).FirstAsync();
+                if (toBeDeleted != null)
+                {
+                    var result = dbSet.Remove(toBeDeleted);
+                    return result.State == EntityState.Deleted;
+                }
+            }
             return false;
+
         }
 
 

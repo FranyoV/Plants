@@ -110,6 +110,19 @@ export class PostsListComponent implements OnInit, OnDestroy{
     this.router.navigate([`posts/new`]);
   }
 
+  deletePost(postId: string){
+    this.webApi.deletePost(postId).subscribe({
+      next: (res) => {
+        if (!res){
+          this.openSnackBar("Deleting post was unsuccesfull. ") , console.log("res")
+        }else{this.openSnackBar("Post succesfully deleted. ") , console.log("res")}
+      },
+      error: (err) => {this.openSnackBar("Deleting post was unsuccesfull. ")
+        
+      },
+    })
+  }
+
 
   //PAGINATOR EVENTHANDLER
   OnPageEvent(event: PageEvent){

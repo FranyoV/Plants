@@ -72,15 +72,15 @@ export class PostDetailsComponent implements OnInit {
 
   getPostById(){
     this.webApi.getPostById(this.currentPostId).subscribe({
-      next: (result) => { this.currentPost = result},
-      error: (error) => {this.openSnackBar("something went wrong. Try again later!"), console.error("No matching posts found for this id.", error)}
+      next: (result) => { this.currentPost = result },
+      error: (error) => { this.openSnackBar("Something went wrong. Try again later!"), console.error("No matching posts found for this id.", error)}
     });
   }
 
   getRepliesOfPost(){
     this.webApi.getRepliesOfPost(this.currentPostId).subscribe({
       next: (res) => { this.replies = res},
-      error: (error) => {this.openSnackBar("something went wrong. Try again later!"), console.log( "NoReplies for this post.", error)}
+      error: (error) => { this.openSnackBar("Something went wrong. Try again later!"), console.log( "No replies for this post.", error)}
     })
   }
 

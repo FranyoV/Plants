@@ -19,7 +19,7 @@ namespace PlantsAPI.Controllers
             this.unitOfWork = unitOFWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         }
 
-        //TODO AUTHORIZATION
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Post>>> GetPosts()
         {
@@ -35,7 +35,6 @@ namespace PlantsAPI.Controllers
  
         }
 
-        //TODO AUTHORIZATION
         [HttpGet]
         [Route("{id}")]
         public async Task<ActionResult<Post>> GetPostById(Guid id)
@@ -59,10 +58,8 @@ namespace PlantsAPI.Controllers
         {
             try
             {
-
-                    var post = await unitOfWork.Posts.GetPostsOfUser(userId);
-                    return Ok(post);
-
+                var post = await unitOfWork.Posts.GetPostsOfUser(userId);
+                return Ok(post);
             }
             catch
             {
@@ -78,10 +75,8 @@ namespace PlantsAPI.Controllers
         {
             try
             {
-
-                    var post = await unitOfWork.Posts.GetPostsByUserReplies(userId);
-                    return Ok(post);
-
+                var post = await unitOfWork.Posts.GetPostsByUserReplies(userId);
+                return Ok(post);
             }
             catch
             {
@@ -97,10 +92,8 @@ namespace PlantsAPI.Controllers
         {
             try
             {
-
-                    var posts = await unitOfWork.Posts.GetPostsCount(userId);
-                    return Ok(posts);
-
+                var posts = await unitOfWork.Posts.GetPostsCount(userId);
+                return Ok(posts);
             }
             catch
             {
@@ -114,11 +107,9 @@ namespace PlantsAPI.Controllers
         {
             try
             {
-
-                    var newPost = await unitOfWork.Posts.AddPost(post);
-                    await unitOfWork.SaveChangesAsync();
-                    return Ok(newPost);
-
+                var newPost = await unitOfWork.Posts.AddPost(post);
+                await unitOfWork.SaveChangesAsync();
+                return Ok(newPost);
             }
             catch
             {
@@ -127,25 +118,24 @@ namespace PlantsAPI.Controllers
         }
 
 
-        [HttpPut]
-        [Route("{id}")]
-        public async Task<ActionResult<Post>> PutPost([FromBody] Post post, [FromQuery] Guid id)
-        {
-            try
-            {
+        //[HttpPut]
+        //[Route("{id}")]
+        //public async Task<ActionResult<Post>> PutPost([FromBody] Post post, [FromQuery] Guid id)
+        //{
+        //    try
+        //    {
 
-                    var modifiedPost = await unitOfWork.Posts.EditPost(post);
-                    await unitOfWork.SaveChangesAsync();
-                    return Ok(modifiedPost);
-            }
-            catch
-            { 
-                return BadRequest(); 
-            }
-        }
+        //            var modifiedPost = await unitOfWork.Posts.EditPost(post);
+        //            await unitOfWork.SaveChangesAsync();
+        //            return Ok(modifiedPost);
+        //    }
+        //    catch
+        //    { 
+        //        return BadRequest(); 
+        //    }
+        //}
 
 
-        //TODO AUTHORIZATION
         [HttpDelete]
         [Route("{id}")]
         public async Task<ActionResult<bool>> DeletePost(Guid id)
