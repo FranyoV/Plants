@@ -18,80 +18,86 @@ namespace PlantsAPI.Repositories
 
         }
 
-       public async Task<UserDto> GetUserById(Guid id)
-        {
-            var user = await dbSet.Where(u => u.Id == id).FirstOrDefaultAsync();
-            var userDto = new UserDto()
-            {
-                Id = id,
-                Name = user.Name,
-                EmailAddress = user.EmailAddress,
-            };
-            return userDto;
-        }
+       //public async Task<UserDto> GetUserById(Guid id)
+       // {
+       //     var user = await dbSet.Where(u => u.Id == id).FirstOrDefaultAsync();
+       //     var userDto = new UserDto()
+       //     {
+       //         Id = id,
+       //         Name = user.Name,
+       //         EmailAddress = user.EmailAddress,
+       //     };
+       //     return userDto;
+       // }
 
-        public async Task<User> GetUserByName(string username)
-        {
-            User user = new();
-            user = await dbSet.Where(u => u.Name == username).FirstOrDefaultAsync();
+        //public async Task<User> GetUserByName(string username)
+        //{
+        //    User user = new();
+        //    user = await dbSet.Where(u => u.Name == username).FirstOrDefaultAsync();
 
-            UserDto userDto = new();
-            if (user != null)
-            {
-                userDto = new UserDto()
-                {
-                    Id = user.Id,
-                    Name = user.Name,
-                    EmailAddress = user.EmailAddress,
-                };
-            }
+        //    UserDto userDto = new();
+        //    if (user != null)
+        //    {
+        //        userDto = new UserDto()
+        //        {
+        //            Id = user.Id,
+        //            Name = user.Name,
+        //            EmailAddress = user.EmailAddress,
+        //        };
+        //    }
 
-            return user;
-        }
+        //    return user;
+        //}
 
 
-        //used in registration
-        public async Task<User> AddUser(User user)
-        {
-            if (user == null) throw new NotImplementedException(nameof(user));
+        ////used in registration
+        //public async Task<User> AddUser(User user)
+        //{
+        //    if (user == null) throw new NotImplementedException(nameof(user));
 
-            var result = await dbSet.AddAsync(user);
-            return result.Entity;
-        }
+        //    var result = await dbSet.AddAsync(user);
+        //    return result.Entity;
+        //}
 
 
         //TODO for profil editing
-        public async Task<User> EditUser(User user)
-        {
-            if (user == null) throw new NotImplementedException(nameof(user));
+        //public async Task<User> EditUserEmail(UserInfoEditRequest request, string hash )
+        //{
+        //    if (request == null) throw new NotImplementedException(nameof(request));
 
-            var originalUser = await dbSet.FirstAsync(u => u.Id == user.Id);
+        //    if (_userContext.HasAuthorization(request.UserId))
+        //    {
 
-            if (originalUser != null)
-            {
-                originalUser.Name = user.Name;
-                originalUser.PasswordHash = user.PasswordHash;
-                     
-            }
+        //        var originalUser = await dbSet.FirstAsync(u => u.Id == request.UserId);
 
-            return originalUser;
-        }
+        //        if (originalUser != null)
+        //        {
 
 
-        public async Task<bool> DeleteUser(Guid userId)
-        {
-            if (userId == Guid.Empty) throw new ArgumentNullException(nameof(userId));
+        //            originalUser.Name = user.Name;
+        //            originalUser.PasswordHash = user.PasswordHash;
 
-            var toBeDeleted = await dbSet.Where(u => u.Id == userId).FirstAsync();
+        //        }
 
-            if (toBeDeleted != null)
-            {
-                var result = dbSet.Remove(toBeDeleted);
-                return result.State == EntityState.Deleted;
+        //        return originalUser;
+        //    }
+        //}
 
-            }
-            return false;
-        }
+
+        //public async Task<bool> DeleteUser(Guid userId)
+        //{
+        //    if (userId == Guid.Empty) throw new ArgumentNullException(nameof(userId));
+
+        //    var toBeDeleted = await dbSet.Where(u => u.Id == userId).FirstAsync();
+
+        //    if (toBeDeleted != null)
+        //    {
+        //        var result = dbSet.Remove(toBeDeleted);
+        //        return result.State == EntityState.Deleted;
+
+        //    }
+        //    return false;
+        //}
 
 
     }

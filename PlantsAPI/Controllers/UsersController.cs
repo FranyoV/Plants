@@ -35,72 +35,56 @@ namespace PlantsAPI.Controllers
         }
 
         //TODO AUTHORIZATION
-        [HttpGet]
-        [Route("{id}")]
-        public async Task<ActionResult<UserDto>> GetUser(Guid id)
-        {
-            try
-            {
-                var user = await unitOfWork.Users.GetUserById(id);
-                return Ok(user);
-            }
-            catch
-            {
-                return BadRequest();
-            }
-        }
+        //[HttpGet]
+        //[Route("{id}")]
+        //public async Task<ActionResult<UserDto>> GetUserById(Guid id)
+        //{
+        //    try
+        //    {
+        //        var user = await unitOfWork.Users.GetUserById(id);
+        //        return Ok(user);
+        //    }
+        //    catch
+        //    {
+        //        return BadRequest();
+        //    }
+        //}
 
-        //TODO AUTHORIZATION
-        [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
-        {
-            try
-            {
-                var newUser = await unitOfWork.Users.AddUser(user);
-                await unitOfWork.SaveChangesAsync();
-                return Ok(newUser);
-            }
-            catch
-            {
-                return BadRequest();
-            }
-        }
 
-        [HttpPut]
-        [Route("{id}")]
-        public async Task<ActionResult<User>> PutUser(User user)
-        {
-            try
-            {
- 
-                    var modifiedUser = await unitOfWork.Users.EditUser(user);
-                    await unitOfWork.SaveChangesAsync();
-                    return Ok(modifiedUser);
+        //unused
+        //[HttpPost]
+        //public async Task<ActionResult<User>> PostUser(User user)
+        //{
+        //    try
+        //    {
+        //        var newUser = await unitOfWork.Users.AddUser(user);
+        //        await unitOfWork.SaveChangesAsync();
+        //        return Ok(newUser);
+        //    }
+        //    catch
+        //    {
+        //        return BadRequest();
+        //    }
+        //}
 
-            }
-            catch
-            {
-                return BadRequest();
-            }
+       
 
-        }
-
-        [HttpDelete]
-        [Route("{id}")]
-        public async Task<ActionResult<User>> DeleteUser(Guid id)
-        {
-            try
-            {
+        //[HttpDelete]
+        //[Route("{id}")]
+        //public async Task<ActionResult<User>> DeleteUser(Guid id)
+        //{
+        //    try
+        //    {
   
-                    var result = await unitOfWork.Users.DeleteUser(id);
-                    await unitOfWork.SaveChangesAsync();
-                    return Ok(result);
+        //            var result = await unitOfWork.Users.DeleteUser(id);
+        //            await unitOfWork.SaveChangesAsync();
+        //            return Ok(result);
 
-            }
-            catch
-            {
-                return BadRequest();
-            } 
-        }
+        //    }
+        //    catch
+        //    {
+        //        return BadRequest();
+        //    } 
+        //}
     }
 }

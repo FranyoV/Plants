@@ -11,29 +11,23 @@ using Xunit;
 
 namespace PlantsAPI.Test.Controllers
 {
-    public class AuthorizationControllerTest
+    public class UserAccountControllerTest
     {
         #region Constructor
         [Fact]
         public void ConstructorShouldCreateObject()
         {
             TestHelper helper = new();
-            Assert.NotNull(new AuthorizationController(helper.mockUnitOfWork.Object, helper.mockHttpContextAccesor.Object));
+            Assert.NotNull(new UserAccountController(helper.mockUnitOfWork.Object));
         }
 
         [Fact]
         public void Constructor_ShouldThrowArgumentNullException_1()
         {
             TestHelper helper = new();
-            Assert.Throws<ArgumentNullException>(() => new AuthorizationController(null, helper.mockHttpContextAccesor.Object));
+            Assert.Throws<ArgumentNullException>(() => new UserAccountController(null));
         }
 
-        [Fact]
-        public void Constructor_ShouldThrowArgumentNullException_2()
-        {
-            TestHelper helper = new();
-            Assert.Throws<ArgumentNullException>(() => new AuthorizationController(helper.mockUnitOfWork.Object, null));
-        }
         #endregion
 
         #region Register
@@ -60,7 +54,7 @@ namespace PlantsAPI.Test.Controllers
                 .Returns(It.IsAny<string>());
 
             helper.mockUnitOfWork.Setup(
-                x => x.Users.AddUser(It.IsAny<User>()));
+                x => x.Auth.AddUser(It.IsAny<User>()));
                 
 
             var response = helper.Controller.Register(new RegisterRequest());
@@ -96,7 +90,7 @@ namespace PlantsAPI.Test.Controllers
             TestHelper helper = new();
 
             helper.mockUnitOfWork.Setup(
-                x => x.Users.GetUserByName(It.IsAny<string>()))
+                x => x.Auth.GetUserByName(It.IsAny<string>()))
                 .ReturnsAsync(It.IsAny<User>);
 
 
@@ -112,7 +106,7 @@ namespace PlantsAPI.Test.Controllers
             TestHelper helper = new();
 
             helper.mockUnitOfWork.Setup(
-                x => x.Users.GetUserByName(It.IsAny<string>()))
+                x => x.Auth.GetUserByName(It.IsAny<string>()))
                 .ReturnsAsync(It.IsAny<User>);
 
             helper.mockUnitOfWork.Setup(
@@ -132,7 +126,7 @@ namespace PlantsAPI.Test.Controllers
             TestHelper helper = new();
 
             helper.mockUnitOfWork.Setup(
-                x => x.Users.GetUserByName(It.IsAny<string>()))
+                x => x.Auth.GetUserByName(It.IsAny<string>()))
                 .ReturnsAsync(It.IsAny<User>);
 
             helper.mockUnitOfWork.Setup(
@@ -151,23 +145,12 @@ namespace PlantsAPI.Test.Controllers
 
         #endregion
 
-        /*
-        #region GetMe
-        public void GetMe_ShouldReturnToken()
-        {
-            TestHelper helper = new();
-            helper.mockUnitOfWork.Setup(
-                x => x.UserContext.GetMe())
-                .Returns(It.IsAny<string>);
 
-            Assert.True((response?.Result.Result as OkObjectResult).StatusCode == (int)HttpStatusCode.Ok;
-        }
-        #endregion*/
 
         private class TestHelper
         {
             protected internal Mock<IAuthRepository> mockAuthRepository;
-            protected internal AuthorizationController Controller;
+            protected internal UserAccountController Controller;
             protected internal Mock<IUnitOfWork> mockUnitOfWork;
             protected internal Mock<IHttpContextAccessor> mockHttpContextAccesor;
 
@@ -176,7 +159,7 @@ namespace PlantsAPI.Test.Controllers
                 mockAuthRepository = new Mock<IAuthRepository>();
                 mockUnitOfWork = new Mock<IUnitOfWork>();
                 mockHttpContextAccesor = new Mock<IHttpContextAccessor>();
-                Controller = new(mockUnitOfWork.Object, mockHttpContextAccesor.Object);
+                Controller = new(mockUnitOfWork.Object);
             }
         }
     }

@@ -1,3 +1,4 @@
+
 <div class="container">
     <mat-card>
         <mat-card-title>Login</mat-card-title>
@@ -26,11 +27,15 @@
       </p>
     
       <div class="button">
+
         <button type="submit" [disabled]="loginForm.invalid" mat-raised-button>Login</button>
       </div>
 
-      <p>Dont have an account yet?</p>
-      <a mat-raised-button href="register">Register</a>
+      <div class="to-register">
+        <p>Dont have an account yet?</p>
+        <button mat-raised-button (click)="goToLoginPage()">Register</button>
+      </div>
+
     
     </form>
 

@@ -6,6 +6,7 @@ import { Chart, registerables } from 'chart.js';
 import { FormBuilder, Validators } from '@angular/forms';
 import { SnackbarComponent } from '../snackbar/snackbar.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { UserInfoEditRequest } from '../models/UserInfoEditRequest';
 Chart.register(...registerables);
 
 
@@ -58,9 +59,13 @@ export class ProfileComponent implements OnInit, OnChanges {
         const id = params["userId"];
         this.currentUserId = id!;
         this.getUserById();
+        this.getReplyCount();
+        this.getPlantCount();
+        this.getPlantCount();
       },
       error: (err) => this.openSnackBar("Something went wrong!")
     });    
+
   }
 
 
@@ -68,7 +73,7 @@ export class ProfileComponent implements OnInit, OnChanges {
     this.webApi.getUserById(this.currentUserId).subscribe({
       next: (res) => { this.currentUser = res;
         console.log(res)
-        console.log(this.currentUser)
+        console.log("frick ", this.currentUser)
         this.changeEmailForm.controls['email'].setValue(this.currentUser.email);
         },
       error: (error) => {console.log("No user with this id.", error)}
@@ -80,11 +85,18 @@ export class ProfileComponent implements OnInit, OnChanges {
     console.log("nyeh")
   }
 
-  changePassword(){
-
+  changeEmail(){
+    this.webApi.editUserEmail(new UserInfoEditRequest(
+      this.currentUserId,
+      this.changeEmailForm.value.email!,
+      this.changeEmailForm.value.password!)
+    ).subscribe({
+      next: (res) => {this.currentUser!.email = res.email},
+      error: (err) => {this.openSnackBar("Something went wrong. Try again!")}
+    })
   }
 
-  changeProfileData(){
+  changePassword(){
 
   }
 

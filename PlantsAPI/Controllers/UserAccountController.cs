@@ -5,17 +5,15 @@ using PlantsAPI.Models;
 namespace PlantsAPI.Controllers
 {
     
-    [Route("api/auth")]
+    [Route("api/account")]
     [ApiController]
-    public class AuthorizationController : ControllerBase
+    public class UserAccountController : ControllerBase
     {
         private readonly IUnitOfWork unitOfWork;
-        private readonly IHttpContextAccessor httpContextAccessor;
 
-        public AuthorizationController(IUnitOfWork unitOfWork, IHttpContextAccessor contextAccessor)
+        public UserAccountController(IUnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-            this.httpContextAccessor = contextAccessor ?? throw new ArgumentNullException(nameof(contextAccessor));
         }
 
         [HttpPost]
@@ -35,7 +33,7 @@ namespace PlantsAPI.Controllers
                 newUser.PasswordHash = passwordHash;
                 newUser.PasswordSalt = passwordSalt;
 
-                await unitOfWork.Users.AddUser(newUser);
+                await unitOfWork.Auth.AddUser(newUser);
                 await unitOfWork.SaveChangesAsync();
 
                 return Ok();
@@ -44,8 +42,6 @@ namespace PlantsAPI.Controllers
             {
                 return BadRequest();
             }
-
-            //handle the case where the register is unsuccessful
         }
 
 
@@ -56,7 +52,7 @@ namespace PlantsAPI.Controllers
 
             try
             {
-                var user = await unitOfWork.Users.GetUserByName(request.Username);
+                var user = await unitOfWork.Auth.GetUserByName(request.Username);
 
                 if (user == null)
                 {
@@ -83,11 +79,61 @@ namespace PlantsAPI.Controllers
             {
                 return BadRequest();
             }
-            
+        }
+
+
+
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<ActionResult<UserDto>> GetUserById(Guid id)
+        {
+            try
+            {
+                var user = await unitOfWork.Auth.GetUserById(id);
+                return Ok(user);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
+
+
+        [HttpPut]
+        [Route("{id}")]
+        public async Task<ActionResult<User>> EditUser(UserInfoEditRequest request)
+        {
+            try
+            {
+                var modifiedUser = await unitOfWork.Auth.EditUserEmail(request);
+                await unitOfWork.SaveChangesAsync();
+                return Ok(modifiedUser);
+
+            }
+            catch
+            {
+                return BadRequest();
+            }
 
         }
 
 
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<ActionResult<User>> DeleteUser(Guid id)
+        {
+            try
+            {
+                var result = await unitOfWork.Auth.DeleteUser(id);
+                await unitOfWork.SaveChangesAsync();
+                return Ok(result);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
 
     }
 }

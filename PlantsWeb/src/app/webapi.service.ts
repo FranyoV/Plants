@@ -11,6 +11,7 @@ import { LoginRequest } from './models/LoginRequest';
 import { LoginResponse } from './models/LoginResponse';
 import { Item } from './models/Item';
 import { RegisterRequest } from './models/RegisterRequest';
+import { UserInfoEditRequest } from './models/UserInfoEditRequest';
 
 @Injectable({
   providedIn: 'root'
@@ -26,27 +27,32 @@ export class WebApiService {
 
   //Auth
   register(request: RegisterRequest): Observable<any> {
-    let url = `${this.baseUrl}/api/auth/register`
+    let url = `${this.baseUrl}/api/account/register`
     return this.http.post<any>(url, request);
   }
 
   login(request: LoginRequest): Observable<LoginResponse> {
-    let url = `${this.baseUrl}/api/auth/login`;
+    let url = `${this.baseUrl}/api/account/login`;
     return this.http.post<LoginResponse>(url, request);
   }
 
   getMe(): Observable<string> {
-    let url = `${this.baseUrl}/api/auth`;
+    let url = `${this.baseUrl}/api/account`;
     return this.http.get(url, {responseType: 'text'});
   }
 
    getUserById(id: string): Observable<User> {
-    let url = `${this.baseUrl}/api/users/${id}`;
+    let url = `${this.baseUrl}/api/account/${id}`;
     return this.http.get<User>(url);
   }
 
+  editUserEmail( request:UserInfoEditRequest) : Observable<any>{
+    let url = `${this.baseUrl}/api/account/${request.userId}`;
+    return this.http.put(url, request, this.httpOptions);
+  }
+
   deleteUser(userId: string): Observable<User> {
-    let url = `${this.baseUrl}/api/users/${userId}`;
+    let url = `${this.baseUrl}/api/account/${userId}`;
     return this.http.delete<User> (url, this.httpOptions);
   }
 

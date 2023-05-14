@@ -13,11 +13,12 @@ import { RegisterComponent } from './register/register.component';
 import { MarketplaceComponent } from './marketplace/item-list/marketplace.component';
 import { ItemAddComponent } from './marketplace/item-add/item-add.component';
 import { ItemEditComponent } from './marketplace/item-edit/item-edit.component';
+import { AuthGuardService } from './auth-guard.service';
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},  
-  {path: ':userId', component: HeaderComponent, 
+  {path: ':userId', component: HeaderComponent, canActivate: [AuthGuardService],
    children: [
     {path: 'main', component: PostsListComponent},
     {path: 'plants', component: PlantsListComponent},

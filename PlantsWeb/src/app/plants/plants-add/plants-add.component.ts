@@ -198,4 +198,8 @@ export class PlantsAddComponent implements OnInit{
     
   }
 
+
+  goBack(){
+    this.router.navigate([`${this.currentUserId}/plants`])
+  }
 }

@@ -6,11 +6,24 @@
   }
 
 mat-card-header {
-  vertical-align: middle;
+  display:flex;
+  
   margin-left: 1rem;
   margin-right: 1rem;
-  padding-top: 0 !important;
+  align-items: center;
+  padding: 0 1rem;
+  /*padding-top: 0 !important;*/
 }
+
+mat-card-title {
+  display:flex;
+  height:100%;
+  margin: 0 1rem;
+  
+  align-items: center;
+
+}
+
 
 button {
   margin: 0.5rem;
@@ -40,4 +53,5 @@ form {
 
 mat-card {
   box-shadow: inset;
+  opacity: 0.8;
 }

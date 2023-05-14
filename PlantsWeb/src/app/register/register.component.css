@@ -1,15 +1,18 @@
 
-
-
-:host {
+.container {
     display: flex;
-    justify-content: center;
+    justify-content: center; 
+  }
+
+  mat-card{
+    opacity: 0.8;
     margin: 100px 0px;
   }
 
-  .mat-form-field {
+  mat-form-field {
     width: 100%;
     min-width: 300px;
+    appearance: fill;
   }
 
   mat-card-title,
@@ -19,10 +22,6 @@
     margin: 1rem;
   }
 
-  mat-form-field {
-width: 25vw;
-  }
-
   .error {
     padding: 16px;
     width: 300px;
@@ -30,7 +29,11 @@ width: 25vw;
     background-color: red;
   }
 
-  .button {
+  .button-row {
     display: flex;
     justify-content:center;
+  }
+
+  button {
+    margin: 0px 10px;
   }

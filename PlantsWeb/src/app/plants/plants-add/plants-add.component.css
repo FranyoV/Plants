@@ -1,22 +1,30 @@
 
 h2 {
-    margin: 10px;
+    font-weight: 500;
 }
 
-.form-container {
-    display: flex;
+h3 {
+    font-weight: 500;
+}
+
+.container {
+ /*   display: flex;
     flex-direction: column;
-    /*align-items: flex-start;*/
-    
+    align-items: flex-start;*/
+    opacity: 0.8;
+    background-color: white;
   }
 
 .btn {
-margin: 3px;
+    margin: 3px;
+    opacity: 0.8;
 }
 
 .button-row{
-
-   margin-right: 10px;
+   margin: 20px;
+   display: flex;
+   justify-content: center;
+   align-items: center;
 }
 
 img {
@@ -26,6 +34,11 @@ img {
 .col {
     text-align: center;
 }
+
+mat-form-field{
+    min-width: 400px;
+}
+
 
 .file-input {
     display: none;

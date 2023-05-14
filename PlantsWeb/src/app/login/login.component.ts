@@ -46,7 +46,7 @@ export class LoginComponent {
     )).subscribe({
       next: (res: LoginResponse) => {
         if (res.status == LoginStatus.Successful){
-          localStorage.setItem('authToken', res.token);
+          localStorage.setItem('plantstkn', res.token);
           this.currentUserId = res.userId,
           this.userLogin.emit(this.currentUserId);
           this.newMessage(res.userId);
@@ -58,7 +58,8 @@ export class LoginComponent {
           if (res.status == LoginStatus.UserNotFound){
             this.openSnackBar("Wrong username!");
           }
-      }}
+      }},
+      error: (err) => {this.openSnackBar("Something went wrong. Try again!")}
     })
   }
 
@@ -85,5 +86,8 @@ export class LoginComponent {
 
   @Output() userLogin = new EventEmitter<string>();
 
+  goToLoginPage(){
+    this.router.navigate(['register']);
+  }
 
 }

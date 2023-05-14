@@ -46,6 +46,7 @@ import { ItemDetailsComponent } from './marketplace/item-details/item-details.co
 import { ItemEditComponent } from './marketplace/item-edit/item-edit.component';
 import { SnackbarComponent } from './snackbar/snackbar.component';
 import { AuthInterceptor } from './auth.interceptor';
+import {AuthGuardService} from './auth-guard.service';
 
 
 @NgModule({
@@ -98,7 +99,7 @@ import { AuthInterceptor } from './auth.interceptor';
     MatIconModule,
     MatProgressBarModule
   ],
-  providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
+  providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },AuthGuardService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

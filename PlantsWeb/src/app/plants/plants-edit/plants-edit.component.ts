@@ -22,13 +22,14 @@ export class PlantsEditComponent implements OnInit{
   subscription! : Subscription;
   currentPlantId : string = ""; 
   currentPlant!: Plant;
+  currentUserId : string = '';
   plants: Plant[] = [];
 
 
   editForm = this.formBuilder.group({
     name : ['', [Validators.required, Validators.maxLength(50)]],
     description : "",
-    imageUrl: "" ,
+    imageUrl: '',
     interval: [{value: 0, disabled: true}, [Validators.required, Validators.min(1)]],
     note: [{value: '', disabled: true},[Validators.required]],
     lastNotification: [{value: formatDate( Date(), 'yyyy-MM-dd', 'en', '+0000'), disabled: true }, [Validators.required]]
@@ -47,6 +48,13 @@ export class PlantsEditComponent implements OnInit{
   ngOnInit(){
     this.data.currentPlantsMessage.subscribe( message => this.plants = message );
 
+    this.route.parent?.params.subscribe({
+      next: (params) => {
+        const id = params["userId"];
+        this.currentUserId = id}
+      
+    });
+
     this.route.paramMap.subscribe( (params) => {
       const id = params.get("plantId");
       this.currentPlantId = id!;})
@@ -59,7 +67,7 @@ export class PlantsEditComponent implements OnInit{
              console.log("currentplant:", this.currentPlant);
              this.editForm.controls['name'].setValue(this.currentPlant.name);
              this.editForm.controls['description'].setValue(this.currentPlant.description);
-             this.editForm.controls['imageUrl'].setValue(this.currentPlant.imageUrl ),
+             //this.editForm.controls['imageUrl'].setValue(this.currentPlant.imageUrl ),
              this.editForm.controls['interval'].setValue(this.currentPlant.interval ),
              this.editForm.controls['lastNotification'].setValue(this.currentPlant.lastNotification?.toLocaleString()!),
              this.editForm.controls['note'].setValue(this.currentPlant.note)},
@@ -88,7 +96,7 @@ export class PlantsEditComponent implements OnInit{
         this.currentPlantId,
         this.editForm.value.name!,
         this.editForm.value.description!,
-        this.editForm.value.imageUrl!,
+        null,
         this.editForm.value.note!,
         this.editForm.value.interval!,
         utcDate,
@@ -176,5 +184,9 @@ export class PlantsEditComponent implements OnInit{
       this.editForm.controls['interval'].disable();
     }
     
+  }
+
+  goBack(){
+    this.router.navigate([`${this.currentUserId}/plants`])
   }
 }

@@ -79,4 +79,7 @@ export class RegisterComponent {
       //this.webApi
     }
   }
+  backToLoginPage(){
+    this.router.navigate([`login`]);
+  }
 }

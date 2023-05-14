@@ -13,11 +13,11 @@ namespace PlantsAPI.Repositories
         {
         }
 
-        
-        //public async Task<IEnumerable<Plant>> GetPlants()
-        //{
-        //    return await dbSet.ToListAsync();
-        //}
+
+        public async Task<IEnumerable<Plant>> GetPlants()
+        {
+            return await dbSet.ToListAsync();
+        }
 
 
         //throws unathourized exception

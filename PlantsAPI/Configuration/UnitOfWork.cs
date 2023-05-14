@@ -39,7 +39,7 @@ namespace PlantsAPI.Configuration
             _userContext = userContext ?? throw new ArgumentNullException(nameof(userContext)); 
 
             this.Users = new UserRepository(_dbContext, _userContext);
-            this.Plants = new PlantRepository(_dbContext, _userContext, _notificationService);
+            this.Plants = new PlantRepository(_dbContext, _userContext);
             this.Posts = new PostRepository(_dbContext, _userContext);
             this.Replies = new ReplyRepository(_dbContext, _userContext,  _notificationService );
             this.Items = new ItemsRepository(_dbContext, _userContext);

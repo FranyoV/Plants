@@ -1,38 +1,15 @@
 
-<div class="container d-flex justify-content-center align-items-center ">
+<div class="container">
   <div>
 
     <h2 class="text-center">Add plant</h2>  
       
       <form [formGroup]="addForm" (ngSubmit)="addPlant()">
         <div class="row">
-
-          <div class="col" style="float:none;margin:auto;align-items: center;">
-            <img src="assets/plant-icon.avif" alt="">
-            
-            <input  type="file" class="file-input"
-                  (change)="onFileChanged($event)" #fileUpload
-                   accept="image/png">
-                  
-
-            <div class="file-upload">
-                <button mat-raised-button color="primary" type="button" class="upload-btn"
-                  (click)="fileUpload.click()">
-                    Upload image
-                </button>
-                {{fileName || "No file uploaded yet."}}
-                <button mat-raised-button class="cancel-upload" (click)="cancelUpload()" 
-                        >Cancel upload</button>
-            </div>
-            
-
             <!--button mat-raised-button (click)="fileInput.click()">Upload image</button-->
             <!--input #fileInput matInput type="file" (change)="onFileChanged($event)" /-->
-          </div>
-
-          <div class=" col" style="float:none;margin:auto;">
-              <div class="container">
-
+            <div class=" col" >
+              
                 <h3 style="text-align: center;">Plant info:</h3>
 
                 <mat-form-field  appearance="outline">
@@ -55,8 +32,26 @@
                     rows="3"
                     matInput></textarea>
                 </mat-form-field>
+
+                <div  style="float:none;margin:auto;align-items: center;">
+                  <img src="assets/plant-icon.avif" alt="">
+                  
+                  <input  type="file" class="file-input"
+                        (change)="onFileChanged($event)" #fileUpload
+                         accept="image/png">
+                        
+      
+                  <div class="file-upload">
+                      <button mat-raised-button color="primary" type="button" class="upload-btn"
+                        (click)="fileUpload.click()">
+                          Upload image
+                      </button>
+                      {{fileName || "No file uploaded yet."}}
+                      <button mat-raised-button class="cancel-upload" (click)="cancelUpload()" 
+                              >Cancel upload</button>
+                  </div>
     
-                <mat-form-field appearance="outline">
+                <!--mat-form-field appearance="outline">
                   <mat-label>Image</mat-label>
                   <input 
                     type="text" 
@@ -64,12 +59,12 @@
                     id="UploadImage" 
                     placeholder="Paste th url."
                     matInput>
-                </mat-form-field>
+                </mat-form-field-->
               </div>
-              
+            </div>
 
             <!--button mat-raised-button type="button" (click)="showMaintenance()">I want reminder notifications of the maintenance of the plant. </button-->
-            <div >
+            <div class="col" >
               
               <mat-slide-toggle (toggleChange)="showMaintenance()" >I want reminder notifications of the maintenance of the plant.</mat-slide-toggle>
               <h3 style="text-align: center;">Maintenance info:</h3>
@@ -118,73 +113,21 @@
 
           </div>
           
-          <div class="container button-row" [align]="'end'">
+          <div class="button-row" >
+            <button mat-stroked-button (click)="goBack()" >Cancel</button>
             <button mat-stroked-button [disabled]="addForm.invalid" type="submit" class="gy-3" >Save</button>
-            <a mat-stroked-button href="plants" class="btn">Cancel</a>
+            
           </div>
-        </div>
+        
+      
 
-        <!--div class="row">
-          <div class="container button-row" [align]="'end'">
-            <button mat-stroked-button [disabled]="addForm.invalid" type="submit" class="gy-3" >Save</button>
-            <a mat-stroked-button href="plants" class="btn">Cancel</a>
-          </div>
-        </div-->
       </form>
       
     </div>
-  </div>
 
+</div>
 
 
 <router-outlet></router-outlet>
 
-    <!--form [formGroup]="addForm" (ngSubmit)="addPlant()">
-
-      <div>
-        <label for="exampleFormControlInput1">Name</label>
-        <input 
-        class="input-group" 
-        type="text" 
-        formControlName="name" 
-        class="form-control"
-        placeholder="Name">
-      </div>
-  
-      <div>
-        <label for="description">Description</label>
-        <textarea 
-        class="input-group" 
-        type="text"
-        formControlName="description"
-        placeholder="Add description"
-        rows="3"></textarea>
-      </div>
-  
-      <div >
-        <label for="exampleFormControlSelect1">Maintenance</label>
-        <select class="form-control" id="exampleFormControlSelect1">
-          <option>1</option>
-          <option>2</option>
-          <option>3</option>
-          <option>4</option>
-          <option>5</option>
-        </select>
-      </div>
-     
-      <div >
-        <label for="image">Image</label>
-        <button class="btn btn-info">Upload</button>
-        <input 
-        type="text" 
-        formControlName="imageUrl"
-        id="UploadImage" 
-        placeholder="imageurlvagyvalami">
-      </div>
    
-    
-      <button type="submit" class="btn btn-primary gy-3" >Save</button>
-      <a href="plants" class="btn btn-primary">Cancel</a>
-    </form>
-  </div-->
-  
