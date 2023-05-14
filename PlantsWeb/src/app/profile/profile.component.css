@@ -12,6 +12,7 @@ mat-card-header {
   margin-right: 1rem;
   align-items: center;
   padding: 0 1rem;
+  opacity: 1;
   /*padding-top: 0 !important;*/
 }
 
@@ -19,7 +20,8 @@ mat-card-title {
   display:flex;
   height:100%;
   margin: 0 1rem;
-  
+  color: black;
+  opacity: 1;
   align-items: center;
 
 }
@@ -27,6 +29,7 @@ mat-card-title {
 
 button {
   margin: 0.5rem;
+  opacity: 1;
 }
 
 .chart-container {

@@ -57,7 +57,7 @@ export class PostsListComponent implements OnInit, OnDestroy{
           this.getPostByUserReplies();
           this.getPostByUser();
         },
-        error: (err) => this.openSnackBar("Something went wrong!")
+        error: (err) => {this.openSnackBar("Something went wrong. Try again!")}
     });
       
     
@@ -75,7 +75,7 @@ export class PostsListComponent implements OnInit, OnDestroy{
     console.log(this.currentUserId)
     this.webApi.getPostByUser(this.currentUserId).subscribe({
       next: (res) => {this.postsOfUser = res},
-      error: (err) => {console.log(err)}
+      error: (err) => {this.openSnackBar("Something went wrong. Try again!")}
     })
   }
 
@@ -83,7 +83,7 @@ export class PostsListComponent implements OnInit, OnDestroy{
     console.log(this.currentUserId)
     this.webApi.getPostByUserReplies(this.currentUserId).subscribe({
       next: (res) => {this.postsOfUserReplies = res},
-      error: (err) => {console.log(err)}
+      error: (err) => {this.openSnackBar("Something went wrong. Try again!")}
     })
   }
 
