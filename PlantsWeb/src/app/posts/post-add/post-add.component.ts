@@ -18,6 +18,8 @@ export class PostAddComponent implements OnInit{
   posts: Post[] = [];
   currentUserId: string = "";
 
+  fileName = '';
+
   addPostForm = this.formBuilder.group({
     title : ['', [Validators.required, Validators.maxLength(50)]],
     content : ['', [Validators.required]],
@@ -90,7 +92,7 @@ export class PostAddComponent implements OnInit{
         next: (res) => { 
            this.posts.push(res),
            this.newMessage(this.posts),
-           this.router.navigate(['main'])
+           this.router.navigate([`${this.currentUserId}/main`]);
            this.openSnackBar("New post created!"); },
         error: (err) => { 
           this.openSnackBar("Something went wrong!"), 
@@ -98,6 +100,33 @@ export class PostAddComponent implements OnInit{
       })
     }
   }
+
+  onFileChanged(event : any ){
+    
+    const file:File = event.target.files[0];
+
+    if (file) {
+
+        this.fileName = file.name;
+
+        const formData = new FormData();
+
+        formData.append("thumbnail", file);
+
+        //const upload$ = this.http.post("/api/thumbnail-upload", formData);
+
+        
+    }
+  }
+  cancelUpload() {
+    
+    this.reset();
+  }
+
+  reset() {
+    this.fileName = '';
+  }
+
 
   openSnackBar(message: string) {
     this.snackBar.openFromComponent(SnackbarComponent, {
@@ -110,4 +139,8 @@ export class PostAddComponent implements OnInit{
     this.data.changePostsMessage(updatedPosts);
   }
 
+
+  goBack(){
+    this.router.navigate([`${this.currentUserId}/main`]);
+  }
 }

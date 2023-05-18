@@ -13,7 +13,6 @@ namespace PlantsAPI.Configuration
         private readonly IUserContext _userContext;
         private readonly INotificationService _notificationService;
 
-        public IUserRepository Users { get; private set; }
         public IPlantRepository Plants { get; private set; }
         public IPostRepository Posts { get; private set; }
         public IReplyRepository Replies { get; private set; }
@@ -38,7 +37,7 @@ namespace PlantsAPI.Configuration
             _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService)); 
             _userContext = userContext ?? throw new ArgumentNullException(nameof(userContext)); 
 
-            this.Users = new UserRepository(_dbContext, _userContext);
+           
             this.Plants = new PlantRepository(_dbContext, _userContext);
             this.Posts = new PostRepository(_dbContext, _userContext);
             this.Replies = new ReplyRepository(_dbContext, _userContext,  _notificationService );

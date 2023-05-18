@@ -6,10 +6,12 @@ import {MatTableDataSource} from '@angular/material/table';
 import { ItemDetailsComponent } from '../item-details/item-details.component';
 import { Item } from 'src/app/models/Item';
 import { ItemType } from 'src/app/models/ItemType';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { WebApiService } from 'src/app/webapi.service';
 import { DataService } from 'src/app/data.service';
 import { Subscription } from 'rxjs';
+import { SnackbarComponent } from 'src/app/snackbar/snackbar.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Component({
@@ -25,6 +27,7 @@ export class MarketplaceComponent  implements OnInit, AfterViewInit, OnDestroy {
   items: Item[] = [];
   myItems: Item[] = [];
   subscription!: Subscription;
+  currentUserId!: string;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -34,7 +37,8 @@ export class MarketplaceComponent  implements OnInit, AfterViewInit, OnDestroy {
     private router: Router,
     private webApi: WebApiService,
     private data : DataService,
-    
+    private route : ActivatedRoute,
+    private snackBar : MatSnackBar
     ) 
     {}
 
@@ -48,13 +52,13 @@ export class MarketplaceComponent  implements OnInit, AfterViewInit, OnDestroy {
     this.subscription = this.data.currentItemsMessage
     .subscribe( message => this.items = message ) ;
 
-   /* this.route.parent?.params.subscribe({
+   this.route.parent?.params.subscribe({
       next: (params) => {
         const id = params["userId"];
         this.currentUserId = id!;
       },
       error: (err) => this.openSnackBar("Something went wrong!")
-    });*/
+    });
 
     this.getItems();
       
@@ -111,8 +115,14 @@ export class MarketplaceComponent  implements OnInit, AfterViewInit, OnDestroy {
   }
 
   goToAddItemPage(){
-    this.router.navigate(['marketplace/new']);
+    this.router.navigate([`${this.currentUserId}/item/new`]);
   }
   
+  openSnackBar(message: string) {
+    this.snackBar.openFromComponent(SnackbarComponent, {
+      data: message,
+      duration: 3 * 1000,
+    });
+  }
 
 }

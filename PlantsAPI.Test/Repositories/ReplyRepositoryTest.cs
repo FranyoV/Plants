@@ -33,7 +33,7 @@ namespace PlantsAPI.Test.Repositories
             context = new PlantsDbContext(dbOptions.Options);
             //logger = new Mock<ILogger>();
             notificationService = new Mock<INotificationService>();
-           // replyRepository = new ReplyRepository(context, userContext.Object, notificationService.Object);
+            replyRepository = new ReplyRepository(context, userContext.Object, notificationService.Object);
         }
 
         #region Constructor

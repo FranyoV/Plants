@@ -16,7 +16,7 @@ namespace PlantsAPI.Repositories
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
             this.dbSet = dbContext.Set<T>() ?? throw new ArgumentNullException(nameof(dbContext));
             //this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _userContext = userContext;
+            _userContext = userContext ?? throw new ArgumentNullException(nameof(userContext));
         }
 
     }

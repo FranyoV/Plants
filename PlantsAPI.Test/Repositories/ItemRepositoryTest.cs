@@ -2,7 +2,9 @@
 using Microsoft.Extensions.Logging;
 using Moq;
 using PlantsAPI.Data;
+using PlantsAPI.Models;
 using PlantsAPI.Repositories;
+using PlantsAPI.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,21 +13,23 @@ using System.Threading.Tasks;
 using Xunit;
 
 namespace PlantsAPI.Test.Repositories
-{/*
+{
     public class ItemRepositoryTest
     {
         private readonly PlantsDbContext context;
-        private readonly Mock<ILogger> logger;
+       
         private readonly IItemsRepository itemRepository;
+        private readonly Mock<IUserContext> userContext;
 
         public ItemRepositoryTest()
         {
 
             DbContextOptionsBuilder<PlantsDbContext> dbOptions = new DbContextOptionsBuilder<PlantsDbContext>()
                 .UseInMemoryDatabase(Guid.NewGuid().ToString());
+
             context = new PlantsDbContext(dbOptions.Options);
-            logger = new Mock<ILogger>();
-            itemRepository = new ItemsRepository(context, logger.Object);
+            userContext = new Mock<IUserContext>();
+            itemRepository = new ItemsRepository(context, userContext.Object);
         }
 
 
@@ -33,13 +37,13 @@ namespace PlantsAPI.Test.Repositories
         [Fact]
         public void ContructorShouldCreateObject()
         {
-            Assert.NotNull(new ItemsRepository(context, logger.Object));
+            Assert.NotNull(new ItemsRepository(context, userContext.Object));
         }
 
         [Fact]
         public void Contructor_ShouldThrowArgumentNullException_1()
         {
-            Assert.Throws<ArgumentNullException>(() => new ItemsRepository(null, logger.Object));
+            Assert.Throws<ArgumentNullException>(() => new ItemsRepository(null, userContext.Object));
         }
 
         [Fact]
@@ -50,72 +54,75 @@ namespace PlantsAPI.Test.Repositories
         #endregion
 
 
-        #region GetItems
-        [Fact]
-        public void GetItems_ShouldReturnResult()
-        {
-            var itemList = itemRepository.GetItems();
-            Assert.NotNull(itemList.Result);
-            Assert.NotEmpty(itemList.Result);
-        }
-        #endregion
+    //    #region GetItems
+    //    [Fact]
+    //    public void GetItems_ShouldReturnResult()
+    //    {
+    //        itemRepository.Setup(
+    //            x => x.GetItems())
+    //            .ReturnsAsync(It.IsAny<List<Item>>());
+    //        //var itemList = itemRepository.GetItems();
+    //        Assert.NotNull(itemList.Result);
+    //        Assert.NotEmpty(itemList.Result);
+    //    }
+    //    #endregion
 
 
-        #region GetItemById
+    //    #region GetItemById
 
-        [Fact]
-        public void GetItemById_ShouldThrowArgumentNullException()
-        {
-            Assert.ThrowsAsync<ArgumentNullException>(() => itemRepository.GetItemById(Guid.Empty));
-        }
+    //    [Fact]
+    //    public void GetItemById_ShouldThrowArgumentNullException()
+    //    {
+    //        Assert.ThrowsAsync<ArgumentNullException>(() => itemRepository.GetItemById(Guid.Empty));
+    //    }
 
-        #endregion
+    //    #endregion
 
-        #region GetItemsOfUser
-        [Fact]
-        public void GetItemsOfUser_ShouldThrowArgumentNullException()
-        {
-            Assert.ThrowsAsync<ArgumentNullException>(() => itemRepository.GetItemsOfUser(Guid.Empty));
-        }
-        #endregion
+    //    #region GetItemsOfUser
+    //    [Fact]
+    //    public void GetItemsOfUser_ShouldThrowArgumentNullException()
+    //    {
+    //        Assert.ThrowsAsync<ArgumentNullException>(() => itemRepository.GetItemsOfUser(Guid.Empty));
+    //    }
+    //    #endregion
 
-        #region GetItemsCount
-        [Fact]
-        public void GetItemsCount_ShouldThrowArgumentNullException()
-        {
-            Assert.ThrowsAsync<ArgumentNullException>(() => itemRepository.GetItemsCount(Guid.Empty));
-        }
-        #endregion
+    //    #region GetItemsCount
+    //    [Fact]
+    //    public void GetItemsCount_ShouldThrowArgumentNullException()
+    //    {
+    //        Assert.ThrowsAsync<ArgumentNullException>(() => itemRepository.GetItemsCount(Guid.Empty));
+    //    }
+    //    #endregion
 
 
-        #region AddItem
+    //    #region AddItem
 
-        [Fact]
-        public void AddItem_ShouldThrowArgumentNullException()
-        {
-            Assert.ThrowsAsync<ArgumentNullException>(() => itemRepository.AddItem(null));
-        }
+    //    [Fact]
+    //    public void AddItem_ShouldThrowArgumentNullException()
+    //    {
+    //        Assert.ThrowsAsync<ArgumentNullException>(() => itemRepository.AddItem(null));
+    //    }
 
-        #endregion
+    //    #endregion
 
-        #region EditItem
+    //    #region EditItem
 
-        [Fact]
-        public void EditItem_ShouldThrowArgumentNullException()
-        {
-            Assert.ThrowsAsync<ArgumentNullException>(() => itemRepository.EditItem(null));
-        }
+    //    [Fact]
+    //    public void EditItem_ShouldThrowArgumentNullException()
+    //    {
+    //        Assert.ThrowsAsync<ArgumentNullException>(() => itemRepository.EditItem(null));
+    //    }
 
-        #endregion
+    //    #endregion
 
-        #region  DeleteItem
+    //    #region  DeleteItem
 
-        [Fact]
-        public void DeleteItem_ShouldThrowArgumentNullException()
-        {
-            Assert.ThrowsAsync<ArgumentNullException>(() => itemRepository.DeleteItem(Guid.Empty));
-        }
+    //    [Fact]
+    //    public void DeleteItem_ShouldThrowArgumentNullException()
+    //    {
+    //        Assert.ThrowsAsync<ArgumentNullException>(() => itemRepository.DeleteItem(Guid.Empty));
+    //    }
 
-        #endregion
-    }*/
+    //    #endregion
+    }
 }

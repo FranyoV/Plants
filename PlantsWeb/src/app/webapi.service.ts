@@ -12,6 +12,7 @@ import { LoginResponse } from './models/LoginResponse';
 import { Item } from './models/Item';
 import { RegisterRequest } from './models/RegisterRequest';
 import { UserInfoEditRequest } from './models/UserInfoEditRequest';
+import { AbstractControl } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +30,11 @@ export class WebApiService {
   register(request: RegisterRequest): Observable<any> {
     let url = `${this.baseUrl}/api/account/register`
     return this.http.post<any>(url, request);
+  }
+
+  validateUserName(username : AbstractControl) : Observable<any>{
+    let url = `${this.baseUrl}/api/account/${username.value}`;
+    return this.http.get<any>(url)
   }
 
   login(request: LoginRequest): Observable<LoginResponse> {

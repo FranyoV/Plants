@@ -2,17 +2,8 @@
 <div class="container d-flex justify-content-center align-items-center ">
     <div>
   
-      <h2 class="text-center my-5">Add Post</h2>
+      <h2>Add Post</h2>
   
-      <div class="row">
-        <div class="col" style="float:none;margin:auto;align-items: center;">
-          <img src="assets/plant-icon.avif" alt=""><br>
-          <button mat-raised-button>Upload image</button>
-        </div>
-      
-  
-      <div class="col">
-        
         <form [formGroup]="addPostForm" (ngSubmit)="addPost()">
                   
   
@@ -43,7 +34,25 @@
                 </mat-error>
               </mat-form-field>
   
-              <mat-form-field appearance="outline">
+              <div  style="float:none;margin:auto;align-items: center;">
+                <img src="assets/plant-icon.avif" alt="">
+                
+                <input  type="file" class="file-input"
+                      (change)="onFileChanged($event)" #fileUpload
+                       accept="image/png">
+                      
+    
+                <div class="file-upload">
+                    <button mat-raised-button type="button" class="upload-btn" color="secondary"
+                      (click)="fileUpload.click()">
+                        Upload image
+                    </button>
+                    {{fileName || "No file uploaded yet."}}
+                    <button mat-icon-button type="button" class="cancel-upload" (click)="cancelUpload()" 
+                            ><mat-icon color="secondary">cancel</mat-icon></button>
+                </div>
+              </div>
+              <!--mat-form-field appearance="outline">
                 <mat-label>Image</mat-label>
                 <input 
                 type="text" 
@@ -51,19 +60,18 @@
                 id="UploadImage" 
                 placeholder="imageurlvagyvalami"
                 matInput>
-              </mat-form-field>
+              </mat-form-field-->
             
-  
-          
             <div class="button-row" [align]="'end'">
+              <button mat-raised-button type="button" (click)="goBack()" >Cancel</button>
               <button mat-raised-button [disabled]="addPostForm.invalid" type="submit" >Save</button>
-              <a mat-raised-button href="main" >Cancel</a>
+              
             </div>
 
         </form>
         
       </div>
     </div>
-  </div>
+  
   
   <router-outlet></router-outlet>

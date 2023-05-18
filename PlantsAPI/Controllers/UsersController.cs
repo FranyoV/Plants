@@ -7,32 +7,32 @@ using PlantsAPI.Repositories;
 
 namespace PlantsAPI.Controllers
 {
-    [Route("api/users")]
-    [ApiController]
-    [Authorize]
-    public class UsersController : ControllerBase
-    {
-        private readonly IUnitOfWork unitOfWork;
+    //[Route("api/users")]
+    //[ApiController]
+    //[Authorize]
+    //public class UsersController : ControllerBase
+    //{
+    //    private readonly IUnitOfWork unitOfWork;
 
-        public UsersController(IUnitOfWork unitOFWork)
-        {
-            this.unitOfWork = unitOFWork ?? throw new ArgumentNullException(nameof(unitOFWork));
-        }
+    //    public UsersController(IUnitOfWork unitOFWork)
+    //    {
+    //        this.unitOfWork = unitOFWork ?? throw new ArgumentNullException(nameof(unitOFWork));
+    //    }
 
-        //TODO AUTHORIZATION
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
-        {
-            try
-            {
-                var users = await unitOfWork.Users.GetUsers();
-                return Ok(users);
-            }
-            catch
-            {
-                return BadRequest();
-            }
-        }
+    //    //TODO AUTHORIZATION
+    //    [HttpGet]
+    //    public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+    //    {
+    //        try
+    //        {
+    //            var users = await unitOfWork.Users.GetUsers();
+    //            return Ok(users);
+    //        }
+    //        catch
+    //        {
+    //            return BadRequest();
+    //        }
+    //    }
 
         //TODO AUTHORIZATION
         //[HttpGet]
@@ -86,5 +86,5 @@ namespace PlantsAPI.Controllers
         //        return BadRequest();
         //    } 
         //}
-    }
+    //}
 }

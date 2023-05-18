@@ -115,6 +115,26 @@ namespace PlantsAPI.Test.Configuration
             }
         }
 
+        [Fact]
+        public void SaveChangesAsync_ShouldWork()
+        {
+            TestHelper helper = new();
+
+            helper.unitOfWork.Setup(
+                x => x.SaveChangesAsync());
+        }
+
+
+        [Fact]
+        public void Dispose()
+        {
+            TestHelper helper = new();
+
+            helper.unitOfWork.Setup(
+                x => x.Dispose());
+        }
+
+
 
     }
 }

@@ -2,7 +2,7 @@ import { formatDate } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DataService } from 'src/app/data.service';
 import { Item } from 'src/app/models/Item';
 import { ItemType } from 'src/app/models/ItemType';
@@ -15,7 +15,11 @@ import { WebApiService } from 'src/app/webapi.service';
   styleUrls: ['./item-add.component.css']
 })
 export class ItemAddComponent {
+
   items: Item[] = [];
+  currentUserId! : string;
+
+  fileName = '';
 
   addForm = this.formBuilder.group({
     name : ['', [Validators.required, Validators.maxLength(50)]],
@@ -30,10 +34,20 @@ export class ItemAddComponent {
     private webApi: WebApiService,
     private router: Router,
     private data: DataService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private route: ActivatedRoute
     ){}
 
   addItem(){
+
+    this.route.parent?.params.subscribe({
+      next: (params) => {
+        const id = params["userId"];
+        console.log("You are logged in with user: ",this.currentUserId),
+        this.currentUserId = id!;
+      },
+      error: (err) => this.openSnackBar("Something went wrong!")
+    });
 
     const newItem: Item = {
       id: "00000000-0000-0000-0000-000000000000",
@@ -44,7 +58,7 @@ export class ItemAddComponent {
       imageUrl: this.addForm.value.image!,
       date: new Date(),
       sold: false,
-      userId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      userId: this.currentUserId,
       user: null
     };
 
@@ -76,5 +90,31 @@ export class ItemAddComponent {
       data: message,
       duration: 3 * 1000,
     });
+  }
+
+  onFileChanged(event : any ){
+    
+    const file:File = event.target.files[0];
+
+    if (file) {
+
+        this.fileName = file.name;
+
+        const formData = new FormData();
+
+        formData.append("thumbnail", file);
+
+        //const upload$ = this.http.post("/api/thumbnail-upload", formData);
+
+        
+    }
+  }
+  cancelUpload() {
+    
+    this.reset();
+  }
+
+  reset() {
+    this.fileName = '';
   }
 }

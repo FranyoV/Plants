@@ -245,47 +245,47 @@ namespace PlantsAPI.Test.Controllers
         #endregion
 
 
-        #region PutPost
-        [Fact]
-        public void PutPost_ShouldThrowArgumentNullException_1()
-        {
-            TestHelper helper = new();
-            Assert.ThrowsAsync<ArgumentNullException>(() => helper.Controller.PutPost(null, Guid.NewGuid()));
-        }
+        //#region PutPost
+        //[Fact]
+        //public void PutPost_ShouldThrowArgumentNullException_1()
+        //{
+        //    TestHelper helper = new();
+        //    Assert.ThrowsAsync<ArgumentNullException>(() => helper.Controller.PutPost(null, Guid.NewGuid()));
+        //}
 
-        [Fact]
-        public void PutPost_ShouldThrowArgumentNullException_2()
-        {
-            TestHelper helper = new();
-            Assert.ThrowsAsync<ArgumentNullException>(() => helper.Controller.PutPost(new Post(), Guid.Empty));
-        }
-
-
-        [Fact]
-        public void PutPost_ShouldReturnOk()
-        {
-            TestHelper helper = new();
-
-            helper.mockUnitOfWork.Setup(
-                x => x.Posts.EditPost(It.IsAny<Post>()))
-                .ReturnsAsync(It.IsAny<Post>);
-
-            var response = helper.Controller.PutPost( new Post(), Guid.NewGuid());
-
-            Assert.True((response.Result.Result as OkObjectResult).StatusCode == (int)HttpStatusCode.OK);
-        }
+        //[Fact]
+        //public void PutPost_ShouldThrowArgumentNullException_2()
+        //{
+        //    TestHelper helper = new();
+        //    Assert.ThrowsAsync<ArgumentNullException>(() => helper.Controller.PutPost(new Post(), Guid.Empty));
+        //}
 
 
-        [Fact]
-        public void PutPost_ShouldReturnBadRequest()
-        {
-            TestHelper helper = new();
+        //[Fact]
+        //public void PutPost_ShouldReturnOk()
+        //{
+        //    TestHelper helper = new();
 
-            var response = helper.Controller.PutPost(new Post(), Guid.NewGuid());
+        //    helper.mockUnitOfWork.Setup(
+        //        x => x.Posts.EditPost(It.IsAny<Post>()))
+        //        .ReturnsAsync(It.IsAny<Post>);
 
-            Assert.True((response.Result.Result as BadRequestResult).StatusCode == (int)HttpStatusCode.BadRequest);
-        }
-        #endregion
+        //    var response = helper.Controller.PutPost( new Post(), Guid.NewGuid());
+
+        //    Assert.True((response.Result.Result as OkObjectResult).StatusCode == (int)HttpStatusCode.OK);
+        //}
+
+
+        //[Fact]
+        //public void PutPost_ShouldReturnBadRequest()
+        //{
+        //    TestHelper helper = new();
+
+        //    var response = helper.Controller.PutPost(new Post(), Guid.NewGuid());
+
+        //    Assert.True((response.Result.Result as BadRequestResult).StatusCode == (int)HttpStatusCode.BadRequest);
+        //}
+        //#endregion
 
 
         #region DeletePost

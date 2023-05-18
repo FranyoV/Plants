@@ -49,7 +49,8 @@ export class PostDetailsComponent implements OnInit {
         const id = params["userId"];
         
         this.currentUserId = id!;
-        
+        this.getPostById();
+        this.getRepliesOfPost();
       },
       error: (err) => this.openSnackBar("Something went wrong!")
   });
@@ -116,4 +117,8 @@ export class PostDetailsComponent implements OnInit {
     });
   }
 
+
+  goBack(){
+    this.router.navigate([`${this.currentUserId}/main`])
+  }
 }

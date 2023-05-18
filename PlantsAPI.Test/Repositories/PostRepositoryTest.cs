@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using PlantsAPI.Data;
 using PlantsAPI.Repositories;
+using PlantsAPI.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,11 +13,11 @@ using Xunit;
 
 namespace PlantsAPI.Test.Repositories
 {
-    /*
+    
     public class PostRepositoryTest
     {
         private readonly PlantsDbContext context;
-        private readonly Mock<ILogger> logger;
+        private readonly Mock<IUserContext> userContext;
         private readonly IPostRepository postRepository;
 
         public PostRepositoryTest()
@@ -25,21 +26,21 @@ namespace PlantsAPI.Test.Repositories
             DbContextOptionsBuilder<PlantsDbContext> dbOptions = new DbContextOptionsBuilder<PlantsDbContext>()
                 .UseInMemoryDatabase(Guid.NewGuid().ToString());
             context = new PlantsDbContext(dbOptions.Options);
-            logger = new Mock<ILogger>();
-            postRepository = new PostRepository(context, logger.Object);
+            userContext = new Mock<IUserContext>();
+            postRepository = new PostRepository(context, userContext.Object);
         }
 
         #region Constructor
         [Fact]
         public void ContructorShouldCreateObject()
         {
-            Assert.NotNull(new PostRepository(context, logger.Object));
+            Assert.NotNull(new PostRepository(context, userContext.Object));
         }
 
         [Fact]
         public void Contsructor_ShouldThrowArgumentNullException_1()
         {
-            Assert.Throws<ArgumentNullException>(() => new PostRepository(null, logger.Object));
+            Assert.Throws<ArgumentNullException>(() => new PostRepository(null, userContext.Object));
         }
 
         [Fact]
@@ -107,15 +108,15 @@ namespace PlantsAPI.Test.Repositories
 
         #endregion
 
-        #region EditPost
+        //#region EditPost
 
-        [Fact]
-        public void EditItem_ShouldThrowArgumentNullException()
-        {
-            Assert.ThrowsAsync<ArgumentNullException>(() => postRepository.EditPost(null));
-        }
+        //[Fact]
+        //public void EditItem_ShouldThrowArgumentNullException()
+        //{
+        //    Assert.ThrowsAsync<ArgumentNullException>(() => postRepository.EditPost(null));
+        //}
 
-        #endregion
+        //#endregion
 
         #region  DeletePost
 
@@ -126,5 +127,5 @@ namespace PlantsAPI.Test.Repositories
         }
 
         #endregion
-    }*/
+    }
 }

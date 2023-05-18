@@ -86,10 +86,10 @@ namespace PlantsAPI.Repositories
                     };
 
                     notificationService.SendEmail(emailData, EmailTemplate.NEWREPLY);
-
+                    return reply;
                 }
-                Reply result = await GetReplyById(reply.Id);
-                return result;
+                //Reply result = await GetReplyById(reply.Id);
+                return added.Entity;
             }
             else
             {

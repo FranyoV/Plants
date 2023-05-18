@@ -46,7 +46,7 @@ export class LoginComponent {
     )).subscribe({
       next: (res: LoginResponse) => {
         if (res.status == LoginStatus.Successful){
-          localStorage.setItem('plantstkn', res.token);
+          localStorage.setItem('authToken', res.token);
           this.currentUserId = res.userId,
           this.userLogin.emit(this.currentUserId);
           this.newMessage(res.userId);

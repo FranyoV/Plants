@@ -1,13 +1,28 @@
 
-mat-card-header {
-  vertical-align: middle;
-  vertical-align: bottom !important;
+
+.container {
+  background-color: white;
+  opacity: 0.95;
+  margin-top: 1rem;
+  
+}
+
+mat-card {
+  padding-bottom: 1rem;
+  width: 100%;
 }
 
 .card-header-image {
     background-image: url("../../../assets/defaultprofilepic.png");
     background-size: cover;
-    margin-left: 2px;
+    margin: 0rem;
+  }
+
+  mat-card-header {
+    display:flex;
+    width: 100%;
+    align-items: center;
+    margin-bottom: 10px;
   }
 
   .example-form {
@@ -19,8 +34,14 @@ mat-card-header {
     width: 100%;
   }
 
-  .mat-list-item.mat-list-item-word-wrap {
-    height: initial !important;
+  mat-list-item {
+   display: flex;
+   align-items: center;
+   color: black;
+   
+  }
+  matListItemTitle{
+    color: black;
   }
   
   .mat-list-item-word-wrap .mat-line {

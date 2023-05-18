@@ -25,6 +25,7 @@ export class PlantsEditComponent implements OnInit{
   currentUserId : string = '';
   plants: Plant[] = [];
 
+  fileName = '';
 
   editForm = this.formBuilder.group({
     name : ['', [Validators.required, Validators.maxLength(50)]],
@@ -185,6 +186,34 @@ export class PlantsEditComponent implements OnInit{
     }
     
   }
+
+  
+  onFileChanged(event : any ){
+    
+    const file:File = event.target.files[0];
+
+    if (file) {
+
+        this.fileName = file.name;
+
+        const formData = new FormData();
+
+        formData.append("thumbnail", file);
+
+        //const upload$ = this.http.post("/api/thumbnail-upload", formData);
+
+        
+    }
+  }
+  cancelUpload() {
+    
+    this.reset();
+  }
+
+  reset() {
+    this.fileName = '';
+  }
+
 
   goBack(){
     this.router.navigate([`${this.currentUserId}/plants`])

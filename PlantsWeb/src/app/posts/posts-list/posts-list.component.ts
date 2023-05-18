@@ -103,11 +103,11 @@ export class PostsListComponent implements OnInit, OnDestroy{
   }
 
   goToPostDetails(postId: string){
-    this.router.navigate([`post/${postId}`]);
+    this.router.navigate([`${this.currentUserId}/post/${postId}`]);
   }
 
   goToAddPostPage(){
-    this.router.navigate([`posts/new`]);
+    this.router.navigate([`${this.currentUserId}/posts/new`]);
   }
 
   deletePost(postId: string){

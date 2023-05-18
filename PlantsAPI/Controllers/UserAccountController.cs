@@ -18,11 +18,16 @@ namespace PlantsAPI.Controllers
 
         [HttpPost]
         [Route("register")]
-        public async Task<ActionResult> Register([FromBody] RegisterRequest request)
+        public async Task<ActionResult<RegisterResponse>> Register([FromBody] RegisterRequest request)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
             try
             {
+                if (await unitOfWork.Auth.UsernameTaken(request.Username))
+                {
+                    return Ok(new RegisterResponse() { state = RegisterStatus.USERNAMETAKEN});
+                }
+
                 string passwordSalt = unitOfWork.Auth.GenerateSalt(10);
                 string passwordHash = unitOfWork.Auth.CreatePasswordHash(request.Password, passwordSalt);
 
@@ -36,11 +41,11 @@ namespace PlantsAPI.Controllers
                 await unitOfWork.Auth.AddUser(newUser);
                 await unitOfWork.SaveChangesAsync();
 
-                return Ok();
+                return Ok(new RegisterResponse() { state = RegisterStatus.SUCCESSFULL });
             }
             catch
             {
-                return BadRequest();
+                return BadRequest(new RegisterResponse() { state = RegisterStatus.UNSUCCESSFULL });
             }
         }
 
@@ -68,7 +73,7 @@ namespace PlantsAPI.Controllers
 
                 LoginResponse response = new()
                 {
-                    Status = LoginStatus.Successful,
+                    Status = LoginStatus.Successfull,
                     UserId = user.Id,
                     Token = unitOfWork.Auth.CreateToken(user)
                 };

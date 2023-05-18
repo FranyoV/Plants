@@ -2,54 +2,68 @@
 <div class="container">
   <div>
 
-    <h2 class="text-center">Edit plant</h2>
+    <h2>Edit plant</h2>
   
-      <div style="float:none;margin:auto;">
       <form [formGroup]="editForm" (ngSubmit)="editPlant()">
+        <div class="row">
+          <div class="col">
+            <h3>Plant info:</h3>
 
-                <h3 style="text-align: center;">Plant info:</h3>
+            <mat-form-field>
+              <mat-label >Name</mat-label>
+              <input  
+              type="text" 
+              formControlName="name" 
+              placeholder="Name" matInput>
+              <mat-hint 
+                  *ngIf="editForm.get('name')?.touched && editForm.get('name')?.errors?.['required']
+                  "></mat-hint>
+            </mat-form-field>
 
-                <mat-form-field>
-                  <mat-label >Name</mat-label>
-                  <input  
-                  type="text" 
-                  formControlName="name" 
-                  placeholder="Name" matInput>
-                  <mat-hint 
-                     *ngIf="editForm.get('name')?.touched && editForm.get('name')?.errors?.['required']
-                     "></mat-hint>
-                </mat-form-field>
-    
-                <mat-form-field>
-                  <mat-label>Description</mat-label>
-                  <textarea 
-                  
-                  type="text"
-                  formControlName="description"
-                  placeholder="Add description"
-                  rows="3"
-                  matInput></textarea>
-                </mat-form-field>
-    
-                <div  >
-                  <img src="assets/plant-icon.avif" alt="">
-                  <button mat-raised-button>Upload image</button>
-                </div>
-                <!--mat-form-field>
-                  <mat-label>Image</mat-label>
-                  <input 
-                  type="text" 
-                  formControlName="imageUrl"
-                  id="UploadImage" 
-                  placeholder="Paste th url."
-                  matInput>
-                </mat-form-field-->
+            <mat-form-field>
+              <mat-label>Description</mat-label>
+              <textarea 
+              
+              type="text"
+              formControlName="description"
+              placeholder="Add description"
+              rows="3"
+              matInput></textarea>
+            </mat-form-field>
 
-          
-            
-            <mat-slide-toggle (toggleChange)="showMaintenance()" >I want notifications of the maintenance of the plant.</mat-slide-toggle>
-            <h3 style="text-align: center;">Maintenance info:</h3>
-           
+            <div  style="float:none;margin:auto;align-items: center;">
+              <img src="assets/plant-icon.avif" alt="">
+              
+              <input  type="file" class="file-input"
+                    (change)="onFileChanged($event)" #fileUpload
+                     accept="image/png">
+                    
+              <div class="file-upload">
+                  <button mat-raised-button type="button" class="upload-btn" color="secondary"
+                    (click)="fileUpload.click()">
+                      Upload image
+                  </button>
+                  {{fileName || "No file uploaded yet."}}
+                  <button mat-icon-button type="button" class="cancel-upload" (click)="cancelUpload()" 
+                          ><mat-icon color="secondary">cancel</mat-icon></button>
+              </div>
+
+            <!--mat-form-field>
+              <mat-label>Image</mat-label>
+              <input 
+              type="text" 
+              formControlName="imageUrl"
+              id="UploadImage" 
+              placeholder="Paste th url."
+              matInput>
+            </mat-form-field-->
+          </div>
+        </div>
+
+        <div class="col" >   
+          <h3>Maintenance info:</h3>   
+          <mat-slide-toggle color="primary" (toggleChange)="showMaintenance()" >I want reminder emails of the maintenance of the plant.</mat-slide-toggle>
+              
             <mat-form-field>
               <mat-label>Last maintenance date</mat-label>
               <mat-hint>MM/DD/YYYY</mat-hint>
@@ -83,21 +97,19 @@
               placeholder="..."
               matInput>
             </mat-form-field>
-
-          
-          
-          <div class="button-row" >
-            <button mat-raised-button [disabled]="editForm.invalid" type="submit" class="gy-3" >Save</button>
-            <button mat-raised-button   (click)="goBack()"
-              class="btn">Cancel</button>
           </div>
-        
-
-
+        </div>   
+              
+        <div class="button-row" >
+          <button mat-raised-button   (click)="goBack()"
+          class="btn">Cancel</button>
+          <button mat-raised-button [disabled]="editForm.invalid" type="submit" class="gy-3" >Save</button>
+          
+        </div>
       </form>
     </div>
-    </div>
   </div>
+
 
 
 

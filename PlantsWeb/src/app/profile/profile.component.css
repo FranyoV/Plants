@@ -1,7 +1,10 @@
+.container {
+
+}
+
 .card-header-image {
     background-image: url("../../assets/defaultprofilepic.png");
-    background-size: cover;
-    
+    background-size: cover;  
     margin: 0rem;
   }
 
@@ -38,11 +41,13 @@ button {
 }
 
 .col {
-  padding-top: 2rem;
+  padding-top: 1rem;
+  padding-bottom:1rem;
 }
 
 
 canvas{
+  height: 225px;
   margin: 0 auto;
   }
 
@@ -50,11 +55,12 @@ form {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-}
 
+}
 
 
 mat-card {
   box-shadow: inset;
-  opacity: 0.8;
+  opacity: 0.95;
+  
 }

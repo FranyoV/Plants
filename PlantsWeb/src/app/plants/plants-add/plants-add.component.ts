@@ -11,7 +11,6 @@ import { DataService } from 'src/app/data.service';
 import { Plant } from 'src/app/models/Plant';
 import { SnackbarComponent } from 'src/app/snackbar/snackbar.component';
 import { WebApiService } from 'src/app/webapi.service';
-
 @Component({
   selector: 'app-plants-add',
   templateUrl: './plants-add.component.html',
@@ -45,8 +44,7 @@ export class PlantsAddComponent implements OnInit{
     private router: Router,
     private webApi: WebApiService,
     private snackBar: MatSnackBar,
-    private route : ActivatedRoute,
-    private http : HttpClient 
+    private route : ActivatedRoute
   ){}
 
 

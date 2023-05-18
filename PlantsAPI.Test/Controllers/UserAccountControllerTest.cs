@@ -138,9 +138,136 @@ namespace PlantsAPI.Test.Controllers
                 .Returns(It.IsAny<string>());
 
             var response = helper.Controller.Login(new LoginRequest());
-
-            //Assert.True(response?.Result.Result.ToString() == "UserNotFound");
+            
+            //Assert.True((response?.Result.Result as OkObjectResult).Value == new LoginResponse());
             Assert.True((response?.Result.Result as OkObjectResult).StatusCode == (int)HttpStatusCode.OK);
+        }
+
+        [Fact]
+        public void Login_ShouldReturnBadRequest()
+        {
+            TestHelper helper = new();
+
+            var response = helper.Controller.Login(new LoginRequest());
+
+            Assert.True((response?.Result.Result as BadRequestResult).StatusCode == (int)HttpStatusCode.BadRequest);
+        }
+
+        #endregion
+
+
+        #region GetUserById
+
+        [Fact]
+        public void GetUserById_ShouldThrowArgumentNullException()
+        {
+            TestHelper helper = new();
+
+            Assert.ThrowsAsync<ArgumentNullException>(() => helper.Controller.GetUserById(Guid.Empty));
+        }
+
+
+        [Fact]
+        public void GetUserById_ShouldReturnOkWithResult()
+        {
+            TestHelper helper = new();
+
+            helper.mockUnitOfWork.Setup(
+                x => x.Auth.GetUserById(It.IsAny<Guid>()))
+                .ReturnsAsync(It.IsAny<UserDto>());
+
+            var response = helper.Controller.GetUserById(Guid.NewGuid());
+
+            Assert.True((response?.Result.Result as OkObjectResult).StatusCode == (int)HttpStatusCode.OK);
+        }
+
+
+        [Fact]
+        public void GetUserById_ShouldReturnBadRequest()
+        {
+            TestHelper helper = new();
+
+            var response = helper.Controller.GetUserById(Guid.NewGuid());
+
+            Assert.True((response?.Result.Result as BadRequestResult).StatusCode == (int)HttpStatusCode.BadRequest);
+        }
+
+        #endregion
+
+
+        #region EditUser
+
+        [Fact]
+        public void EditUser_ShouldThrowArgumentNullException()
+        {
+            TestHelper helper = new();
+
+            Assert.ThrowsAsync<ArgumentNullException>(() => helper.Controller.EditUser(null));
+        }
+
+
+        [Fact]
+        public void EditUser_ShouldReturnOkWithResult()
+        {
+            TestHelper helper = new();
+
+            helper.mockUnitOfWork.Setup(
+                x => x.Auth.EditUserEmail(It.IsAny<UserInfoEditRequest>()))
+                .ReturnsAsync(It.IsAny<User>());
+
+            var response = helper.Controller.EditUser(new UserInfoEditRequest());
+
+            Assert.True((response?.Result.Result as OkObjectResult).StatusCode == (int)HttpStatusCode.OK);
+        }
+
+
+        [Fact]
+        public void EditUser_ShouldReturnBadRequest()
+        {
+            TestHelper helper = new();
+
+            var response = helper.Controller.EditUser(new UserInfoEditRequest());
+
+            Assert.True((response?.Result.Result as BadRequestResult).StatusCode == (int)HttpStatusCode.BadRequest);
+        }
+
+        #endregion
+
+
+        #region DeleteUser
+
+        [Fact]
+        public void DeleteUser_ShouldThrowArgumentNullException()
+        {
+            TestHelper helper = new();
+
+            Assert.ThrowsAsync<ArgumentNullException>(() => helper.Controller.DeleteUser(Guid.Empty));
+        }
+
+
+        [Fact]
+        public void DeleteUser_ShouldReturnOkWithResult()
+        {
+            TestHelper helper = new();
+
+            helper.mockUnitOfWork.Setup(
+                x => x.Auth.DeleteUser(It.IsAny<Guid>()))
+                .ReturnsAsync(It.IsAny<bool>());
+
+            var response = helper.Controller.DeleteUser(Guid.NewGuid());
+
+            Assert.True((response?.Result.Result as OkObjectResult).StatusCode == (int)HttpStatusCode.OK);
+        }
+
+
+        [Fact]
+        public void DeleteUser_ShouldReturnBadRequest()
+        {
+            TestHelper helper = new();
+
+            var response = helper.Controller.DeleteUser(Guid.NewGuid());
+
+            Assert.True((response?.Result.Result as BadRequestResult).StatusCode == (int)HttpStatusCode.BadRequest);
         }
 
         #endregion
@@ -151,14 +278,12 @@ namespace PlantsAPI.Test.Controllers
         {
             protected internal Mock<IAuthRepository> mockAuthRepository;
             protected internal UserAccountController Controller;
-            protected internal Mock<IUnitOfWork> mockUnitOfWork;
-            protected internal Mock<IHttpContextAccessor> mockHttpContextAccesor;
+            protected internal Mock<IUnitOfWork> mockUnitOfWork;          
 
             public TestHelper()
             {
                 mockAuthRepository = new Mock<IAuthRepository>();
                 mockUnitOfWork = new Mock<IUnitOfWork>();
-                mockHttpContextAccesor = new Mock<IHttpContextAccessor>();
                 Controller = new(mockUnitOfWork.Object);
             }
         }

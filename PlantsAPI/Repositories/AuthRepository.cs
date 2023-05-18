@@ -93,6 +93,18 @@ namespace PlantsAPI.Repositories
         }
 
 
+        public async Task<bool> UsernameTaken(string username)
+        {
+            if (username == null) throw new ArgumentNullException(nameof(username));
+
+            if (await dbSet.Where(u => u.Name == username).AnyAsync())
+            {
+                return true;
+            }
+            else { return false; }
+        }
+
+
         public async Task<User> GetUserByName(string username)
         {
             User user = new();

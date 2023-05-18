@@ -1,34 +1,38 @@
+.container {
+    opacity: 0.95;
+    background-color: white;
+    
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    padding-bottom: 1em;
+    padding-top: 1em;
+}
 
 h2 {
+    text-align: center;
     font-weight: 500;
 }
 
 h3 {
+    text-align: center;
     font-weight: 500;
 }
 
-.container {
- /*   display: flex;
-    flex-direction: column;
-    align-items: flex-start;*/
-    opacity: 0.8;
-    background-color: white;
-  }
 
-.btn {
-    margin: 3px;
-    opacity: 0.8;
+button {
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
 }
 
-.button-row{
-   margin: 20px;
+.button-row{ 
    display: flex;
    justify-content: center;
    align-items: center;
 }
 
 img {
-    max-width: 200px;
+    max-width: 100px;
+    opacity: 1;
 }
 
 .col {
@@ -37,9 +41,25 @@ img {
 
 mat-form-field{
     min-width: 400px;
+    margin-bottom: 20px;
 }
 
 
 .file-input {
     display: none;
   }
+
+
+  .file-upload {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.slide-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 0.5rem;
+}
