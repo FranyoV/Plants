@@ -13,6 +13,8 @@ import { Item } from './models/Item';
 import { RegisterRequest } from './models/RegisterRequest';
 import { UserInfoEditRequest } from './models/UserInfoEditRequest';
 import { AbstractControl } from '@angular/forms';
+import { ReplyDto } from './models/ReplyDto';
+import { ItemDto } from './models/ItemDto';
 
 @Injectable({
   providedIn: 'root'
@@ -47,7 +49,7 @@ export class WebApiService {
     return this.http.get(url, {responseType: 'text'});
   }
 
-   getUserById(id: string): Observable<User> {
+  getUserById(id: string): Observable<User> {
     let url = `${this.baseUrl}/api/account/${id}`;
     return this.http.get<User>(url);
   }
@@ -101,9 +103,9 @@ export class WebApiService {
 
 
   //ITEMS
-  getItems(): Observable<Item[]>{
+  getItems(): Observable<ItemDto[]>{
     const url = `${this.baseUrl}/api/items`;
-    return this.http.get<Item[]>(url);
+    return this.http.get<ItemDto[]>(url);
   }
 
   getItemsById(id: string): Observable<Item> {
@@ -188,9 +190,9 @@ export class WebApiService {
     return this.http.get<Reply>(url);
   }
 
-  getRepliesOfPost(postId: string) : Observable<Reply[]> {
+  getRepliesOfPost(postId: string) : Observable<ReplyDto[]> {
     let url = `${this.baseUrl}/api/replies/post/${postId}`;
-    return this.http.get<Reply[]>(url);
+    return this.http.get<ReplyDto[]>(url);
   }
 
   getRepliesCount(userId: string) : Observable<number>{
@@ -198,9 +200,9 @@ export class WebApiService {
     return this.http.get<number>(url);
   }
 
-  addReplies(reply: Reply): Observable<Reply> {
+  addReplies(reply: Reply): Observable<ReplyDto> {
     let url = `${this.baseUrl}/api/replies`;
-    return this.http.post<Reply>(url, reply, this.httpOptions);
+    return this.http.post<ReplyDto>(url, reply, this.httpOptions);
   }
 
   updateReply(id: Guid, reply: Reply): Observable<any> {

@@ -26,13 +26,13 @@ namespace PlantsAPI.Repositories
         {
             if (replyId == Guid.Empty) throw new ArgumentNullException(nameof(replyId));
 
-            var reply = dbSet.Where(r => r.Id == replyId).FirstAsync();
+            var reply = dbSet.Where(r => r.Id == replyId).Include(u => u.User.Name).FirstAsync();
             return reply;
         }
 
 
         //anonymous access
-        public async Task<IEnumerable<Reply>> GetRepliesOfPost(Guid postId)
+        public async Task<IEnumerable<ReplyDto>> GetRepliesOfPost(Guid postId)
         {
             if (postId == Guid.Empty) throw new ArgumentNullException(nameof(postId));
             
@@ -40,7 +40,28 @@ namespace PlantsAPI.Repositories
 
             List<Reply> replies = await dbSet.Where(r => r.PostId == postId).ToListAsync();
 
-            var repliesInOrder = replies.OrderBy(x => x.DateOfCreation);
+            List<ReplyDto> replyDtos = new();
+
+            if (replies.Count > 0)
+            {
+                foreach (var reply in replies)
+                {
+                    User user = await _dbContext.Users.Where(x => x.Id == reply.UserId).FirstAsync();
+                    ReplyDto dto = new ReplyDto()
+                    {
+                        Id = reply.Id,
+                        PostId = postId,
+                        UserId = reply.UserId,
+                        Content = reply.Content,
+                        Username = user.Name,
+                        DateOfCreation = reply.DateOfCreation
+                    };
+                    replyDtos.Add(dto);
+                }
+            }
+          
+
+            var repliesInOrder = replyDtos.OrderBy(x => x.DateOfCreation);
             return repliesInOrder; 
         }
 
@@ -62,7 +83,7 @@ namespace PlantsAPI.Repositories
         }
 
 
-        public async Task<Reply> AddReply(Reply reply)
+        public async Task<ReplyDto> AddReply(Reply reply)
         {
             if (reply == null) throw new ArgumentNullException(nameof(reply));
 
@@ -71,10 +92,11 @@ namespace PlantsAPI.Repositories
 
                 reply.Id = Guid.NewGuid();
                 var added = await dbSet.AddAsync(reply);
+                ReplyDto dto = new();
 
                 if (added != null)
                 {
-                    Post post = _dbContext.Posts.Where(p => p.Id == reply.PostId).First();
+                    Post post = await _dbContext.Posts.Where(p => p.Id == reply.PostId).FirstAsync();
                     EmailData emailData = new()
                     {
 
@@ -86,10 +108,21 @@ namespace PlantsAPI.Repositories
                     };
 
                     notificationService.SendEmail(emailData, EmailTemplate.NEWREPLY);
-                    return reply;
+
+                    User user = await _dbContext.Users.Where(p => p.Id == reply.UserId).FirstAsync();
+                    dto = new()
+                    {
+                        Id = reply.Id,
+                        UserId = reply.UserId,
+                        PostId = reply.PostId,
+                        Content = reply.Content,
+                        DateOfCreation = reply.DateOfCreation,
+                        Username = user.Name,
+                    };
+                   // return dto;
                 }
-                //Reply result = await GetReplyById(reply.Id);
-                return added.Entity;
+
+                return dto;
             }
             else
             {

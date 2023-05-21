@@ -4,7 +4,7 @@ namespace PlantsAPI.Repositories
 {
     public interface IItemsRepository
     {
-        Task<IEnumerable<Item>> GetItems();
+        Task<IEnumerable<ItemDto>> GetItems();
         Task<Item> GetItemById(Guid id);
         Task<IEnumerable<Item>> GetItemsOfUser(Guid userId);
         Task<int> GetItemsCount(Guid userId);

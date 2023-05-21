@@ -29,17 +29,25 @@
               
                 <mat-list-item class="mat-list-item-word-wrap" >
                     
-                  <mat-avatar matListItemAvatar>
+                      
+                  <mat-avatar matListItemAvatar >
                     <img class="h-100" src="../../../assets/defaultprofilepic.png" alt="">
                   </mat-avatar>
+                  
 
                   <div matListItemTitle class="row">
-                    <div matListItemLine class="col"> TODO</div>
-                    <div matListItemLine class="col" [align]="'end'">{{reply.dateOfCreation | date : 'medium'}}</div>
+                    <div class="col">
+                      <div matListItemLine class="reply-username">{{reply.username}} </div>
+                      <div matListItemLine class="reply-date" >{{reply.dateOfCreation | date : 'medium'}}</div>
+                    </div>
+                   
+                    <div class="col">
+                      <button *ngIf="reply.userId==currentUserId" (click)="deleteReply(reply.id)" mat-stroked-button color="warn">Delete</button>
+
+                    </div>
                   </div>
 
-                  <div matListItemLine class="mat-line">
-                    {{reply.content}}
+                  <div matListItemLine class="reply-content">{{reply.content}}
                   </div>
                  
                 </mat-list-item>

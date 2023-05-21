@@ -35,7 +35,7 @@
                 </mat-form-field>
 
                 <div  style="float:none;margin:auto;align-items: center;">
-                  <img src="assets/plant-icon.avif" alt="">
+                  <img src={{this.url}} alt="">
                   
                   <input  type="file" class="file-input"
                         (change)="onFileChanged($event)" #fileUpload
@@ -84,7 +84,7 @@
                 <mat-datepicker #dp3 ></mat-datepicker>
               </mat-form-field>
   
-              <mat-form-field appearance="outline">
+              <mat-form-field>
                 <mat-label>Interval of days</mat-label>
                 
                 <input 
@@ -100,7 +100,7 @@
                   The value must at least 1.</mat-error>
               </mat-form-field>
   
-              <mat-form-field appearance="outline">
+              <mat-form-field>
                 <mat-label>Note</mat-label>
                 <input 
                 matTooltip="We will send you this note in the notification email."

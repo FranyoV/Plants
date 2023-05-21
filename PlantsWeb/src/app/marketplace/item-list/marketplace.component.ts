@@ -12,6 +12,7 @@ import { DataService } from 'src/app/data.service';
 import { Subscription } from 'rxjs';
 import { SnackbarComponent } from 'src/app/snackbar/snackbar.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ItemDto } from 'src/app/models/ItemDto';
 
 
 @Component({
@@ -21,10 +22,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class MarketplaceComponent  implements OnInit, AfterViewInit, OnDestroy {
   displayedColumns: string[] = ['name', 'type', 'price', 'username', 'date', 'details'];
-  dataSource!: MatTableDataSource<Item>;
+  dataSource!: MatTableDataSource<ItemDto>;
   animal: string = '';
   name: string = '';
-  items: Item[] = [];
+  items: ItemDto[] = [];
   myItems: Item[] = [];
   subscription!: Subscription;
   currentUserId!: string;
@@ -81,7 +82,7 @@ export class MarketplaceComponent  implements OnInit, AfterViewInit, OnDestroy {
 
 
 
-  openDialog(item: Item): void {
+  openDialog(item: ItemDto): void {
 
     const dialogRef = this.dialog.open(ItemDetailsComponent, {
       data: {
@@ -90,7 +91,7 @@ export class MarketplaceComponent  implements OnInit, AfterViewInit, OnDestroy {
         type: item.type,
         date: item.date,
         price: item.price,
-        username: item.user?.name
+        username: item.username
       },
     });
 

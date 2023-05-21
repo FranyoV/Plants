@@ -61,13 +61,13 @@ export class ItemAddComponent {
       userId: this.currentUserId,
       user: null
     };
-
+    console.log(newItem);
 
     this.webApi.addItem(newItem).subscribe({
       next: (res) => {
-        this.items.push(res),
-        this.newMessage(this.items),
-        this.router.navigate(['marketplace']),
+        //this.items.push(res),
+       // this.newMessage(this.items),
+        this.router.navigate([`${this.currentUserId}/marketplace`]),
         this.openSnackBar("Successfully added item for sale!"); },
       error: (err) => {
         this.openSnackBar("Couldn't add item. Try again!"),
@@ -77,9 +77,9 @@ export class ItemAddComponent {
     
   }
 
-  newMessage(updatedItems : Item[]) {
+ /* newMessage(updatedItems : ItemDto[]) {
     this.data.changeItemsMessage(updatedItems);
-  }
+  }*/
 
   goToMarketPlace(){
     this.router.navigate(['/marketplace']);

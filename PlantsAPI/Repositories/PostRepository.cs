@@ -24,6 +24,7 @@ namespace PlantsAPI.Repositories
                 foreach (var post in posts)
                 {
                     User user = await _dbContext.Users.Where(x => x.Id == post.UserId).FirstAsync();
+                    int replyCount = await _dbContext.Replies.Where(x => x.PostId == post.Id).CountAsync();
 
                     PostDto postDto = new()
                     {
@@ -33,7 +34,8 @@ namespace PlantsAPI.Repositories
                         DateOfCreation = post.DateOfCreation,
                         ImageUrl = post.ImageUrl,
                         UserName = user.Name,
-                        UserId = post.UserId
+                        UserId = post.UserId,
+                        ReplyCount = replyCount,
                     };
                     postDtos.Add(postDto);
                 }
@@ -44,27 +46,29 @@ namespace PlantsAPI.Repositories
             return postsInOrder;
         }
 
-        //throws exception
-        public async Task<Post> GetPostById(Guid postId)
+        //anonymous allowed
+        public async Task<PostDto> GetPostById(Guid postId)
         {
             if (postId == Guid.Empty) throw new ArgumentNullException(nameof(postId));
 
-            Guid currentUserId = Guid.Parse(_userContext.GetMe()); ;
-
-            var isPostUsers = dbSet.Where(p => p.Id == postId).Any(up => up.UserId == currentUserId);
-
             Post post = new();
+            PostDto dto = new();
+            post = await dbSet.Where(p => p.Id == postId).FirstAsync();
+            User user = await _dbContext.Users.Where(u => u.Id == post.UserId).FirstAsync();
 
-            if (isPostUsers)
-            {
-                post = await dbSet.Where(p => p.Id == postId).FirstAsync();
-                return post;
-            }
+            dto = new(){
+                Id = post.Id,
+                UserId = post.UserId,
+                Title = post.Title,
+                Content = post.Content,
+                DateOfCreation = post.DateOfCreation,
+                ImageUrl = post.ImageUrl,
+                UserName = user.Name,
+                ReplyCount = 0
+            };
 
-            else
-            {
-                throw new UnauthorizedAccessException();
-            }
+            return dto;
+
         }
 
         //üres lista
@@ -83,7 +87,7 @@ namespace PlantsAPI.Repositories
                     foreach (var post in postsOfUser)
                     {
                         var user = _dbContext.Users.FirstOrDefault(x => x.Id == post.UserId);
-
+                        var count = _dbContext.Replies.Where(r => r.PostId == post.Id).Count();
                         if (user != null)
                         {
                             PostDto postDto = new()
@@ -94,7 +98,8 @@ namespace PlantsAPI.Repositories
                                 DateOfCreation = post.DateOfCreation,
                                 ImageUrl = post.ImageUrl,
                                 UserName = user.Name,
-                                UserId = post.UserId
+                                UserId = post.UserId,
+                                ReplyCount = count
                             };
                             postDtos.Add(postDto);
                         }
@@ -137,6 +142,8 @@ namespace PlantsAPI.Repositories
                     foreach (var post in postsWithUsersReplies)
                     {
                         var user = _dbContext.Users.FirstOrDefault(x => x.Id == post.UserId);
+                        var count = _dbContext.Replies.Where(r => r.PostId == post.Id).Count();
+
                         if (user != null)
                         {
                             PostDto postDto = new()
@@ -147,7 +154,8 @@ namespace PlantsAPI.Repositories
                                 DateOfCreation = post.DateOfCreation,
                                 ImageUrl = post.ImageUrl,
                                 UserName = user.Name,
-                                UserId = post.UserId
+                                UserId = post.UserId,
+                                ReplyCount = count
                             };
                             postDtos.Add(postDto);
 

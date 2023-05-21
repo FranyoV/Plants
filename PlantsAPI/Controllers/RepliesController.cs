@@ -32,7 +32,7 @@ namespace PlantsAPI.Controllers
             }
 
         }*/
-       /*
+       
         //TODO AUTHORIZATION
         [HttpGet]
         [Route("{id}")]
@@ -47,12 +47,12 @@ namespace PlantsAPI.Controllers
             {
                 return BadRequest();
             }
-        }*/
+        }
 
         //TODO AUTHORIZATION
         [HttpGet]
         [Route("post/{postid}")]
-        public async Task<ActionResult<IEnumerable<Reply>>> GetRepliesOfPost([FromRoute] Guid postid) 
+        public async Task<ActionResult<IEnumerable<ReplyDto>>> GetRepliesOfPost([FromRoute] Guid postid) 
         {
             try
             {
@@ -72,10 +72,8 @@ namespace PlantsAPI.Controllers
         {
             try
             {
-
-                    var replies = await unitOfWork.Replies.GetRepliesCount(userId);
-                    return Ok(replies);
-
+                var replies = await unitOfWork.Replies.GetRepliesCount(userId);
+                return Ok(replies);
             }
             catch
             {
@@ -85,7 +83,7 @@ namespace PlantsAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Reply>> PostReply(Reply reply)
+        public async Task<ActionResult<ReplyDto>> PostReply(Reply reply)
         {
             try
             {

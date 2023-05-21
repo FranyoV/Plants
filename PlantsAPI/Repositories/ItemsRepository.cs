@@ -12,9 +12,30 @@ namespace PlantsAPI.Repositories
         }
 
         //anonymous access allowed
-        public async Task<IEnumerable<Item>> GetItems()
+        public async Task<IEnumerable<ItemDto>> GetItems()
         {
-            return await dbSet.ToListAsync();
+            List<Item> items = await dbSet.ToListAsync();
+            List<ItemDto> itemsDto = new List<ItemDto>();
+
+            foreach (var item in items)
+            {
+                User user = await _dbContext.Users.Where(x => x.Id == item.UserId).FirstAsync();
+                ItemDto dto = new()
+                {
+                    Id = item.Id,
+                    Name = item.Name,
+                    Type = item.Type,
+                    Price = item.Price,
+                    Description = item.Description,
+                    ImageUrl = item.ImageUrl,
+                    Date = item.Date,
+                    UserId = item.UserId,
+                    Sold = item.Sold,
+                    Username = user.Name
+                };
+                itemsDto.Add(dto);
+            }
+            return itemsDto;
         }
 
 

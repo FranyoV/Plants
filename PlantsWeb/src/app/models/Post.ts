@@ -7,6 +7,7 @@ export class Post {
         public imageUrl : string | null,
         public dateOfCreation : Date,
         public userId : string,
-        public userName : string | null | undefined
+        public userName : string | null | undefined,
+        public replyCount : number | null | undefined
         ){}
 }

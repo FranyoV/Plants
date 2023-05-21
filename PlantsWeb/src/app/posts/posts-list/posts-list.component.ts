@@ -59,7 +59,11 @@ export class PostsListComponent implements OnInit, OnDestroy{
         },
         error: (err) => {this.openSnackBar("Something went wrong. Try again!")}
     });
-      
+   /*   this.data.currentUserIdMessage.subscribe({
+        next: (message) => {this.currentUserId = message,
+          this.getPostByUserReplies();
+          this.getPostByUser();}
+      })*/
     
    /* this.data.currentUserIdMessage.subscribe({
       next: (res) => {this.currentUserId = res, console.log("You are logged in with user: ",this.currentUserId)}

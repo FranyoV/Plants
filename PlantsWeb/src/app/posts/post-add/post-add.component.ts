@@ -81,6 +81,7 @@ export class PostAddComponent implements OnInit{
       this.addPostForm.value.imageUrl!,
       new Date(),
       this.currentUserId,
+      null,
       null
     )
 

@@ -46,6 +46,13 @@ export class PlantsListComponent implements OnInit, OnDestroy {
     },
     error: (err) => {this.openSnackBar("Something went wrong. Try again!"), console.error('Getting plant for user failed.',err)}
     })*/
+
+    /*this.data.currentUserIdMessage.subscribe({
+      next: (message) => {this.currentUserId = message,
+        console.log("message:", message)
+        this.getPlantsOfUser();}
+    })*/
+  
     this.route.parent?.params.subscribe({
       next: (params) => {
         const id = params["userId"];

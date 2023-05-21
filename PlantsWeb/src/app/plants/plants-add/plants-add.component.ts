@@ -23,7 +23,8 @@ export class PlantsAddComponent implements OnInit{
   plants: Plant[] = [];
   subscription!: Subscription;
   
-  
+  imagePath:string = '';
+  url!:ArrayBuffer|null|string;
   fileName = '';
   
   uploadSub! : Subscription | null ;
@@ -83,17 +84,29 @@ export class PlantsAddComponent implements OnInit{
         formData.append("thumbnail", file);
 
         //const upload$ = this.http.post("/api/thumbnail-upload", formData);
-
+        const files = event.target.files;
+        if (files.length === 0)
+            return;
+    
+        const mimeType = files[0].type;
+        if (mimeType.match(/image\/*/) == null) {
+            this.openSnackBar("Only images are supported.");
+            return;
+        }
+    
+        const reader = new FileReader();
+        this.imagePath = files;
+        reader.readAsDataURL(files[0]); 
+        reader.onload = (_event) => { 
+            this.url = reader.result; 
+        }
         
     }
   }
   cancelUpload() {
-    
-    this.reset();
-  }
-
-  reset() {
     this.fileName = '';
+    this.url = '';
+    
   }
 
   getPlantOfUser(){

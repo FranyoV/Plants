@@ -29,21 +29,18 @@
 
                 <mat-card-title>{{post.userName}}</mat-card-title>
                 <mat-card-subtitle>{{post.dateOfCreation | date : 'medium'}}</mat-card-subtitle>
-                <mat-card-actions >
-                  <button *ngIf="post.userId==currentUserId" (click)="deletePost(post.id)" mat-raised-button color="warn">Delete</button>
-                </mat-card-actions>
-                
+      
             </mat-card-header>
 
             <mat-card-content>
               <mat-card-title>{{ post.title }}</mat-card-title>
-              <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.</p>
-              <p [align]="'end'">Number of comments on this post: 2</p>
+              <p>{{post.content}}</p>
+              <p [align]="'end'">Number of comments on this post: {{post.replyCount}}</p>
             </mat-card-content>
 
             <mat-card-actions [align]="'end'">
-              
-                <button mat-raised-button (click)="goToPostDetails(post.id)">See more details or leave a reply..</button>
+              <button *ngIf="post.userId==currentUserId" (click)="deletePost(post.id)" mat-stroked-button color="warn">Delete</button>
+                <button mat-stroked-button (click)="goToPostDetails(post.id)">See more details or leave a reply..</button>
               
             </mat-card-actions>
           </mat-card>
@@ -65,13 +62,14 @@
 
           <mat-card-content>
             <mat-card-title>{{ post.title }}</mat-card-title>
-            <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.</p>
-            <p [align]="'end'">Number of comments on this post: 2</p>
+            <p>{{post.content}}</p>
+            <p [align]="'end'">Number of comments on this post: {{post.replyCount}}</p>
+
           </mat-card-content>
 
           <mat-card-actions [align]="'end'">
-            
-              <button mat-raised-button (click)="goToPostDetails(post.id)">See more details or leave a reply..</button>
+            <button *ngIf="post.userId==currentUserId" (click)="deletePost(post.id)" mat-stroked-button color="warn">Delete</button>
+              <button mat-stroked-button (click)="goToPostDetails(post.id)">See more details or leave a reply..</button>
             
           </mat-card-actions>
         </mat-card>
@@ -91,19 +89,19 @@
               <mat-card-subtitle>{{post.dateOfCreation | date : 'medium'}}</mat-card-subtitle>
               <!--mat-card-title-group>
             </mat-card-title-group-->
-            <button *ngIf="post.userId==currentUserId" mat-raised-button color="warn">Delete</button>
-            
+ 
           </mat-card-header>
 
           <mat-card-content>
             <mat-card-title>{{ post.title }}</mat-card-title>
-            <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.</p>
-            <p [align]="'end'">Number of comments on this post: 2</p>
+            <p>{{post.content}}</p>
+            <p [align]="'end'">Number of comments on this post: {{post.replyCount}}</p>
+
           </mat-card-content>
 
           <mat-card-actions [align]="'end'">
-            
-              <button mat-raised-button (click)="goToPostDetails(post.id)">See more details or leave a reply..</button>
+            <button *ngIf="post.userId==currentUserId" (click)="deletePost(post.id)" mat-stroked-button color="warn">Delete</button>
+              <button mat-stroked-button (click)="goToPostDetails(post.id)">See more details or leave a reply..</button>
             
           </mat-card-actions>
         </mat-card>
@@ -116,12 +114,12 @@
 
 
 
-  <mat-paginator (page)="OnPageEvent($event)"
+  <!--mat-paginator (page)="OnPageEvent($event)"
               [length]="posts.length"
               [pageSize]="5"
               [pageSizeOptions]="[5, 10, 25, 100]"
               aria-label="Select page">
-  </mat-paginator>
+  </mat-paginator-->
 
   
 </div>
