@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container">
-    <a class="navbar-brand" href="main">Home</a>
+    <a class="navbar-brand" href="{{currentUserId + '/main'}}">Home</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -8,18 +8,16 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-          <a class="nav-link" href="marketplace">Market Place</a>
+          <a class="nav-link" href="{{currentUserId + '/marketplace'}}">Market Place</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="plants">My Plants</a>
+          <a class="nav-link" href="{{currentUserId + '/plants'}}">My Plants</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{'profile/' + currentUserId}}">Profile</a>
+          <a class="nav-link" href="{{currentUserId + '/profile'}}">Profile</a>
         </li>
       </ul>
-      <span class="navbar-text">
-        Navbar text with an inline element
-      </span>
+
     </div>
   </div>
   </nav>

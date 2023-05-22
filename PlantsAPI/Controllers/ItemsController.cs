@@ -56,12 +56,9 @@ namespace PlantsAPI.Controllers
         {
             try
             {
-                if (unitOfWork.UserContext.HasAuthorization(userId))
-                {
                     var items = await unitOfWork.Items.GetItemsOfUser(userId);
                     return Ok(items);
-                }
-                return Unauthorized();
+
             }
             catch
             {
@@ -76,12 +73,8 @@ namespace PlantsAPI.Controllers
         {
             try
             {
-                if (unitOfWork.UserContext.HasAuthorization(userId))
-                {
-                    var items = await unitOfWork.Plants.GetPlantsCount(userId);
-                    return Ok(items);
-                }
-                return Unauthorized();
+                var items = await unitOfWork.Items.GetItemsCount(userId);
+                return Ok(items);
             }
             catch
             {
@@ -94,13 +87,9 @@ namespace PlantsAPI.Controllers
         {
             try
             {
-                if (unitOfWork.UserContext.HasAuthorization(item.UserId))
-                {
-                    var newItem = await unitOfWork.Items.AddItem(item);
-                    await unitOfWork.SaveChangesAsync();
-                    return Ok(newItem);
-                }
-                return Unauthorized();
+                var newItem = await unitOfWork.Items.AddItem(item);
+                await unitOfWork.SaveChangesAsync();
+                return Ok(newItem);
             }
             catch
             {
@@ -114,14 +103,9 @@ namespace PlantsAPI.Controllers
         {
             try
             {
-                if (unitOfWork.UserContext.HasAuthorization(item.UserId))
-                {
-                    var modifiedPlant = await unitOfWork.Items.EditItem(item);
-                    await unitOfWork.SaveChangesAsync();
-                    return Ok(modifiedPlant);
-
-                }
-                return Unauthorized();
+                var modifiedItem = await unitOfWork.Items.EditItem(item);
+                await unitOfWork.SaveChangesAsync();
+                return Ok(modifiedItem);
             }
             catch
             {

@@ -1,5 +1,5 @@
 
-<div class="container d-flex justify-content-center align-items-center ">
+<div class="container">
 
 
   <form [formGroup]="addForm" (ngSubmit)="addItem()">
@@ -38,12 +38,41 @@
       rows="2"></textarea>
     </mat-form-field>
 
-    <mat-form-field appearance="outline" style="width:50vw">
+    <div  style="float:none;margin:auto;align-items: center;">
+      <img src="assets/plant-icon.avif" alt="">
+      
+      <input  type="file" class="file-input"
+            (change)="onFileChanged($event)" #fileUpload
+             accept="image/png">
+            
+
+      <div class="file-upload">
+          <button mat-raised-button type="button" class="upload-btn" color="secondary"
+            (click)="fileUpload.click()">
+              Upload image
+          </button>
+          {{fileName || "No file uploaded yet."}}
+          <button mat-icon-button type="button" class="cancel-upload" (click)="cancelUpload()" 
+                  ><mat-icon color="secondary">cancel</mat-icon></button>
+      </div>
+
+    <!--mat-form-field appearance="outline">
+      <mat-label>Image</mat-label>
+      <input 
+        type="text" 
+        formControlName="imageUrl"
+        id="UploadImage" 
+        placeholder="Paste th url."
+        matInput>
+    </mat-form-field-->
+  </div>
+
+    <!--mat-form-field appearance="outline" style="width:50vw">
       <mat-label>Image</mat-label>
       <input matInput formControlName="image">
-    </mat-form-field>
+    </mat-form-field-->
   
-    <div class="buttonRow">
+    <div class="button-row">
       <button mat-raised-button (click)="goToMarketPlace()">Cancel</button>
       <button type="submit" mat-raised-button>Save</button>
     </div>

@@ -1,14 +1,14 @@
 
-<div class="container  ">
+<div class="container w-100">
     <br>
     <mat-card align-center>
         <mat-card-header>
-            
-                <div mat-card-avatar class="card-header-image"></div>
+            <div mat-card-avatar class="card-header-image"></div>
            
+            <mat-card-title-group>
+
                 <mat-card-title >{{this.currentUser?.name}}</mat-card-title>
     
-            <mat-card-title-group>
                 <mat-card-actions >
                     <button mat-stroked-button color="warn" (click)="deleteUser()">Delete profile</button>
                     <button mat-stroked-button (click)="logout()">Logout</button>
@@ -34,7 +34,7 @@
 
             <form [formGroup]="changeEmailForm" class="d-flex justify-content-center align-items-center">
 
-                <h3>Change email address</h3>
+                <h3>Update email address</h3>
         
               
                 <mat-form-field class="example-full-width">
@@ -61,7 +61,7 @@
                     && changeEmailForm.get('password')?.errors?.['required']
                     "></mat-error>
                 </mat-form-field>
-                <button type="submit" [disabled]="changeEmailForm.invalid" mat-raised-button>Edit profile</button>
+                <button type="submit" [disabled]="changeEmailForm.invalid" (click)="changeEmail()" mat-raised-button>Save</button>
             </form>
         
                 
@@ -99,20 +99,16 @@
                     && changePasswordForm.get('currentPassword')?.errors?.['pattern']
                     "></mat-error>
                 </mat-form-field>
-                <button type="submit" [disabled]="changePasswordForm.invalid" mat-raised-button>Change password</button>
+                <button type="submit" [disabled]="changePasswordForm.invalid" mat-raised-button>Save</button>
             
               </form>
         </div>
        
        
     </div>
-
-  
-      
+    
     </mat-card-content>
-    <!--mat-card-actions [align]="'end'">
-        <button mat-raised-button>Delete profile</button>
-        <button mat-raised-button>Logout</button>
-    </mat-card-actions-->
+   
     </mat-card>
+
 </div>

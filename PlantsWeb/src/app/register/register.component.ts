@@ -1,11 +1,15 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { WebApiService } from '../webapi.service';
 import { LoginRequest } from '../models/LoginRequest';
 import { Router } from '@angular/router';
 import { RegisterRequest } from '../models/RegisterRequest';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackbarComponent } from '../snackbar/snackbar.component';
+import { Observable } from 'rxjs';
+import { resolve } from 'chart.js/dist/helpers/helpers.options';
+import { RegisterResponse } from '../models/RegisterResponse';
+import { RegisterStatus } from '../models/RegisterStatus';
 
 @Component({
   selector: 'app-register',
@@ -18,8 +22,14 @@ export class RegisterComponent {
 
   @Output() submitEM = new EventEmitter();
 
+  debouncer: any;
+
   registerForm: FormGroup = this.formBuilder.group({
-    username: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(10)]],
+    username: [
+      '', 
+      Validators.compose([Validators.required, Validators.minLength(5), Validators.maxLength(10)]),
+      //this.validateUsername,
+  ],
     password: ['', [Validators.required, Validators.minLength(6)]],
     email: ['', [Validators.required, Validators.email]]
   });
@@ -51,11 +61,21 @@ export class RegisterComponent {
       );
     this.webApi.register(person).subscribe(
       {
-        next: (res) => {this.openSnackBar("New account registered successfully.")},
-        error: (err) => {this.openSnackBar("Registration unsuccessful. Try again!")}
+        next: (res : RegisterResponse) => {
+          if (res.status  == RegisterStatus.SUCCESSFULL){
+            this.openSnackBar("New account registered successfully.")
+          }
+          else{
+            this.openSnackBar("Username is taken. Try another.")
+          }
+
+            //this.router.navigate(['login']);
+          },
+          
+        error: (err) => {this.openSnackBar("Something went wrong. Try again!")}
         }
     );
-    this.router.navigate(['login']);
+
   }
 
   
@@ -79,4 +99,32 @@ export class RegisterComponent {
       //this.webApi
     }
   }
+  backToLoginPage(){
+    this.router.navigate([`login`]);
+  }
+
+
+  validateUsername(control: FormControl) : Promise<any> | Observable<any>{
+    let promise = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (control.value === 'newUser') {
+          resolve({'usernameTaken': true});
+        }else{
+          resolve(null);
+        }
+      }, 2000)
+    });
+    return promise;
+  }
+    
+   
+   
+    /*this.webApi.validateUserName(control.value).subscribe({
+    next: (res) => {
+      if (!res) {control.setErrors}
+    },
+    error: (err) => {}
+   })*/
+  
+
 }

@@ -6,6 +6,7 @@ import { Reply } from 'src/app/models/Reply';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { SnackbarComponent } from 'src/app/snackbar/snackbar.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ReplyDto } from 'src/app/models/ReplyDto';
 
 
 @Component({
@@ -18,7 +19,7 @@ export class PostDetailsComponent implements OnInit {
   currentUserId!: string;
   currentPost: Post | undefined ;
   currentPostId: string = "";
-  replies: Reply[] = [];
+  replies: ReplyDto[] = [];
   reply: string = "";
 
    addReplyForm  = this.formBuilder.group({
@@ -44,30 +45,45 @@ export class PostDetailsComponent implements OnInit {
       this.currentPostId = id!;
     } )
 
+    this.route.parent?.params.subscribe({
+      next: (params) => {
+        const id = params["userId"];
+        this.currentUserId = id!;
+
+        this.getPostById();
+        this.getRepliesOfPost();
+        
+      },
+      error: (err) => this.openSnackBar("Something went wrong!")
+  });
+  /*
     this.webApi.getMe().subscribe({
       next: (res) => {
         this.currentUserId = res, 
         console.log("You are logged in with user: ",this.currentUserId),
         this.getPostById();
         this.getRepliesOfPost();
+
       },
-      error: (err) => {this.openSnackBar("something went wrong. Try again later!"),  console.error(err);
+      error: (err) => {
+        this.openSnackBar("something went wrong. Try again later!")
+        
       },
-    })
+    })*/
 
   }
 
   getPostById(){
     this.webApi.getPostById(this.currentPostId).subscribe({
-      next: (result) => { this.currentPost = result},
-      error: (error) => {this.openSnackBar("something went wrong. Try again later!"), console.error("No matching posts found for this id.", error)}
+      next: (result) => { this.currentPost = result },
+      error: (error) => { this.openSnackBar("Something went wrong. Try again later!"), console.error("No matching posts found for this id.", error)}
     });
   }
 
   getRepliesOfPost(){
     this.webApi.getRepliesOfPost(this.currentPostId).subscribe({
       next: (res) => { this.replies = res},
-      error: (error) => {this.openSnackBar("something went wrong. Try again later!"), console.log( "NoReplies for this post.", error)}
+      error: (error) => { this.openSnackBar("Something went wrong. Try again later!"), console.log( "No replies for this post.", error)}
     })
   }
 
@@ -103,4 +119,12 @@ export class PostDetailsComponent implements OnInit {
     });
   }
 
+
+  goBack(){
+    this.router.navigate([`${this.currentUserId}/main`])
+  }
+
+  deleteReply(replyId : string){
+      console.log("delete clicked");
+  }
 }

@@ -1,14 +1,16 @@
 import { formatDate } from '@angular/common';
-import { Component, OnChanges, OnDestroy, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { EventListenerOptions } from 'rxjs/internal/observable/fromEvent';
 import { DataService } from 'src/app/data.service';
 import { Plant } from 'src/app/models/Plant';
 import { SnackbarComponent } from 'src/app/snackbar/snackbar.component';
 import { WebApiService } from 'src/app/webapi.service';
-
 @Component({
   selector: 'app-plants-add',
   templateUrl: './plants-add.component.html',
@@ -20,6 +22,12 @@ export class PlantsAddComponent implements OnInit{
   currentUserId!: string;
   plants: Plant[] = [];
   subscription!: Subscription;
+  
+  imagePath:string = '';
+  url!:ArrayBuffer|null|string;
+  fileName = '';
+  
+  uploadSub! : Subscription | null ;
 
   addForm = this.formBuilder.group({
     name : ['', [Validators.required, Validators.maxLength(50)]],
@@ -36,13 +44,14 @@ export class PlantsAddComponent implements OnInit{
     private data: DataService,
     private router: Router,
     private webApi: WebApiService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private route : ActivatedRoute
   ){}
 
 
   ngOnInit(){
     console.log( this.maintenance)
-    this.webApi.getMe().subscribe({
+    /*this.webApi.getMe().subscribe({
       next: (res) => {
         this.currentUserId = res, 
         console.log("You are logged in with user: ",this.currentUserId),
@@ -50,10 +59,55 @@ export class PlantsAddComponent implements OnInit{
       },
       error: (err) => {this.openSnackBar("something went wrong. Try again later!"),  console.error(err);
       },
-    })
+    })*/
+    this.route.parent?.params.subscribe({
+      next: (params) => {
+        const id = params["userId"];
+        console.log("You are logged in with user: ",this.currentUserId),
+        this.currentUserId = id!;
+        this.getPlantOfUser();
+      },
+      error: (err) => this.openSnackBar("Something went wrong!")
+    });
   }
 
+  onFileChanged(event : any ){
+    
+    const file:File = event.target.files[0];
 
+    if (file) {
+
+        this.fileName = file.name;
+
+        const formData = new FormData();
+
+        formData.append("thumbnail", file);
+
+        //const upload$ = this.http.post("/api/thumbnail-upload", formData);
+        const files = event.target.files;
+        if (files.length === 0)
+            return;
+    
+        const mimeType = files[0].type;
+        if (mimeType.match(/image\/*/) == null) {
+            this.openSnackBar("Only images are supported.");
+            return;
+        }
+    
+        const reader = new FileReader();
+        this.imagePath = files;
+        reader.readAsDataURL(files[0]); 
+        reader.onload = (_event) => { 
+            this.url = reader.result; 
+        }
+        
+    }
+  }
+  cancelUpload() {
+    this.fileName = '';
+    this.url = '';
+    
+  }
 
   getPlantOfUser(){
     this.webApi.getPlantsOfUser(this.currentUserId).subscribe({
@@ -155,4 +209,8 @@ export class PlantsAddComponent implements OnInit{
     
   }
 
+
+  goBack(){
+    this.router.navigate([`${this.currentUserId}/plants`])
+  }
 }

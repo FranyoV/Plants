@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { WebApiService } from '../webapi.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackbarComponent } from '../snackbar/snackbar.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -14,16 +15,23 @@ export class HeaderComponent implements OnInit{
 
   constructor(
     private webApi : WebApiService ,
-    private snackBar : MatSnackBar 
+    private snackBar : MatSnackBar ,
+    private route : ActivatedRoute
   ){}
 
   ngOnInit(): void {
-    this.webApi.getMe().subscribe({
+    /*this.webApi.getMe().subscribe({
       next: (res) => {
         this.currentUserId = res, console.log("You are logged in with user: ",this.currentUserId);
       },
-      error: (err) => {this.openSnackBar("Something went wrong. Try again!"), console.error('Getting plant for user failed.',err)}
-      })
+      error: (err) => {this.openSnackBar("Something went wrong. Try again!")}
+      })*/
+      this.route.paramMap.subscribe( (params) => {
+        const id = params.get("userId");
+        this.currentUserId = id!;
+
+      } )
+      console.log(this.currentUserId);
   }
 
   openSnackBar(message: string) {

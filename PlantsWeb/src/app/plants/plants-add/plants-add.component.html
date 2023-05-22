@@ -1,33 +1,30 @@
 
-<div class="container d-flex justify-content-center align-items-center ">
+<div class="container">
   <div>
 
-    <h2 class="text-center">Add plant</h2>  
+    <h2>Add plant</h2>  
       
       <form [formGroup]="addForm" (ngSubmit)="addPlant()">
         <div class="row">
+            <div class=" col" >
+                <h3>Plant info:</h3>
 
-          <div class="col" style="float:none;margin:auto;align-items: center;">
-            <img src="assets/plant-icon.avif" alt="">
-          </div>
-
-          <div class=" col" style="float:none;margin:auto;">
-              <div class="container">
-
-                <h3 style="text-align: center;">Plant info:</h3>
-
-                <mat-form-field  appearance="outline">
+                <mat-form-field >
                   <mat-label >Name</mat-label>
                   <input  
                     type="text" 
                     formControlName="name" 
                     placeholder="Name" matInput>
-                  <mat-hint 
-                    *ngIf="addForm.get('name')?.touched || addForm.get('name')?.errors?.['required']
-                    ">This field is required.</mat-hint>
+                  <mat-error 
+                    *ngIf="addForm.get('name')?.touched && addForm.get('name')?.errors?.['required']
+                    ">This field is required.</mat-error>
+                  <mat-error 
+                    *ngIf="addForm.get('name')?.touched 
+                    && addForm.get('name')?.errors?.['maxlength']"
+                    >The name is too long.</mat-error>
                 </mat-form-field>
     
-                <mat-form-field appearance="outline">
+                <mat-form-field>
                   <mat-label>Description</mat-label>
                   <textarea 
                     type="text"
@@ -36,8 +33,26 @@
                     rows="3"
                     matInput></textarea>
                 </mat-form-field>
+
+                <div  style="float:none;margin:auto;align-items: center;">
+                  <img src={{this.url}} alt="">
+                  
+                  <input  type="file" class="file-input"
+                        (change)="onFileChanged($event)" #fileUpload
+                         accept="image/png">
+                        
+      
+                  <div class="file-upload">
+                      <button mat-raised-button type="button" class="upload-btn" color="secondary"
+                        (click)="fileUpload.click()">
+                          Upload image
+                      </button>
+                      {{fileName || "No file uploaded yet."}}
+                      <button mat-icon-button type="button" class="cancel-upload" (click)="cancelUpload()" 
+                              ><mat-icon color="secondary">cancel</mat-icon></button>
+                  </div>
     
-                <mat-form-field appearance="outline">
+                <!--mat-form-field appearance="outline">
                   <mat-label>Image</mat-label>
                   <input 
                     type="text" 
@@ -45,17 +60,16 @@
                     id="UploadImage" 
                     placeholder="Paste th url."
                     matInput>
-                </mat-form-field>
+                </mat-form-field-->
               </div>
-              
+            </div>
 
-            <!--button mat-raised-button type="button" (click)="showMaintenance()">I want reminder notifications of the maintenance of the plant. </button-->
-            <div >
-              
-              <mat-slide-toggle (toggleChange)="showMaintenance()" >I want reminder notifications of the maintenance of the plant.</mat-slide-toggle>
-              <h3 style="text-align: center;">Maintenance info:</h3>
-           
-              <mat-form-field appearance="outline" style="margin-bottom: 20px;">
+            <div class="col" >
+              <h3>Maintenance info:</h3>
+              <div class="slide-toggle">
+              <mat-slide-toggle color="primary" (toggleChange)="showMaintenance()" >I want reminder emails of the maintenance of the plant.</mat-slide-toggle>
+              </div>
+              <mat-form-field style="margin-bottom: 20px;">
                 <mat-label>Last maintenance date</mat-label>
                 <mat-hint>MM/DD/YYYY</mat-hint>
                 <input 
@@ -64,27 +78,30 @@
                 formControlName="lastNotification"
                 >
                 <mat-error 
-                    *ngIf="addForm.get('lastNotification')?.touched || addForm.get('lastNotification')?.errors?.['required']
-                    ">This field is required.</mat-error>
+                  *ngIf="addForm.get('lastNotification')?.touched && addForm.get('lastNotification')?.errors?.['required']
+                  ">This field is required.</mat-error>
                 <mat-datepicker-toggle matIconSuffix [for]="dp3"></mat-datepicker-toggle>
                 <mat-datepicker #dp3 ></mat-datepicker>
               </mat-form-field>
   
-              <mat-form-field appearance="outline">
+              <mat-form-field>
                 <mat-label>Interval of days</mat-label>
-                <mat-hint>The frequency of notifications. (eg. 2 days) </mat-hint>
+                
                 <input 
                 type="number" 
                 formControlName="interval"
                 id="Interval" 
                 placeholder="1"
-                matInput>
-                
+                matInput
+                matTooltip="The frequency of notifications in days.">
+                <mat-error *ngIf="addForm.get('interval')?.touched && addForm.get('interval')?.errors?.['required']"> 
+                This field is required.</mat-error>
+                <mat-error *ngIf="addForm.get('interval')?.touched && addForm.get('interval')?.errors?.['min']"> 
+                  The value must at least 1.</mat-error>
               </mat-form-field>
   
-              <mat-form-field appearance="outline">
+              <mat-form-field>
                 <mat-label>Note</mat-label>
-                <mat-hint>This note will be included in the notification email. (watering amount)</mat-hint>
                 <input 
                 matTooltip="We will send you this note in the notification email."
                 type="text" 
@@ -92,80 +109,22 @@
                 id="Note" 
                 placeholder="..."
                 matInput>
-                
+                <mat-error *ngIf="addForm.get('note')?.touched && addForm.get('note')?.errors?.['required']"> 
+                  This field is required.</mat-error>
               </mat-form-field>
             </div>
-            
-
           </div>
           
-          <div class="container button-row" [align]="'end'">
-            <button mat-stroked-button [disabled]="addForm.invalid" type="submit" class="gy-3" >Save</button>
-            <a mat-stroked-button href="plants" class="btn">Cancel</a>
+          <div class="button-row" >
+            <button mat-raised-button (click)="goBack()" >Cancel</button>
+            <button mat-raised-button [disabled]="addForm.invalid" type="submit" class="gy-3" >Save</button>
+            
           </div>
-        </div>
-
-        <!--div class="row">
-          <div class="container button-row" [align]="'end'">
-            <button mat-stroked-button [disabled]="addForm.invalid" type="submit" class="gy-3" >Save</button>
-            <a mat-stroked-button href="plants" class="btn">Cancel</a>
-          </div>
-        </div-->
       </form>
-      
     </div>
-  </div>
-
+</div>
 
 
 <router-outlet></router-outlet>
 
-    <!--form [formGroup]="addForm" (ngSubmit)="addPlant()">
-
-      <div>
-        <label for="exampleFormControlInput1">Name</label>
-        <input 
-        class="input-group" 
-        type="text" 
-        formControlName="name" 
-        class="form-control"
-        placeholder="Name">
-      </div>
-  
-      <div>
-        <label for="description">Description</label>
-        <textarea 
-        class="input-group" 
-        type="text"
-        formControlName="description"
-        placeholder="Add description"
-        rows="3"></textarea>
-      </div>
-  
-      <div >
-        <label for="exampleFormControlSelect1">Maintenance</label>
-        <select class="form-control" id="exampleFormControlSelect1">
-          <option>1</option>
-          <option>2</option>
-          <option>3</option>
-          <option>4</option>
-          <option>5</option>
-        </select>
-      </div>
-     
-      <div >
-        <label for="image">Image</label>
-        <button class="btn btn-info">Upload</button>
-        <input 
-        type="text" 
-        formControlName="imageUrl"
-        id="UploadImage" 
-        placeholder="imageurlvagyvalami">
-      </div>
    
-    
-      <button type="submit" class="btn btn-primary gy-3" >Save</button>
-      <a href="plants" class="btn btn-primary">Cancel</a>
-    </form>
-  </div-->
-  

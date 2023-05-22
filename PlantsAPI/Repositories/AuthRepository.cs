@@ -1,6 +1,8 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using PlantsAPI.Data;
 using PlantsAPI.Models;
+using PlantsAPI.Services;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -12,7 +14,7 @@ namespace PlantsAPI.Repositories
     {
         private readonly IConfiguration configuration;
 
-        public AuthRepository(PlantsDbContext dbContext, ILogger logger, IConfiguration configuration) : base(dbContext, logger)
+        public AuthRepository(PlantsDbContext dbContext, IConfiguration configuration, IUserContext userContext) : base(dbContext, userContext)
         {
             this.configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
@@ -20,7 +22,7 @@ namespace PlantsAPI.Repositories
 
         public string CreateToken(User user)
         {
-            List<Claim> claims = new List<Claim>()
+            List<Claim> claims = new()
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.Name)
@@ -63,10 +65,10 @@ namespace PlantsAPI.Repositories
 
         public string GenerateSalt(int length)
         {
-            StringBuilder saltBuilder = new StringBuilder();
+            StringBuilder saltBuilder = new();
 
             string saltCharacters = "abcdefghijklmnopqrstuvwxzyABCDEFGHIJKLMNOPQRSTUVWXZY0123456789";
-            Random rnd = new Random(DateTime.Now.Millisecond);
+            Random rnd = new(DateTime.Now.Millisecond);
 
             for (int i = 0; i < length; i++)
             {
@@ -76,5 +78,104 @@ namespace PlantsAPI.Repositories
 
             return saltBuilder.ToString();
         }
+
+
+        public async Task<UserDto> GetUserById(Guid id)
+        {
+            var user = await dbSet.Where(u => u.Id == id).FirstOrDefaultAsync();
+            var userDto = new UserDto()
+            {
+                Id = id,
+                Name = user.Name,
+                EmailAddress = user.EmailAddress,
+            };
+            return userDto;
+        }
+
+
+        public async Task<bool> UsernameTaken(string username)
+        {
+            if (username == null) throw new ArgumentNullException(nameof(username));
+
+            if (await dbSet.Where(u => u.Name == username).AnyAsync())
+            {
+                return true;
+            }
+            else { return false; }
+        }
+
+
+        public async Task<User> GetUserByName(string username)
+        {
+            User user = new();
+            user = await dbSet.Where(u => u.Name == username).FirstOrDefaultAsync();
+
+            UserDto userDto = new();
+            if (user != null)
+            {
+                userDto = new UserDto()
+                {
+                    Id = user.Id,
+                    Name = user.Name,
+                    EmailAddress = user.EmailAddress,
+                };
+            }
+
+            return user;
+        }
+
+
+        //used in registration
+        public async Task<User> AddUser(User user)
+        {
+            if (user == null) throw new NotImplementedException(nameof(user));
+
+            var result = await dbSet.AddAsync(user);
+            return result.Entity;
+        }
+
+
+        //TODO for profil editing
+        public async Task<User> EditUserEmail(UserInfoEditRequest request)
+        {
+            if (request == null) throw new NotImplementedException(nameof(request));
+
+            if (_userContext.HasAuthorization(request.UserId))
+            {
+
+                var originalUser = await dbSet.FirstAsync(u => u.Id == request.UserId);
+
+                string compareHash = CreatePasswordHash(request.Password, originalUser.PasswordSalt);
+
+                if (originalUser != null && (originalUser.PasswordHash == compareHash))
+                {
+
+                    originalUser.EmailAddress = request.UserInfo;
+                }
+
+                return originalUser;
+            }
+            else
+            {
+                throw new UnauthorizedAccessException();
+            }
+        }
+
+
+        public async Task<bool> DeleteUser(Guid userId)
+        {
+            if (userId == Guid.Empty) throw new ArgumentNullException(nameof(userId));
+
+            var toBeDeleted = await dbSet.Where(u => u.Id == userId).FirstAsync();
+
+            if (toBeDeleted != null)
+            {
+                var result = dbSet.Remove(toBeDeleted);
+                return result.State == EntityState.Deleted;
+
+            }
+            return false;
+        }
+
     }
 }

@@ -1,17 +1,24 @@
 
-mat-card-header {
-  vertical-align: middle;
-  vertical-align: bottom !important;
+
+.container { 
+  opacity: 0.95;
 }
 
-.card-header-image {
-    background-image: url("../../../assets/defaultprofilepic.png");
-    background-size: cover;
-    margin-left: 2px;
+mat-card {
+  padding-bottom: 1rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  width: 100%;
+}
+
+  mat-card-header {
+    display:flex;
+    width: 100%;
+    align-items: center;
+    margin-bottom: 10px;
   }
 
   .example-form {
-
     width: 100%;
   }
   
@@ -19,16 +26,43 @@ mat-card-header {
     width: 100%;
   }
 
-  .mat-list-item.mat-list-item-word-wrap {
-    height: initial !important;
-  }
-  
-  .mat-list-item-word-wrap .mat-line {
-    word-wrap: break-word !important; 
-    white-space: pre-wrap !important;
+  mat-list-item {
+   display: flex;
+   align-items: start;
+   color: black; 
+  }  
+  mat-avatar{
+    padding-top: 0.5rem;
+
   }
 
   button {
     float: right;
     margin-left: 5px;
+  }
+
+  .reply-username {
+    font-size: large;
+    font-weight: 400;
+    color: black;
+  }
+
+  .reply-date {
+    font-size: small;
+    font-weight: 300;
+    color: black;
+  }
+
+  .reply-content {
+    font-size: small;
+    font-weight: 400;
+    color: black;
+    word-wrap: break-word !important; 
+    white-space: pre-wrap !important;
+  }
+
+  .reply-avatar {
+    padding-top: 1rem;
+    height: 20px;
+    width: 20px;
   }

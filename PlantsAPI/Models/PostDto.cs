@@ -12,6 +12,7 @@ namespace PlantsAPI.Models
 
         //userdata
         public string UserName { get; set; }
+        public int? ReplyCount { get; set; }
         public Guid UserId { get; set; }
 
 

@@ -19,15 +19,15 @@ namespace PlantsAPI.Controllers
 
 
         //TODO AUTHORIZATION
-       /* [HttpGet]
-        public async Task<ActionResult<IEnumerable<Plant>>> GetPlants()
-        {
+        /* [HttpGet]
+         public async Task<ActionResult<IEnumerable<Plant>>> GetPlants()
+         {
 
-            var plants = await unitOfWork.Plants.GetPlants();
-            return Ok(plants);
-        }*/
+             var plants = await unitOfWork.Plants.GetPlants();
+             return Ok(plants);
+         }*/
 
-
+        
         //TODO AUTHORIZATION
         [HttpGet]
         [Route("{id}")]
@@ -51,12 +51,10 @@ namespace PlantsAPI.Controllers
         {
             try
             {
-                if (unitOfWork.UserContext.HasAuthorization(userId))
-                {
+
                     var plants = await unitOfWork.Plants.GetPlantsOfUser(userId);
                     return Ok(plants);
-                }
-                return Unauthorized();
+                
             }
             catch (Exception ex)
             {
@@ -71,16 +69,13 @@ namespace PlantsAPI.Controllers
         {
             try
             {
-                if (unitOfWork.UserContext.HasAuthorization(userId))
-                {
                     var plants = await unitOfWork.Plants.GetPlantsCount(userId);
                     return Ok(plants);
-                }
-                return Unauthorized();
+
             }
-            catch
+            catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex);
             }
         }
 
@@ -90,17 +85,15 @@ namespace PlantsAPI.Controllers
         {
             try
             {
-                if (unitOfWork.UserContext.HasAuthorization(plant.UserId))
-                {
+
                     var newPlant = await unitOfWork.Plants.AddPlant(plant);
                     await unitOfWork.SaveChangesAsync();
                     return Ok(newPlant);
-                }
-                return Unauthorized();
+
             }
-            catch
+            catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex);
             }
         }
 
@@ -111,13 +104,11 @@ namespace PlantsAPI.Controllers
         {
             try
             {
-                if (unitOfWork.UserContext.HasAuthorization(plant.UserId))
-                {
+
                     var modifiedPlant = await unitOfWork.Plants.EditPlant(plant);
                     await unitOfWork.SaveChangesAsync();
                     return Ok(modifiedPlant);
-                }
-                return Unauthorized();
+
             }
             catch
             {

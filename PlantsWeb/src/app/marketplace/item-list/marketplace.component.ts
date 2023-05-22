@@ -6,10 +6,13 @@ import {MatTableDataSource} from '@angular/material/table';
 import { ItemDetailsComponent } from '../item-details/item-details.component';
 import { Item } from 'src/app/models/Item';
 import { ItemType } from 'src/app/models/ItemType';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { WebApiService } from 'src/app/webapi.service';
 import { DataService } from 'src/app/data.service';
 import { Subscription } from 'rxjs';
+import { SnackbarComponent } from 'src/app/snackbar/snackbar.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ItemDto } from 'src/app/models/ItemDto';
 
 
 @Component({
@@ -19,12 +22,13 @@ import { Subscription } from 'rxjs';
 })
 export class MarketplaceComponent  implements OnInit, AfterViewInit, OnDestroy {
   displayedColumns: string[] = ['name', 'type', 'price', 'username', 'date', 'details'];
-  dataSource!: MatTableDataSource<Item>;
+  dataSource!: MatTableDataSource<ItemDto>;
   animal: string = '';
   name: string = '';
-  items: Item[] = [];
+  items: ItemDto[] = [];
   myItems: Item[] = [];
   subscription!: Subscription;
+  currentUserId!: string;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -34,6 +38,8 @@ export class MarketplaceComponent  implements OnInit, AfterViewInit, OnDestroy {
     private router: Router,
     private webApi: WebApiService,
     private data : DataService,
+    private route : ActivatedRoute,
+    private snackBar : MatSnackBar
     ) 
     {}
 
@@ -46,6 +52,14 @@ export class MarketplaceComponent  implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit(): void {
     this.subscription = this.data.currentItemsMessage
     .subscribe( message => this.items = message ) ;
+
+   this.route.parent?.params.subscribe({
+      next: (params) => {
+        const id = params["userId"];
+        this.currentUserId = id!;
+      },
+      error: (err) => this.openSnackBar("Something went wrong!")
+    });
 
     this.getItems();
       
@@ -68,7 +82,7 @@ export class MarketplaceComponent  implements OnInit, AfterViewInit, OnDestroy {
 
 
 
-  openDialog(item: Item): void {
+  openDialog(item: ItemDto): void {
 
     const dialogRef = this.dialog.open(ItemDetailsComponent, {
       data: {
@@ -77,7 +91,7 @@ export class MarketplaceComponent  implements OnInit, AfterViewInit, OnDestroy {
         type: item.type,
         date: item.date,
         price: item.price,
-        username: item.user?.name
+        username: item.username
       },
     });
 
@@ -102,8 +116,14 @@ export class MarketplaceComponent  implements OnInit, AfterViewInit, OnDestroy {
   }
 
   goToAddItemPage(){
-    this.router.navigate(['marketplace/new']);
+    this.router.navigate([`${this.currentUserId}/item/new`]);
   }
   
+  openSnackBar(message: string) {
+    this.snackBar.openFromComponent(SnackbarComponent, {
+      data: message,
+      duration: 3 * 1000,
+    });
+  }
 
 }

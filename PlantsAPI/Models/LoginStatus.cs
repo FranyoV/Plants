@@ -4,6 +4,6 @@
     {
         UserNotFound = 1,
         WrongPassword = 2,
-        Successful = 3
+        Successfull = 3
     }
 }

@@ -4,6 +4,7 @@ using Moq;
 using PlantsAPI.Data;
 using PlantsAPI.Models;
 using PlantsAPI.Repositories;
+using PlantsAPI.Services;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace PlantsAPI.Test.Repositories
     public class PlantRepositoryTest
     {
         private readonly PlantsDbContext context;
-        private readonly Mock<ILogger> logger;
+        private readonly Mock<IUserContext> userContext;
         private readonly IPlantRepository plantRepository;
 
         public PlantRepositoryTest()
@@ -23,9 +24,10 @@ namespace PlantsAPI.Test.Repositories
 
             DbContextOptionsBuilder<PlantsDbContext> dbOptions = new DbContextOptionsBuilder<PlantsDbContext>()
                 .UseInMemoryDatabase(Guid.NewGuid().ToString());
+
             context = new PlantsDbContext(dbOptions.Options);
-            logger = new Mock<ILogger>();
-            plantRepository = new PlantRepository(context, logger.Object);
+            userContext = new Mock<IUserContext>();
+            plantRepository = new PlantRepository(context, userContext.Object);
         }
 
         #region DataBase
@@ -60,13 +62,13 @@ namespace PlantsAPI.Test.Repositories
         [Fact]
         public void ConstructorShouldCreateObject()
         {
-            Assert.NotNull(new PlantRepository(context, logger.Object));
+            Assert.NotNull(new PlantRepository(context, userContext.Object));
         }
 
         [Fact]
         public void Contsructor_ShouldThrowArgumentNullException_1()
         {
-            Assert.Throws<ArgumentNullException>(() => new PlantRepository(null, logger.Object));
+            Assert.Throws<ArgumentNullException>(() => new PlantRepository(null, userContext.Object));
         }
 
         [Fact]

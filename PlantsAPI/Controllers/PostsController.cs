@@ -19,7 +19,7 @@ namespace PlantsAPI.Controllers
             this.unitOfWork = unitOFWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         }
 
-        //TODO AUTHORIZATION
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Post>>> GetPosts()
         {
@@ -35,7 +35,6 @@ namespace PlantsAPI.Controllers
  
         }
 
-        //TODO AUTHORIZATION
         [HttpGet]
         [Route("{id}")]
         public async Task<ActionResult<Post>> GetPostById(Guid id)
@@ -59,12 +58,8 @@ namespace PlantsAPI.Controllers
         {
             try
             {
-                if (unitOfWork.UserContext.HasAuthorization(userId))
-                {
-                    var post = await unitOfWork.Posts.GetPostsOfUser(userId);
-                    return Ok(post);
-                }
-                return Unauthorized();
+                var post = await unitOfWork.Posts.GetPostsOfUser(userId);
+                return Ok(post);
             }
             catch
             {
@@ -80,12 +75,8 @@ namespace PlantsAPI.Controllers
         {
             try
             {
-                if (unitOfWork.UserContext.HasAuthorization(userId))
-                {
-                    var post = await unitOfWork.Posts.GetPostsByUserReplies(userId);
-                    return Ok(post);
-                }
-                return Unauthorized();
+                var post = await unitOfWork.Posts.GetPostsByUserReplies(userId);
+                return Ok(post);
             }
             catch
             {
@@ -101,12 +92,8 @@ namespace PlantsAPI.Controllers
         {
             try
             {
-                if (unitOfWork.UserContext.HasAuthorization(userId))
-                {
-                    var posts = await unitOfWork.Posts.GetPostsCount(userId);
-                    return Ok(posts);
-                }
-                return Unauthorized();
+                var posts = await unitOfWork.Posts.GetPostsCount(userId);
+                return Ok(posts);
             }
             catch
             {
@@ -120,13 +107,9 @@ namespace PlantsAPI.Controllers
         {
             try
             {
-                if (unitOfWork.UserContext.HasAuthorization(post.UserId))
-                {
-                    var newPost = await unitOfWork.Posts.AddPost(post);
-                    await unitOfWork.SaveChangesAsync();
-                    return Ok(newPost);
-                }
-                return Unauthorized();
+                var newPost = await unitOfWork.Posts.AddPost(post);
+                await unitOfWork.SaveChangesAsync();
+                return Ok(newPost);
             }
             catch
             {
@@ -135,28 +118,24 @@ namespace PlantsAPI.Controllers
         }
 
 
-        [HttpPut]
-        [Route("{id}")]
-        public async Task<ActionResult<Post>> PutPost([FromBody] Post post, [FromQuery] Guid id)
-        {
-            try
-            {
-                if (unitOfWork.UserContext.HasAuthorization(post.Id))
-                {
-                    var modifiedPost = await unitOfWork.Posts.EditPost(post);
-                    await unitOfWork.SaveChangesAsync();
-                    return Ok(modifiedPost);
-                }
-                return Unauthorized();
-            }
-            catch
-            { 
-                return BadRequest(); 
-            }
-        }
+        //[HttpPut]
+        //[Route("{id}")]
+        //public async Task<ActionResult<Post>> PutPost([FromBody] Post post, [FromQuery] Guid id)
+        //{
+        //    try
+        //    {
+
+        //            var modifiedPost = await unitOfWork.Posts.EditPost(post);
+        //            await unitOfWork.SaveChangesAsync();
+        //            return Ok(modifiedPost);
+        //    }
+        //    catch
+        //    { 
+        //        return BadRequest(); 
+        //    }
+        //}
 
 
-        //TODO AUTHORIZATION
         [HttpDelete]
         [Route("{id}")]
         public async Task<ActionResult<bool>> DeletePost(Guid id)

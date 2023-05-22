@@ -13,27 +13,28 @@ import { RegisterComponent } from './register/register.component';
 import { MarketplaceComponent } from './marketplace/item-list/marketplace.component';
 import { ItemAddComponent } from './marketplace/item-add/item-add.component';
 import { ItemEditComponent } from './marketplace/item-edit/item-edit.component';
+import { AuthGuardService } from './auth-guard.service';
 
 const routes: Routes = [
-  {path: '', component: HeaderComponent, 
+  {path: 'login', component: LoginComponent},
+  {path: 'register', component: RegisterComponent},  
+  {path: ':userId', component: HeaderComponent, canActivate: [AuthGuardService],
    children: [
     {path: 'main', component: PostsListComponent},
     {path: 'plants', component: PlantsListComponent},
     {path: 'plants/:plantId', component: PlantsEditComponent},
     {path: 'plant/new', component: PlantsAddComponent},
-    {path: 'profile/:userId', component: ProfileComponent},
+    {path: 'profile', component: ProfileComponent},
     {path: 'post/:postId', component: PostDetailsComponent},
     {path: 'posts/new', component: PostAddComponent},
     {path: 'marketplace', component: MarketplaceComponent},
-    {path: 'marketplace/new', component: ItemAddComponent},
+    {path: 'item/new', component: ItemAddComponent},
     {path: 'marketplace/:itemId', component: ItemEditComponent}
     ]
     //rerouting --> { path: '', redirectTo: 'component-one', pathMatch: 'full' },
   },
 
-  {path: 'login', component: LoginComponent},
-  {path: 'register', component: RegisterComponent}
-  
+
 ];
 
 @NgModule({

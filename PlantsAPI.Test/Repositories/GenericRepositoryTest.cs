@@ -5,16 +5,18 @@ using Moq;
 using PlantsAPI.Data;
 using PlantsAPI.Models;
 using PlantsAPI.Repositories;
+using PlantsAPI.Services;
 using System;
 using Xunit;
 
 namespace PlantsAPI.Test.Repositories
 {
     //implementing IDisposable needed?
+    
     public class GenericRepositoryTest 
     {
         private readonly PlantsDbContext context;
-        private readonly Mock<ILogger> logger;
+        private readonly Mock<IUserContext> userContext;
         private readonly Mock<IGenericRepository> mockGenericRepository;
         private readonly Mock<IConfiguration> configuration;
        
@@ -25,20 +27,20 @@ namespace PlantsAPI.Test.Repositories
 
             configuration = new Mock<IConfiguration>();
             context = new PlantsDbContext(dbOptions.Options);
-            logger = new Mock<ILogger>();
+            userContext = new Mock<IUserContext>();
             mockGenericRepository = new Mock<IGenericRepository>();
         }
 
         [Fact]
         public void Constructor_ShouldCreateObject()
         {
-            Assert.NotNull(new GenericRepository<Plant>(context, logger.Object));
+            Assert.NotNull(new GenericRepository<Plant>(context, userContext.Object));
         }
 
         [Fact]
         public void Constructor_ShouldThrowArgumentNullException_1()
         {
-            Assert.Throws<ArgumentNullException>(() => new GenericRepository<Plant>(null, logger.Object));
+            Assert.Throws<ArgumentNullException>(() => new GenericRepository<Plant>(null, userContext.Object));
         }
 
         [Fact]

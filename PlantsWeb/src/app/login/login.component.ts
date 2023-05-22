@@ -50,7 +50,7 @@ export class LoginComponent {
           this.currentUserId = res.userId,
           this.userLogin.emit(this.currentUserId);
           this.newMessage(res.userId);
-          this.router.navigate(['/main']);
+          this.router.navigate([`${this.currentUserId}/main`]);
         } else {
           if (res.status == LoginStatus.WrongPassword){
             this.openSnackBar("Wrong password!");
@@ -58,7 +58,8 @@ export class LoginComponent {
           if (res.status == LoginStatus.UserNotFound){
             this.openSnackBar("Wrong username!");
           }
-      }}
+      }},
+      error: (err) => {this.openSnackBar("Something went wrong. Try again!")}
     })
   }
 
@@ -85,5 +86,8 @@ export class LoginComponent {
 
   @Output() userLogin = new EventEmitter<string>();
 
+  goToLoginPage(){
+    this.router.navigate(['register']);
+  }
 
 }

@@ -23,6 +23,10 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+
+
 
 import { AppComponent } from './app.component';
 import { PostsListComponent } from './posts/posts-list/posts-list.component';
@@ -43,6 +47,8 @@ import { ItemDetailsComponent } from './marketplace/item-details/item-details.co
 import { ItemEditComponent } from './marketplace/item-edit/item-edit.component';
 import { SnackbarComponent } from './snackbar/snackbar.component';
 import { AuthInterceptor } from './auth.interceptor';
+import {AuthGuardService} from './auth-guard.service';
+
 
 @NgModule({
   declarations: [
@@ -90,9 +96,11 @@ import { AuthInterceptor } from './auth.interceptor';
     MatSelectModule,
     MatRadioModule,
     MatSnackBarModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatIconModule,
+    MatProgressBarModule
   ],
-  providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
+  providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },AuthGuardService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

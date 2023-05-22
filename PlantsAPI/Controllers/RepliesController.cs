@@ -32,7 +32,7 @@ namespace PlantsAPI.Controllers
             }
 
         }*/
-
+       
         //TODO AUTHORIZATION
         [HttpGet]
         [Route("{id}")]
@@ -52,7 +52,7 @@ namespace PlantsAPI.Controllers
         //TODO AUTHORIZATION
         [HttpGet]
         [Route("post/{postid}")]
-        public async Task<ActionResult<IEnumerable<Reply>>> GetRepliesOfPost([FromRoute] Guid postid) 
+        public async Task<ActionResult<IEnumerable<ReplyDto>>> GetRepliesOfPost([FromRoute] Guid postid) 
         {
             try
             {
@@ -72,12 +72,8 @@ namespace PlantsAPI.Controllers
         {
             try
             {
-                if (unitOfWork.UserContext.HasAuthorization(userId))
-                {
-                    var replies = await unitOfWork.Replies.GetRepliesCount(userId);
-                    return Ok(replies);
-                }
-                return Unauthorized();
+                var replies = await unitOfWork.Replies.GetRepliesCount(userId);
+                return Ok(replies);
             }
             catch
             {
@@ -87,17 +83,13 @@ namespace PlantsAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Reply>> PostReply(Reply reply)
+        public async Task<ActionResult<ReplyDto>> PostReply(Reply reply)
         {
             try
             {
-                if (unitOfWork.UserContext.HasAuthorization(reply.UserId))
-                {
-                    var newReply = await unitOfWork.Replies.AddReply(reply);
-                    await unitOfWork.SaveChangesAsync();
-                    return Ok(newReply);
-                }
-                return Unauthorized();
+                var newReply = await unitOfWork.Replies.AddReply(reply);
+                await unitOfWork.SaveChangesAsync();
+                return Ok(newReply);
             }
             catch
             {
@@ -112,13 +104,11 @@ namespace PlantsAPI.Controllers
         {
             try
             {
-                if (unitOfWork.UserContext.HasAuthorization(reply.UserId))
-                {
+
                     var modifiedReply = await unitOfWork.Replies.EditReply(reply);
                     await unitOfWork.SaveChangesAsync();
                     return Ok(modifiedReply);
-                }
-                return Unauthorized();
+
             }
             catch
             {

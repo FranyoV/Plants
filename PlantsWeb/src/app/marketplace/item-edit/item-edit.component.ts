@@ -34,7 +34,7 @@ export class ItemEditComponent implements OnInit{
     private route: ActivatedRoute
   ){}
   ngOnInit(): void {
-    this.data.currentItemsMessage.subscribe( message => this.items = message );
+   // this.data.currentItemsMessage.subscribe( message => this.items = message );
 
     this.route.paramMap.subscribe( (params) => {
       const id = params.get("itemId");
@@ -82,8 +82,8 @@ export class ItemEditComponent implements OnInit{
             let index = this.items.findIndex(p => p.id = result.id);
             this.items.splice(index, 1, result);
             
-            this.newMessage(this.items), 
-            this.router.navigate(['marketplace']);},
+           /* this.newMessage(this.items), 
+          this.router.navigate(['marketplace']);*/},
             
           error: (error) => {console.error('Adding failed', error)}
         });
@@ -92,9 +92,9 @@ export class ItemEditComponent implements OnInit{
 
   }
 
-  newMessage(updatedItems : Item[]) {
+  /*newMessage(updatedItems : ItemDto[]) {
     this.data.changeItemsMessage(updatedItems);
-  }
+  }*/
 
   goToMarketPlace(){
     this.router.navigate(['/marketplace']);
