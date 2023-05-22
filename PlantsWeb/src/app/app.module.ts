@@ -25,7 +25,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-
+import { MatSortModule } from '@angular/material/sort';
 
 
 import { AppComponent } from './app.component';
@@ -98,7 +98,8 @@ import {AuthGuardService} from './auth-guard.service';
     MatSnackBarModule,
     MatSlideToggleModule,
     MatIconModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatSortModule
   ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },AuthGuardService],
   bootstrap: [AppComponent]

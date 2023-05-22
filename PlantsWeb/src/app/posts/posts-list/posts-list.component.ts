@@ -118,8 +118,16 @@ export class PostsListComponent implements OnInit, OnDestroy{
     this.webApi.deletePost(postId).subscribe({
       next: (res) => {
         if (!res){
-          this.openSnackBar("Deleting post was unsuccesfull. ") , console.log("res")
-        }else{this.openSnackBar("Post succesfully deleted. ") , console.log("res")}
+          this.openSnackBar("Deleting post was unsuccesfull. ");
+        }
+        else
+        {this.openSnackBar("Post succesfully deleted. ");
+        let index = this.posts.findIndex(p => p.id == postId);
+        this.posts.splice(index, 1);
+        index = this.postsOfUser.findIndex(p => p.id == postId);
+        this.postsOfUser.splice(index, 1);
+        index = this.postsOfUserReplies.findIndex(p => p.id == postId);
+        this.postsOfUserReplies.splice(index, 1)}
       },
       error: (err) => {this.openSnackBar("Deleting post was unsuccesfull. ")
         

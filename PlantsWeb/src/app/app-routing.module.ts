@@ -29,7 +29,7 @@ const routes: Routes = [
     {path: 'posts/new', component: PostAddComponent},
     {path: 'marketplace', component: MarketplaceComponent},
     {path: 'item/new', component: ItemAddComponent},
-    {path: 'marketplace/:itemId', component: ItemEditComponent}
+    {path: 'items/:itemId', component: ItemEditComponent}
     ]
     //rerouting --> { path: '', redirectTo: 'component-one', pathMatch: 'full' },
   },

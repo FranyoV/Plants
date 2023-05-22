@@ -31,7 +31,8 @@ namespace PlantsAPI.Repositories
                     Date = item.Date,
                     UserId = item.UserId,
                     Sold = item.Sold,
-                    Username = user.Name
+                    Username = user.Name,
+                    Email = user.EmailAddress
                 };
                 itemsDto.Add(dto);
             }
