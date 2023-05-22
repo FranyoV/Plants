@@ -18,6 +18,12 @@ mat-card {
     margin-bottom: 10px;
   }
 
+  .card-header-image {
+    background-image: url("../../../assets/defaultprofilepic.png");
+    background-size: cover;
+    margin: 0rem;
+  }
+
   .example-form {
     width: 100%;
   }
@@ -30,11 +36,9 @@ mat-card {
    display: flex;
    align-items: start;
    color: black; 
+   padding-top: 0.5rem;
   }  
-  mat-avatar{
-    padding-top: 0.5rem;
 
-  }
 
   button {
     float: right;

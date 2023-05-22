@@ -32,7 +32,7 @@ export class PlantsAddComponent implements OnInit{
   addForm = this.formBuilder.group({
     name : ['', [Validators.required, Validators.maxLength(50)]],
     description : "",
-    imageUrl: "" ,
+    imageUrl: '',
     interval: [{value: 0, disabled: true}, [Validators.required, Validators.min(1)]],
     note: [{value: '', disabled: true},[Validators.required]],
     lastNotification: [{value: formatDate( Date(), 'yyyy-MM-dd', 'en', '+0000'), disabled: true }, [Validators.required]]
@@ -99,7 +99,9 @@ export class PlantsAddComponent implements OnInit{
         reader.readAsDataURL(files[0]); 
         reader.onload = (_event) => { 
             this.url = reader.result; 
+            //this.addForm.controls['imageUrl'].setValue(this.url)
         }
+        console.log(this.url)
         
     }
   }
@@ -118,7 +120,8 @@ export class PlantsAddComponent implements OnInit{
 
 
   addPlant(){
-    
+    console.log(this.url)
+   
     let date = new Date(this.addForm.value.lastNotification!);
     let utcDate = new Date(
       date.getUTCFullYear(), 
@@ -138,7 +141,7 @@ export class PlantsAddComponent implements OnInit{
           "00000000-0000-0000-0000-000000000000",
           this.addForm.value.name!,
           this.addForm.value.description!,
-          this.addForm.value.imageUrl!,
+          this.url,
           this.addForm.value.note!,
           this.addForm.value.interval!,
           utcDate,
@@ -146,6 +149,7 @@ export class PlantsAddComponent implements OnInit{
           null,
           this.currentUserId
           );
+          console.log(newPlant);
       }else{
         //no maintenance
         newPlant = new Plant(

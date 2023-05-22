@@ -10,6 +10,7 @@ export interface ItemDto {
         imageUrl : string | null,
         date: Date | null,
         sold: boolean,
-        username: string;
+        username: string,
+        email: string,
         userId: string    
 }
