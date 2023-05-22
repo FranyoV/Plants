@@ -1,0 +1,41 @@
+
+.container {
+ width: 100%;
+ background-color: white;
+ opacity: 0.95;
+
+ 
+}
+
+h2 {
+  text-align: center;
+  margin-top: 1rem;
+  padding-top: 1rem;
+}
+
+.filter{
+  margin-top: 1rem;
+  width: 50%;
+  text-align: start;
+}
+
+table {
+    width: 90%;
+  }
+ 
+  td, th {
+    width: 15%;
+    text-align: center;
+  }
+
+button {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+
+mat-tab-group{
+  background-color: white;
+  opacity: 0.95;
+}
+  

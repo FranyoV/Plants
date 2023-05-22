@@ -1,0 +1,39 @@
+
+<div class="container">
+  <h2>My plants</h2>
+
+  <div class="addButtonRow my-3" [align]="'end'">
+    <button mat-raised-button  (click)="goToAddPlantPage()" >Add Plant</button>
+  </div>
+
+
+  <div class="row gy-3">
+   
+      <div class="col-md-6" *ngFor="let plant of plants">
+
+        <mat-card class="card h-100">
+          <mat-card-header>
+            <mat-card-title-group>
+              <mat-card-title>{{plant.name}}</mat-card-title>
+              
+              <img mat-card-sm-image src="assets/plant-icon.avif" >
+            </mat-card-title-group>
+          </mat-card-header>
+          <mat-card-content>
+           <p>
+            {{plant.description}}
+           </p>
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-stroked-button (click)="goToEditPlantPage(plant.id)" >Edit</button>
+              <button mat-stroked-button color="warn" (click)="deletePlant(plant.id)">Delete</button>
+            
+          </mat-card-actions>
+        </mat-card>
+
+
+      </div>
+    
+  </div>
+  
+  <router-outlet></router-outlet>

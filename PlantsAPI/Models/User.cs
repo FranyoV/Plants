@@ -6,8 +6,11 @@ namespace PlantsAPI.Models
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public string PasswordHash { get; set; }
+        public string EmailAddress { get; set; }
+        public string? ImageUrl { get; set; }
 
+        public string PasswordHash { get; set; }
+        public string PasswordSalt { get; set; }
 
         [JsonIgnore]
         public IEnumerable<Plant>? Plants { get; set; }
@@ -17,5 +20,8 @@ namespace PlantsAPI.Models
 
         [JsonIgnore]
         public IEnumerable<Reply>? Replies { get; set; }
+
+        [JsonIgnore]
+        public IEnumerable<Item>? Items { get; set; }
     }
 }

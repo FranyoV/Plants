@@ -2,36 +2,135 @@
 using Microsoft.EntityFrameworkCore;
 using PlantsAPI.Data;
 using PlantsAPI.Models;
+using PlantsAPI.Services;
 
 namespace PlantsAPI.Repositories
 {
     public class ReplyRepository : GenericRepository<Reply>, IReplyRepository
     {
-        public ReplyRepository(PlantsDbContext dbContext, ILogger logger) : base(dbContext, logger)
+        private readonly INotificationService notificationService;
+        public ReplyRepository(PlantsDbContext dbContext, IUserContext userContext, INotificationService notificationService) : base(dbContext, userContext)
         {
-
+            this.notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
         }
 
+        /*
         public async Task<IEnumerable<Reply>> GetReplies()
         {
             return await dbSet.ToListAsync();
-        }
+        }*/
 
+        
+        //only used by backend - helper method
         public Task<Reply> GetReplyById(Guid replyId)
         {
             if (replyId == Guid.Empty) throw new ArgumentNullException(nameof(replyId));
 
-            var reply = dbSet.Where(r => r.Id == replyId).FirstAsync();
+            var reply = dbSet.Where(r => r.Id == replyId).Include(u => u.User.Name).FirstAsync();
             return reply;
         }
 
-        public async Task<Reply> AddReply(Reply reply)
+
+        //anonymous access
+        public async Task<IEnumerable<ReplyDto>> GetRepliesOfPost(Guid postId)
         {
-            if (reply == null) throw new ArgumentNullException(nameof(reply));
-            var result = dbSet.Add(reply);
-            return result.Entity;
+            if (postId == Guid.Empty) throw new ArgumentNullException(nameof(postId));
+            
+            var post = _dbContext.Posts.Where(x => x.Id == postId).FirstOrDefault();
+
+            List<Reply> replies = await dbSet.Where(r => r.PostId == postId).ToListAsync();
+
+            List<ReplyDto> replyDtos = new();
+
+            if (replies.Count > 0)
+            {
+                foreach (var reply in replies)
+                {
+                    User user = await _dbContext.Users.Where(x => x.Id == reply.UserId).FirstAsync();
+                    ReplyDto dto = new ReplyDto()
+                    {
+                        Id = reply.Id,
+                        PostId = postId,
+                        UserId = reply.UserId,
+                        Content = reply.Content,
+                        Username = user.Name,
+                        DateOfCreation = reply.DateOfCreation
+                    };
+                    replyDtos.Add(dto);
+                }
+            }
+          
+
+            var repliesInOrder = replyDtos.OrderBy(x => x.DateOfCreation);
+            return repliesInOrder; 
         }
 
+
+        //throw error
+        public async Task<int> GetRepliesCount(Guid userId)
+        {
+            if (userId == Guid.Empty) throw new ArgumentNullException(nameof(userId));
+
+            if (_userContext.HasAuthorization(userId))
+            {
+                List<Reply> result = await dbSet.Where(p => p.UserId == userId).ToListAsync();
+                return result.Count;
+            }
+            else
+            {
+                throw new UnauthorizedAccessException("The logged in user has no access.");
+            }
+        }
+
+
+        public async Task<ReplyDto> AddReply(Reply reply)
+        {
+            if (reply == null) throw new ArgumentNullException(nameof(reply));
+
+            if (_userContext.HasAuthorization(reply.UserId))
+            {
+
+                reply.Id = Guid.NewGuid();
+                var added = await dbSet.AddAsync(reply);
+                ReplyDto dto = new();
+
+                if (added != null)
+                {
+                    Post post = await _dbContext.Posts.Where(p => p.Id == reply.PostId).FirstAsync();
+                    EmailData emailData = new()
+                    {
+
+                        Recipicent = "ryann.rempel@ethereal.email",
+                        Subject = "New Reply",
+                        DataName = post.Title,
+                        Url = "http://localhost:4200/post/" + post.Id,
+                        Body = "2dl víz"
+                    };
+
+                    notificationService.SendEmail(emailData, EmailTemplate.NEWREPLY);
+
+                    User user = await _dbContext.Users.Where(p => p.Id == reply.UserId).FirstAsync();
+                    dto = new()
+                    {
+                        Id = reply.Id,
+                        UserId = reply.UserId,
+                        PostId = reply.PostId,
+                        Content = reply.Content,
+                        DateOfCreation = reply.DateOfCreation,
+                        Username = user.Name,
+                    };
+                   // return dto;
+                }
+
+                return dto;
+            }
+            else
+            {
+                throw new UnauthorizedAccessException("The logged in user has no access.");
+            }
+        }
+
+        /*
         public async Task<Reply> EditReply(Reply reply)
         {
             if (reply == null) throw new ArgumentNullException(nameof(reply));
@@ -44,17 +143,20 @@ namespace PlantsAPI.Repositories
                 originalReply.DateOfCreation = reply.DateOfCreation;
             }
             return originalReply;
-        }
+        }*/
 
         public async Task<bool> DeleteReply(Guid replyId)
         {
             if (replyId == Guid.Empty) throw new ArgumentNullException(nameof(replyId));
 
-            var toBeDeleted = await dbSet.Where(r => r.Id == replyId).FirstAsync();
+            Reply toBeDeleted = await dbSet.Where(r => r.Id == replyId).FirstAsync();
 
-            var result = dbSet.Remove(toBeDeleted);
-
-            return result.State == EntityState.Deleted;
+            if (toBeDeleted != null && _userContext.HasAuthorization(toBeDeleted.UserId))
+            {
+                var result = dbSet.Remove(toBeDeleted);
+                return result.State == EntityState.Deleted;
+            }
+            return false;
         }
     }
 }

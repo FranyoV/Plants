@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace PlantsAPI.Models
 {
@@ -8,8 +9,10 @@ namespace PlantsAPI.Models
         public string Content { get; set; }
         public DateTime DateOfCreation { get; set; }
 
-
+        [ForeignKey("Post")]
         public Guid PostId { get; set; }
+
+        [ForeignKey("User")]
         public Guid UserId { get; set; }
 
         [JsonIgnore]

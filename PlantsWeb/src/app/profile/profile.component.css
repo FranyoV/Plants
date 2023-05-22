@@ -1,0 +1,66 @@
+.container {
+
+}
+
+.card-header-image {
+    background-image: url("../../assets/defaultprofilepic.png");
+    background-size: cover;  
+    margin: 0rem;
+  }
+
+mat-card-header {
+  display:flex;
+  
+  margin-left: 1rem;
+  margin-right: 1rem;
+  align-items: center;
+  padding: 0 1rem;
+  opacity: 1;
+  /*padding-top: 0 !important;*/
+}
+
+mat-card-title {
+  display:flex;
+  height:100%;
+  margin: 0 1rem;
+  color: black;
+  opacity: 1;
+  align-items: center;
+
+}
+
+
+button {
+  margin: 0.5rem;
+  opacity: 1;
+}
+
+.chart-container {
+  align-items: center;
+  text-align: center;
+}
+
+.col {
+  padding-top: 1rem;
+  padding-bottom:1rem;
+}
+
+
+canvas{
+  height: 225px;
+  margin: 0 auto;
+  }
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+}
+
+
+mat-card {
+  box-shadow: inset;
+  opacity: 0.95;
+  
+}

@@ -1,0 +1,130 @@
+
+<div class="container">
+  <div>
+
+    <h2>Add plant</h2>  
+      
+      <form [formGroup]="addForm" (ngSubmit)="addPlant()">
+        <div class="row">
+            <div class=" col" >
+                <h3>Plant info:</h3>
+
+                <mat-form-field >
+                  <mat-label >Name</mat-label>
+                  <input  
+                    type="text" 
+                    formControlName="name" 
+                    placeholder="Name" matInput>
+                  <mat-error 
+                    *ngIf="addForm.get('name')?.touched && addForm.get('name')?.errors?.['required']
+                    ">This field is required.</mat-error>
+                  <mat-error 
+                    *ngIf="addForm.get('name')?.touched 
+                    && addForm.get('name')?.errors?.['maxlength']"
+                    >The name is too long.</mat-error>
+                </mat-form-field>
+    
+                <mat-form-field>
+                  <mat-label>Description</mat-label>
+                  <textarea 
+                    type="text"
+                    formControlName="description"
+                    placeholder="Add description"
+                    rows="3"
+                    matInput></textarea>
+                </mat-form-field>
+
+                <div  style="float:none;margin:auto;align-items: center;">
+                  <img src={{this.url}} alt="">
+                  
+                  <input  type="file" class="file-input"
+                        (change)="onFileChanged($event)" #fileUpload
+                         accept="image/png">
+                        
+      
+                  <div class="file-upload">
+                      <button mat-raised-button type="button" class="upload-btn" color="secondary"
+                        (click)="fileUpload.click()">
+                          Upload image
+                      </button>
+                      {{fileName || "No file uploaded yet."}}
+                      <button mat-icon-button type="button" class="cancel-upload" (click)="cancelUpload()" 
+                              ><mat-icon color="secondary">cancel</mat-icon></button>
+                  </div>
+    
+                <!--mat-form-field appearance="outline">
+                  <mat-label>Image</mat-label>
+                  <input 
+                    type="text" 
+                    formControlName="imageUrl"
+                    id="UploadImage" 
+                    placeholder="Paste th url."
+                    matInput>
+                </mat-form-field-->
+              </div>
+            </div>
+
+            <div class="col" >
+              <h3>Maintenance info:</h3>
+              <div class="slide-toggle">
+              <mat-slide-toggle color="primary" (toggleChange)="showMaintenance()" >I want reminder emails of the maintenance of the plant.</mat-slide-toggle>
+              </div>
+              <mat-form-field style="margin-bottom: 20px;">
+                <mat-label>Last maintenance date</mat-label>
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <input 
+                matInput 
+                [matDatepicker]="dp3" 
+                formControlName="lastNotification"
+                >
+                <mat-error 
+                  *ngIf="addForm.get('lastNotification')?.touched && addForm.get('lastNotification')?.errors?.['required']
+                  ">This field is required.</mat-error>
+                <mat-datepicker-toggle matIconSuffix [for]="dp3"></mat-datepicker-toggle>
+                <mat-datepicker #dp3 ></mat-datepicker>
+              </mat-form-field>
+  
+              <mat-form-field>
+                <mat-label>Interval of days</mat-label>
+                
+                <input 
+                type="number" 
+                formControlName="interval"
+                id="Interval" 
+                placeholder="1"
+                matInput
+                matTooltip="The frequency of notifications in days.">
+                <mat-error *ngIf="addForm.get('interval')?.touched && addForm.get('interval')?.errors?.['required']"> 
+                This field is required.</mat-error>
+                <mat-error *ngIf="addForm.get('interval')?.touched && addForm.get('interval')?.errors?.['min']"> 
+                  The value must at least 1.</mat-error>
+              </mat-form-field>
+  
+              <mat-form-field>
+                <mat-label>Note</mat-label>
+                <input 
+                matTooltip="We will send you this note in the notification email."
+                type="text" 
+                formControlName="note"
+                id="Note" 
+                placeholder="..."
+                matInput>
+                <mat-error *ngIf="addForm.get('note')?.touched && addForm.get('note')?.errors?.['required']"> 
+                  This field is required.</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          
+          <div class="button-row" >
+            <button mat-raised-button (click)="goBack()" >Cancel</button>
+            <button mat-raised-button [disabled]="addForm.invalid" type="submit" class="gy-3" >Save</button>
+            
+          </div>
+      </form>
+    </div>
+</div>
+
+
+<router-outlet></router-outlet>
+
+   

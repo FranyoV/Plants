@@ -22,6 +22,45 @@ namespace PlantsAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("PlantsAPI.Models.Item", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("Price")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Sold")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Items", (string)null);
+                });
+
             modelBuilder.Entity("PlantsAPI.Models.Plant", b =>
                 {
                     b.Property<Guid>("Id")
@@ -34,8 +73,21 @@ namespace PlantsAPI.Migrations
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("Interval")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("LastNotification")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("NextNotification")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("UserId")
@@ -61,9 +113,14 @@ namespace PlantsAPI.Migrations
                     b.Property<DateTime>("DateOfCreation")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Title")
+                    b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -109,6 +166,13 @@ namespace PlantsAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("EmailAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -117,9 +181,24 @@ namespace PlantsAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("PasswordSalt")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Users", (string)null);
+                });
+
+            modelBuilder.Entity("PlantsAPI.Models.Item", b =>
+                {
+                    b.HasOne("PlantsAPI.Models.User", "User")
+                        .WithMany("Items")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("PlantsAPI.Models.Plant", b =>
@@ -170,6 +249,8 @@ namespace PlantsAPI.Migrations
 
             modelBuilder.Entity("PlantsAPI.Models.User", b =>
                 {
+                    b.Navigation("Items");
+
                     b.Navigation("Plants");
 
                     b.Navigation("Posts");

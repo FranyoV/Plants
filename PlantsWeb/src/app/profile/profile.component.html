@@ -1,0 +1,114 @@
+
+<div class="container w-100">
+    <br>
+    <mat-card align-center>
+        <mat-card-header>
+            <div mat-card-avatar class="card-header-image"></div>
+           
+            <mat-card-title-group>
+
+                <mat-card-title >{{this.currentUser?.name}}</mat-card-title>
+    
+                <mat-card-actions >
+                    <button mat-stroked-button color="warn" (click)="deleteUser()">Delete profile</button>
+                    <button mat-stroked-button (click)="logout()">Logout</button>
+                </mat-card-actions>
+            </mat-card-title-group>
+
+
+        </mat-card-header>
+
+        <mat-divider ></mat-divider>
+    <mat-card-content>
+    
+    <div class="row">
+        <div class="col">
+            <div class="chart-container">
+                <canvas id="profileInfo" #myChart></canvas>
+            </div>
+            
+        </div>
+        
+        <mat-divider [vertical]="true"></mat-divider>
+        <div class="col">
+
+            <form [formGroup]="changeEmailForm" class="d-flex justify-content-center align-items-center">
+
+                <h3>Update email address</h3>
+        
+              
+                <mat-form-field class="example-full-width">
+                    <mat-label>Email</mat-label>
+                    <input matInput             
+                    type="text" 
+                    formControlName="email" 
+                    placeholder="Email">
+                    <mat-error 
+                    *ngIf="changeEmailForm.get('email')?.touched 
+                    && changeEmailForm.get('email')?.errors?.['required']
+                    && changeEmailForm.get('email')?.errors?.['email']
+                    "></mat-error>
+                  </mat-form-field>
+                  
+                <mat-form-field class="example-full-width">
+                    <mat-label>Password</mat-label>
+                    <input 
+                    matInput 
+                    type="password" 
+                    formControlName="password">
+                    <mat-error 
+                    *ngIf="changeEmailForm.get('password')?.touched 
+                    && changeEmailForm.get('password')?.errors?.['required']
+                    "></mat-error>
+                </mat-form-field>
+                <button type="submit" [disabled]="changeEmailForm.invalid" (click)="changeEmail()" mat-raised-button>Save</button>
+            </form>
+        
+                
+        </div>
+        <mat-divider [vertical]="true"></mat-divider>
+
+        <div class="col">
+            <form [formGroup]="changePasswordForm" class="d-flex justify-content-center align-items-center">
+        
+                <h3>Change password</h3>
+        
+                <mat-form-field class="example-full-width">
+                    <mat-label>New password</mat-label>
+                    <input matInput type="text" 
+                    formControlName="newPassword"
+                    >
+                    <mat-error 
+                    *ngIf="changePasswordForm.get('newPassword')?.touched 
+                    && changePasswordForm.get('newPassword')?.errors?.['required']
+                    && changePasswordForm.get('newPassword')?.errors?.['maxlength']
+                    && changePasswordForm.get('newPassword')?.errors?.['minLength']
+                    && changePasswordForm.get('newPassword')?.errors?.['pattern']
+                    "></mat-error>
+                  </mat-form-field>
+                  
+                <mat-form-field class="example-full-width">
+                    <mat-label>Current password</mat-label>
+                    <input matInput  type="currentPassword"
+                    formControlName="currentPassword">
+                    <mat-error 
+                    *ngIf="changePasswordForm.get('currentPassword')?.touched 
+                    && changePasswordForm.get('currentPassword')?.errors?.['required']
+                    && changePasswordForm.get('currentPassword')?.errors?.['maxlength']
+                    && changePasswordForm.get('currentPassword')?.errors?.['minLength']
+                    && changePasswordForm.get('currentPassword')?.errors?.['pattern']
+                    "></mat-error>
+                </mat-form-field>
+                <button type="submit" [disabled]="changePasswordForm.invalid" mat-raised-button>Save</button>
+            
+              </form>
+        </div>
+       
+       
+    </div>
+    
+    </mat-card-content>
+   
+    </mat-card>
+
+</div>

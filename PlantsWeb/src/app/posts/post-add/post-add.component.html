@@ -1,0 +1,77 @@
+
+<div class="container d-flex justify-content-center align-items-center ">
+    <div>
+  
+      <h2>Add Post</h2>
+  
+        <form [formGroup]="addPostForm" (ngSubmit)="addPost()">
+                  
+  
+              <mat-form-field  appearance="outline">
+                <mat-label >Title</mat-label>
+                <input  
+                type="text" 
+                formControlName="title" 
+                placeholder="Title" matInput>
+                <mat-error
+                *ngIf="title?.touched && title?.errors?.['required']">A title is required.
+                </mat-error>
+                <mat-error *ngIf="title?.errors?.['maxlength']">
+                  Title should be less than 50 characters.
+                </mat-error>
+              </mat-form-field>
+  
+              <mat-form-field appearance="outline">
+                <mat-label>Content</mat-label>
+                <textarea 
+                type="text"
+                formControlName="content"
+                placeholder="Add description"
+                rows="3"
+                matInput></textarea>
+                <mat-error
+                *ngIf="content?.touched && content?.errors?.['required']">Field must be filled.
+                </mat-error>
+              </mat-form-field>
+  
+              <div  style="float:none;margin:auto;align-items: center;">
+                <img src="assets/plant-icon.avif" alt="">
+                
+                <input  type="file" class="file-input"
+                      (change)="onFileChanged($event)" #fileUpload
+                       accept="image/png">
+                      
+    
+                <div class="file-upload">
+                    <button mat-raised-button type="button" class="upload-btn" color="secondary"
+                      (click)="fileUpload.click()">
+                        Upload image
+                    </button>
+                    {{fileName || "No file uploaded yet."}}
+                    <button mat-icon-button type="button" class="cancel-upload" (click)="cancelUpload()" 
+                            ><mat-icon color="secondary">cancel</mat-icon></button>
+                </div>
+              </div>
+              <!--mat-form-field appearance="outline">
+                <mat-label>Image</mat-label>
+                <input 
+                type="text" 
+                formControlName="imageUrl"
+                id="UploadImage" 
+                placeholder="imageurlvagyvalami"
+                matInput>
+              </mat-form-field-->
+            
+            <div class="button-row" [align]="'end'">
+              <button mat-raised-button type="button" (click)="goBack()" >Cancel</button>
+              <button mat-raised-button [disabled]="addPostForm.invalid" type="submit" >Save</button>
+              
+            </div>
+
+        </form>
+        
+      </div>
+    </div>
+  
+  
+  <router-outlet></router-outlet>

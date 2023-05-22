@@ -1,0 +1,22 @@
+<div class="dialog">
+  <h1 mat-dialog-title>Item Details</h1>
+  <mat-dialog-content>
+      <p>Name: {{data.name}} </p>
+      <p>Description:{{data.description}} </p>
+      <p>Type: {{data.type}}</p>
+      <p>Price: {{data.price}}</p>
+      <p>Username: {{data.username}}</p>
+      <p>Date: {{data.date | date }}</p>
+  
+    <mat-form-field appearance="outline">
+      <mat-label>Note</mat-label>
+      <input matInput >
+    </mat-form-field>
+
+    <mat-dialog-actions [align]="'end'">
+      <button mat-raised-button (click)="onNoClick()">Cancel</button>
+      <button mat-raised-button [mat-dialog-close]="data.name" cdkFocusInitial>Ok</button>
+    </mat-dialog-actions>
+  </mat-dialog-content>
+
+</div>

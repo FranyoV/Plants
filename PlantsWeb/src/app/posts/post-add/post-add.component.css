@@ -1,0 +1,52 @@
+.container {
+    background-color: white;
+    opacity: 0.95;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+}
+
+
+h2 {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+  }
+
+  mat-form-field {
+    width: 400px;
+  }
+button {
+    margin-right: 0.25rem;
+    margin-left: 0.25rem;
+}
+
+.button-row{
+    text-align: center;
+}
+
+img {
+    max-width: 200px;
+}
+
+.col {
+    text-align: center;
+}
+
+.file-input {
+    display: none;
+  }
+
+  .file-upload {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
