@@ -10,6 +10,7 @@ import { EventListenerOptions } from 'rxjs/internal/observable/fromEvent';
 import { DataService } from 'src/app/data.service';
 import { Plant } from 'src/app/models/Plant';
 import { SnackbarComponent } from 'src/app/snackbar/snackbar.component';
+import { UserService } from 'src/app/user.service';
 import { WebApiService } from 'src/app/webapi.service';
 @Component({
   selector: 'app-plants-add',
@@ -45,30 +46,18 @@ export class PlantsAddComponent implements OnInit{
     private router: Router,
     private webApi: WebApiService,
     private snackBar: MatSnackBar,
-    private route : ActivatedRoute
-  ){}
+    private route : ActivatedRoute,
+    private userService : UserService
+    ){
+      this.currentUserId = this.userService.LoggedInUser();
+    }
+
 
 
   ngOnInit(){
     console.log( this.maintenance)
-    /*this.webApi.getMe().subscribe({
-      next: (res) => {
-        this.currentUserId = res, 
-        console.log("You are logged in with user: ",this.currentUserId),
-        this.getPlantOfUser();
-      },
-      error: (err) => {this.openSnackBar("something went wrong. Try again later!"),  console.error(err);
-      },
-    })*/
-    this.route.parent?.params.subscribe({
-      next: (params) => {
-        const id = params["userId"];
-        console.log("You are logged in with user: ",this.currentUserId),
-        this.currentUserId = id!;
-        this.getPlantOfUser();
-      },
-      error: (err) => this.openSnackBar("Something went wrong!")
-    });
+    this.getPlantOfUser();
+
   }
 
   onFileChanged(event : any ){

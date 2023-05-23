@@ -25,6 +25,7 @@
     "chart.js": "^4.2.1",
     "guid-typescript": "^1.0.9",
     "icons": "^1.0.0",
+    "jwt-decode": "^3.1.2",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.12.0"

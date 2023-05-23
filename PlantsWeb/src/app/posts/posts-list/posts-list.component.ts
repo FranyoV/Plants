@@ -8,6 +8,8 @@ import { DataService } from 'src/app/data.service';
 import { MatSnackBar, MatSnackBarRef } from '@angular/material/snack-bar';
 import { SnackbarComponent } from 'src/app/snackbar/snackbar.component';
 
+import { UserService } from 'src/app/user.service';
+
 @Component({
   selector: 'app-posts-list',
   templateUrl: './posts-list.component.html',
@@ -30,50 +32,24 @@ export class PostsListComponent implements OnInit, OnDestroy{
     private webApi : WebApiService,
     private data : DataService,
     private snackBar: MatSnackBar,
-    private route : ActivatedRoute
-  ){}
+    private route : ActivatedRoute,
+    private userService : UserService
+  ){
+    this.currentUserId = this.userService.LoggedInUser();
+  }
 
   ngOnInit() : void {
-   /* this.webApi.getMe().subscribe({
-      next: (res) => {
-        this.currentUserId = res, console.log("You are logged in with user: ",this.currentUserId);
-        this.getPostByUserReplies();
-        this.getPostByUser();
-        this.openSnackBar("You are not logged in!");
-        if (res == null) this.router.navigate(['/login']);
-      },
-      error: (err) => {this.openSnackBar("Something went wrong. Try again!"),
-        
-       console.error('Getting plant for user failed.',err)}
-      })*/
-      
-
-      this.route.parent?.params.subscribe({
-        next: (params) => {
-          const id = params["userId"];
-          
-          this.currentUserId = id!;
-          
-          this.getPostByUserReplies();
-          this.getPostByUser();
-        },
-        error: (err) => {this.openSnackBar("Something went wrong. Try again!")}
-    });
-   /*   this.data.currentUserIdMessage.subscribe({
-        next: (message) => {this.currentUserId = message,
-          this.getPostByUserReplies();
-          this.getPostByUser();}
-      })*/
-    
-   /* this.data.currentUserIdMessage.subscribe({
-      next: (res) => {this.currentUserId = res, console.log("You are logged in with user: ",this.currentUserId)}
-    })*/
+  
     this.subscription = this.data.currentPostsMessage
     .subscribe( message => this.posts = message ) ;
-
+   
     this.getPosts();
+    this.getPostByUserReplies();
+    this.getPostByUser();
   
   }
+
+
 
   getPostByUser(){
     console.log(this.currentUserId)

@@ -11,6 +11,7 @@ import { Dialog } from '@angular/cdk/dialog';
 import { DialogComponent } from 'src/app/plants/plants-list/dialog/dialog.component';
 import { SnackbarComponent } from 'src/app/snackbar/snackbar.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { UserService } from 'src/app/user.service';
 
 @Component({
   selector: 'app-plants',
@@ -31,36 +32,17 @@ export class PlantsListComponent implements OnInit, OnDestroy {
     private webApi : WebApiService,
     private dialog : MatDialog,
     private snackBar : MatSnackBar,
-    private route : ActivatedRoute
-    ){}
+    private route : ActivatedRoute,
+    private userService : UserService
+    ){
+      this.currentUserId = this.userService.LoggedInUser();
+    }
 
 
   ngOnInit(){
 
     this.subscription = this.data.currentPlantsMessage.subscribe( message => this.plants = message ) ;
-
-    /*this.webApi.getMe().subscribe({
-      next: (res) => {
-        this.currentUserId = res, console.log("You are logged in with user: ",this.currentUserId);
-        this.getPlantsOfUser();
-    },
-    error: (err) => {this.openSnackBar("Something went wrong. Try again!"), console.error('Getting plant for user failed.',err)}
-    })*/
-
-    /*this.data.currentUserIdMessage.subscribe({
-      next: (message) => {this.currentUserId = message,
-        console.log("message:", message)
-        this.getPlantsOfUser();}
-    })*/
-  
-    this.route.parent?.params.subscribe({
-      next: (params) => {
-        const id = params["userId"];
-        this.currentUserId = id!;
-        this.getPlantsOfUser();
-      },
-      error: (err) => this.openSnackBar("Something went wrong!")
-    });
+    this.getPlantsOfUser();
 
   }
 

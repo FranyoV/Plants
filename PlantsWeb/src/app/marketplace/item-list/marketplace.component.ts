@@ -12,6 +12,7 @@ import { Subscription } from 'rxjs';
 import { SnackbarComponent } from 'src/app/snackbar/snackbar.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ItemDto } from 'src/app/models/ItemDto';
+import { UserService } from 'src/app/user.service';
 
 
 @Component({
@@ -40,9 +41,10 @@ export class MarketplaceComponent  implements OnInit, AfterViewInit, OnDestroy {
     private webApi: WebApiService,
     private data : DataService,
     private route : ActivatedRoute,
-    private snackBar : MatSnackBar
+    private snackBar : MatSnackBar,
+    private userService: UserService
     ) 
-    {}
+    {this.currentUserId = userService.LoggedInUser()}
 
     
   ngOnDestroy(): void {
@@ -53,14 +55,6 @@ export class MarketplaceComponent  implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit(): void {
     this.subscription = this.data.currentItemsMessage
     .subscribe( message => this.items = message ) ;
-
-   this.route.parent?.params.subscribe({
-      next: (params) => {
-        const id = params["userId"];
-        this.currentUserId = id!;
-      },
-      error: (err) => this.openSnackBar("Something went wrong!")
-    });
 
     this.getItems();
     this.getMyItems();

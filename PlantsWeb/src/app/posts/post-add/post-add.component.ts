@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/data.service';
 import { Post } from 'src/app/models/Post';
 import { SnackbarComponent } from 'src/app/snackbar/snackbar.component';
+import { UserService } from 'src/app/user.service';
 import { WebApiService } from 'src/app/webapi.service';
 
 @Component({
@@ -43,29 +44,14 @@ export class PostAddComponent implements OnInit{
     private data: DataService,
     private router: Router,
     private snackBar: MatSnackBar,
-    private route: ActivatedRoute
-    ){}
+    private route: ActivatedRoute,
+    private userService : UserService
+    ){
+      this.currentUserId = this.userService.LoggedInUser();
+    }
 
 
   ngOnInit(): void {
-    /*this.webApi.getMe().subscribe({
-      next: (res) => {
-        this.currentUserId = res, console.log("You are logged in with user: ",this.currentUserId);
-
-      },
-      error: (err) => {this.openSnackBar("something went wrong. Try again later!")
-      },
-
-    })*/
-
-    this.route.parent?.params.subscribe({
-      next: (params) => {
-        const id = params["userId"];
-        this.currentUserId = id!;
-      },
-      error: (err) => this.openSnackBar("Something went wrong!")
-    });
-
     this.webApi.getPosts().subscribe({
       next: (res) => { this.posts = res },
       error: (err) => { console.error("Coutldn't get posts.", err)}
