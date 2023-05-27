@@ -20,7 +20,7 @@ const routes: Routes = [
   {path: 'register', component: RegisterComponent},  
   {path: '', component: HeaderComponent, canActivate: [AuthGuardService],
    children: [
-    {path: 'main', component: PostsListComponent},
+    {path: 'main', component: PostsListComponent },
     {path: 'plants', component: PlantsListComponent},
     {path: 'plants/:plantId', component: PlantsEditComponent},
     {path: 'plant/new', component: PlantsAddComponent},

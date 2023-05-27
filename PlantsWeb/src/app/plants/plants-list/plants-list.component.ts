@@ -54,9 +54,7 @@ export class PlantsListComponent implements OnInit, OnDestroy {
   }
 
   deletePlant(plantId: string){
-
     this.openDialog("1000", '1000') ;
-
     this.webApi.deletePlant(plantId).subscribe({
       next: (result) => {
         const index = this.plants.findIndex(p => p.id == plantId);
@@ -64,18 +62,8 @@ export class PlantsListComponent implements OnInit, OnDestroy {
     })
   }
 
-  goToEditPlantPage(plantId: string){
-    this.router.navigate([`${this.currentUserId}/plants/${plantId}`]);
-
-  }
-
-  goToAddPlantPage(){
-    this.router.navigate([`${this.currentUserId}/plant/new`]);
-  }
 
   openDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
-
-  //  const dialogRef = this.dialog.open(DialogComponent)
     this.dialog.open( DialogComponent, {
       width: '250px',
       enterAnimationDuration,
@@ -89,6 +77,15 @@ export class PlantsListComponent implements OnInit, OnDestroy {
       data: message,
       duration: 3 * 1000,
     });
+  }
+
+  goToEditPlantPage(plantId: string){
+    this.router.navigate([`plants/${plantId}`]);
+
+  }
+
+  goToAddPlantPage(){
+    this.router.navigate([`plant/new`]);
   }
 
   ngOnDestroy(): void {

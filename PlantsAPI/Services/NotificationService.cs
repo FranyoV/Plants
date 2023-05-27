@@ -20,8 +20,8 @@ namespace PlantsAPI.Services
             
             var email = new MimeMessage();
 
-            email.From.Add(MailboxAddress.Parse("verla.schneider@ethereal.email"));
-            email.To.Add(MailboxAddress.Parse("verla.schneider@ethereal.email"));
+            email.From.Add(MailboxAddress.Parse("kallie70@ethereal.email"));
+            email.To.Add(MailboxAddress.Parse("kallie70@ethereal.email"));
 
             if(template == EmailTemplate.NEWREPLY)
             {
@@ -40,14 +40,14 @@ namespace PlantsAPI.Services
                 {
                     Text = "<p> Heey! <br><br>" +
                     "Don't forget to take care of your plant! <br>" +
-                    "Here's your note for <i>" + emailData.DataName + "'s</i> maintenance:" + emailData.Url + ".</p> "
+                    "Here's your note for <i>" + emailData.DataName + "'s</i> maintenance: " + emailData.Body + ".</p> "
                 };
             }
 
             
             using var smtp = new SmtpClient();
             smtp.Connect("smtp.ethereal.email", 587, MailKit.Security.SecureSocketOptions.StartTls);
-            smtp.Authenticate("verla.schneider@ethereal.email", "uPScnTxGjgAHrpWQ9y");
+            smtp.Authenticate("kallie70@ethereal.email", "FJwzh3ttNyyVAUyceS");
             smtp.Send(email);
             smtp.Disconnect(true);
         }

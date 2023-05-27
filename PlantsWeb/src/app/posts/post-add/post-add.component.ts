@@ -128,6 +128,6 @@ export class PostAddComponent implements OnInit{
 
 
   goBack(){
-    this.router.navigate([`${this.currentUserId}/main`]);
+    this.router.navigate([`main`]);
   }
 }

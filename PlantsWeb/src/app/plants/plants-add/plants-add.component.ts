@@ -27,13 +27,14 @@ export class PlantsAddComponent implements OnInit{
   imagePath:string = '';
   url!:ArrayBuffer|null|string;
   fileName = '';
+  file! : File;
   
   uploadSub! : Subscription | null ;
 
   addForm = this.formBuilder.group({
     name : ['', [Validators.required, Validators.maxLength(50)]],
     description : "",
-    imageUrl: '',
+    imageUrl: File,
     interval: [{value: 0, disabled: true}, [Validators.required, Validators.min(1)]],
     note: [{value: '', disabled: true},[Validators.required]],
     lastNotification: [{value: formatDate( Date(), 'yyyy-MM-dd', 'en', '+0000'), disabled: true }, [Validators.required]]
@@ -71,7 +72,8 @@ export class PlantsAddComponent implements OnInit{
         const formData = new FormData();
 
         formData.append("thumbnail", file);
-
+        console.log(formData.get("thumbnail"));
+        this.file = file
         //const upload$ = this.http.post("/api/thumbnail-upload", formData);
         const files = event.target.files;
         if (files.length === 0)
@@ -110,6 +112,8 @@ export class PlantsAddComponent implements OnInit{
 
   addPlant(){
     console.log(this.url)
+    console.log("file: ", this.file)
+   // this.addForm.controls['imageUrl'].setValue(this.file);
    
     let date = new Date(this.addForm.value.lastNotification!);
     let utcDate = new Date(
@@ -130,7 +134,7 @@ export class PlantsAddComponent implements OnInit{
           "00000000-0000-0000-0000-000000000000",
           this.addForm.value.name!,
           this.addForm.value.description!,
-          this.url,
+          this.file,
           this.addForm.value.note!,
           this.addForm.value.interval!,
           utcDate,
@@ -145,7 +149,7 @@ export class PlantsAddComponent implements OnInit{
           "00000000-0000-0000-0000-000000000000",
           this.addForm.value.name!,
           this.addForm.value.description!,
-          this.addForm.value.imageUrl!,
+          this.file!,
           null,
           null,
           null,
@@ -204,6 +208,6 @@ export class PlantsAddComponent implements OnInit{
 
 
   goBack(){
-    this.router.navigate([`${this.currentUserId}/plants`])
+    this.router.navigate([`plants`])
   }
 }

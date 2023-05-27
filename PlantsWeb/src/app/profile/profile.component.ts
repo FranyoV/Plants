@@ -189,7 +189,6 @@ export class ProfileComponent implements OnInit, OnChanges {
     chart.data.datasets[0].data[0] = this.postsCount;
     chart.data.datasets[0].data[1] = this.plantCount;
     chart.data.datasets[0].data[2] = this.repliesCount;
-
   }
 
   openSnackBar(message: string) {

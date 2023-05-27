@@ -56,10 +56,18 @@ export class MarketplaceComponent  implements OnInit, AfterViewInit, OnDestroy {
     this.subscription = this.data.currentItemsMessage
     .subscribe( message => this.items = message ) ;
 
-    this.getItems();
-    this.getMyItems();
+
       
   }
+
+  ngAfterViewInit() {
+    this.getItems();
+    this.getMyItems();
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
+
+
 
   getItems(){
     this.webApi.getItems().subscribe({
@@ -98,10 +106,7 @@ export class MarketplaceComponent  implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
+
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -126,11 +131,11 @@ export class MarketplaceComponent  implements OnInit, AfterViewInit, OnDestroy {
   }
 
   goToAddItemPage(){
-    this.router.navigate([`${this.currentUserId}/item/new`]);
+    this.router.navigate([`item/new`]);
   }
 
   goToEditItemPage(item: Item){
-    this.router.navigate([`${this.currentUserId}/items/${item.id}`]);
+    this.router.navigate([`items/${item.id}`]);
   }
   
   openSnackBar(message: string) {

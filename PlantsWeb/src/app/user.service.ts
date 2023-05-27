@@ -11,18 +11,27 @@ export class UserService {
   constructor() { }
 
   LoggedInUser() : string{
-    var myRawToken = localStorage.getItem("authToken");
-    const tokenInfo = this.getDecodedAccessToken(myRawToken!); // decode token
-    //const expireDate = tokenInfo.exp; // get token expiration dateTime
-    console.log(tokenInfo["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"]); // show decoded token object in console
-    this.currentUserId = tokenInfo["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"]; 
+    var tkn = localStorage.getItem("authToken");
+    const decodedTkn = this.getDecodedAccessToken(tkn!); // decode token
+    this.currentUserId = decodedTkn["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"]; 
     return this.currentUserId;
   }
 
+  isExpired() : boolean{
+    var tkn = localStorage.getItem("authToken");
+    const decodedTkn = this.getDecodedAccessToken(tkn!); // decode token
+    const expireDate = decodedTkn.exp; // get token expiration dateTime
+    if (expireDate < new Date() ){
+      return false;
+    }
+    else{
+      return true;
+    }
+  }
 
-  getDecodedAccessToken(token: string): any {
+  getDecodedAccessToken(tkn: string) : any {
     try {
-      return jwt_decode(token);
+      return jwt_decode(tkn);
     } catch(Error) {
       return null;
     }

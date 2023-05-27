@@ -62,7 +62,7 @@ export class ItemAddComponent {
       next: (res) => {
         //this.items.push(res),
        // this.newMessage(this.items),
-        this.router.navigate([`${this.currentUserId}/marketplace`]),
+        this.goToMarketPlace();
         this.openSnackBar("Successfully added item for sale!"); },
       error: (err) => {
         this.openSnackBar("Couldn't add item. Try again!"),

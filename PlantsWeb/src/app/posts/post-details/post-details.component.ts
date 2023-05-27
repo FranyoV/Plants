@@ -101,7 +101,7 @@ export class PostDetailsComponent implements OnInit {
 
 
   goBack(){
-    this.router.navigate([`${this.currentUserId}/main`])
+    this.router.navigate([`main`])
   }
 
   deleteReply(replyId : string){

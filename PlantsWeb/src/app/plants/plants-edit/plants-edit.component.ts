@@ -51,6 +51,7 @@ export class PlantsEditComponent implements OnInit{
 
 
   ngOnInit(){
+    
     this.data.currentPlantsMessage.subscribe( message => this.plants = message );
 
     this.route.paramMap.subscribe( (params) => {
@@ -118,19 +119,6 @@ export class PlantsEditComponent implements OnInit{
         );
     }
    
-   
-   /* const modifiedPlant: Plant= new Plant(
-      this.currentPlantId,
-      this.editForm.value.name!,
-      this.editForm.value.description!,
-      this.editForm.value.imageUrl!,
-      this.editForm.value.note!,
-      this.editForm.value.interval!,
-      utcDate,
-      null,
-      null,
-      this.currentPlant.userId,
-      );*/
       console.log(modifiedPlant)
       console.log(new Date(this.editForm.value.lastNotification!).getDate());
 
@@ -213,6 +201,6 @@ export class PlantsEditComponent implements OnInit{
 
 
   goBack(){
-    this.router.navigate([`${this.currentUserId}/plants`])
+    this.router.navigate([`plants`])
   }
 }
