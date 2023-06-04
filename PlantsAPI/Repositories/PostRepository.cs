@@ -171,8 +171,6 @@ namespace PlantsAPI.Repositories
                     }
                 }
                 //var postsInOrder = postDtos.OrderByDescending(x => x.DateOfCreation);
-
-
                 return postDtos;
             }
             return new List<PostDto>();
