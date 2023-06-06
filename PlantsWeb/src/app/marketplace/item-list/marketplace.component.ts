@@ -5,7 +5,6 @@ import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import { ItemDetailsComponent } from '../item-details/item-details.component';
 import { Item } from 'src/app/models/Item';
-import { ItemType } from 'src/app/models/ItemType';
 import { ActivatedRoute, Router } from '@angular/router';
 import { WebApiService } from 'src/app/webapi.service';
 import { DataService } from 'src/app/data.service';
@@ -13,6 +12,7 @@ import { Subscription } from 'rxjs';
 import { SnackbarComponent } from 'src/app/snackbar/snackbar.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ItemDto } from 'src/app/models/ItemDto';
+import { UserService } from 'src/app/user.service';
 
 
 @Component({
@@ -22,7 +22,9 @@ import { ItemDto } from 'src/app/models/ItemDto';
 })
 export class MarketplaceComponent  implements OnInit, AfterViewInit, OnDestroy {
   displayedColumns: string[] = ['name', 'type', 'price', 'username', 'date', 'details'];
+  myDisplayedColumns: string[] = ['name', 'type', 'price', 'date', 'edit', 'delete'];
   dataSource!: MatTableDataSource<ItemDto>;
+  dataSourceMyItems!: MatTableDataSource<Item>;
   animal: string = '';
   name: string = '';
   items: ItemDto[] = [];
@@ -39,9 +41,10 @@ export class MarketplaceComponent  implements OnInit, AfterViewInit, OnDestroy {
     private webApi: WebApiService,
     private data : DataService,
     private route : ActivatedRoute,
-    private snackBar : MatSnackBar
+    private snackBar : MatSnackBar,
+    private userService: UserService
     ) 
-    {}
+    {this.currentUserId = userService.LoggedInUser()}
 
     
   ngOnDestroy(): void {
@@ -53,17 +56,18 @@ export class MarketplaceComponent  implements OnInit, AfterViewInit, OnDestroy {
     this.subscription = this.data.currentItemsMessage
     .subscribe( message => this.items = message ) ;
 
-   this.route.parent?.params.subscribe({
-      next: (params) => {
-        const id = params["userId"];
-        this.currentUserId = id!;
-      },
-      error: (err) => this.openSnackBar("Something went wrong!")
-    });
 
-    this.getItems();
       
   }
+
+  ngAfterViewInit() {
+    this.getItems();
+    this.getMyItems();
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
+
+
 
   getItems(){
     this.webApi.getItems().subscribe({
@@ -74,8 +78,8 @@ export class MarketplaceComponent  implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getMyItems(){
-    this.webApi.getItemsOfUser("3fa85f64-5717-4562-b3fc-2c963f66afa6").subscribe({
-      next: (res) => { this.myItems = res},
+    this.webApi.getItemsOfUser(this.currentUserId).subscribe({
+      next: (res) => { this.dataSourceMyItems = new MatTableDataSource(res)},
       error: (err) => { console.error(err)}
     })
   }
@@ -91,7 +95,8 @@ export class MarketplaceComponent  implements OnInit, AfterViewInit, OnDestroy {
         type: item.type,
         date: item.date,
         price: item.price,
-        username: item.username
+        username: item.username,
+        email: item.email
       },
     });
 
@@ -101,10 +106,7 @@ export class MarketplaceComponent  implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
+
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -115,8 +117,25 @@ export class MarketplaceComponent  implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+
+  deleteItem(item: Item){
+    this.webApi.deleteItem(item.id).subscribe({
+      next: (res) => {
+        this.openSnackBar("Item successfully deleted!");
+        const index = this.myItems.findIndex(i => i.id == res.id);
+        this.myItems.splice(index, 1);
+        this.dataSourceMyItems._renderChangesSubscription;
+      },
+      error: (err) => {this.openSnackBar("Couldn't delete item!")}
+    })
+  }
+
   goToAddItemPage(){
-    this.router.navigate([`${this.currentUserId}/item/new`]);
+    this.router.navigate([`item/new`]);
+  }
+
+  goToEditItemPage(item: Item){
+    this.router.navigate([`items/${item.id}`]);
   }
   
   openSnackBar(message: string) {

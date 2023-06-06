@@ -7,6 +7,7 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { SnackbarComponent } from 'src/app/snackbar/snackbar.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ReplyDto } from 'src/app/models/ReplyDto';
+import { UserService } from 'src/app/user.service';
 
 
 @Component({
@@ -36,8 +37,11 @@ export class PostDetailsComponent implements OnInit {
     private router: Router,
     private webApi: WebApiService,
     private formBuilder: FormBuilder,
-    private snackBar: MatSnackBar
-  ){}
+    private snackBar: MatSnackBar,
+    private userService : UserService
+  ){
+    this.currentUserId = this.userService.LoggedInUser();
+  }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe( (params) => {
@@ -45,32 +49,8 @@ export class PostDetailsComponent implements OnInit {
       this.currentPostId = id!;
     } )
 
-    this.route.parent?.params.subscribe({
-      next: (params) => {
-        const id = params["userId"];
-        this.currentUserId = id!;
-
-        this.getPostById();
-        this.getRepliesOfPost();
-        
-      },
-      error: (err) => this.openSnackBar("Something went wrong!")
-  });
-  /*
-    this.webApi.getMe().subscribe({
-      next: (res) => {
-        this.currentUserId = res, 
-        console.log("You are logged in with user: ",this.currentUserId),
-        this.getPostById();
-        this.getRepliesOfPost();
-
-      },
-      error: (err) => {
-        this.openSnackBar("something went wrong. Try again later!")
-        
-      },
-    })*/
-
+    this.getPostById();
+    this.getRepliesOfPost();
   }
 
   getPostById(){
@@ -121,7 +101,7 @@ export class PostDetailsComponent implements OnInit {
 
 
   goBack(){
-    this.router.navigate([`${this.currentUserId}/main`])
+    this.router.navigate([`main`])
   }
 
   deleteReply(replyId : string){

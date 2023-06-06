@@ -28,9 +28,10 @@ table {
     text-align: center;
   }
 
-button {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+
+button mat-icon{
+  margin-right: 0px;
+  margin-right: 0px; 
 }
 
 

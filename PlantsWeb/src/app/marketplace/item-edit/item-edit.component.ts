@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DataService } from 'src/app/data.service';
 import { Item } from 'src/app/models/Item';
 import { ItemType } from 'src/app/models/ItemType';
+import { UserService } from 'src/app/user.service';
 import { WebApiService } from 'src/app/webapi.service';
 
 @Component({
@@ -25,15 +26,19 @@ export class ItemEditComponent implements OnInit{
   items: Item[] = [];
   currentItemId: string = '';
   currentItem!: Item;
+  currentUserId: string = '';
 
   constructor(
     private formBuilder: FormBuilder,
     private webApi: WebApiService,
     private router: Router,
     private data: DataService,
-    private route: ActivatedRoute
-  ){}
-  ngOnInit(): void {
+    private route: ActivatedRoute,
+    private userService: UserService
+    ) 
+    {this.currentUserId = userService.LoggedInUser()}
+    
+    ngOnInit(): void {
    // this.data.currentItemsMessage.subscribe( message => this.items = message );
 
     this.route.paramMap.subscribe( (params) => {

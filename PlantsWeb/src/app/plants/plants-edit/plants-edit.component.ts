@@ -10,6 +10,7 @@ import { WebApiService } from 'src/app/webapi.service';
 import { formatDate } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackbarComponent } from 'src/app/snackbar/snackbar.component';
+import { UserService } from 'src/app/user.service';
 
 @Component({
   selector: 'app-plants-edit',
@@ -42,19 +43,16 @@ export class PlantsEditComponent implements OnInit{
     private router: Router,
     private route: ActivatedRoute,
     private webApi: WebApiService,
-    private snackBar: MatSnackBar
-  ){}
+    private snackBar: MatSnackBar,
+    private userService : UserService
+    ){
+      this.currentUserId = this.userService.LoggedInUser();
+    }
 
 
   ngOnInit(){
+    
     this.data.currentPlantsMessage.subscribe( message => this.plants = message );
-
-    this.route.parent?.params.subscribe({
-      next: (params) => {
-        const id = params["userId"];
-        this.currentUserId = id}
-      
-    });
 
     this.route.paramMap.subscribe( (params) => {
       const id = params.get("plantId");
@@ -121,19 +119,6 @@ export class PlantsEditComponent implements OnInit{
         );
     }
    
-   
-   /* const modifiedPlant: Plant= new Plant(
-      this.currentPlantId,
-      this.editForm.value.name!,
-      this.editForm.value.description!,
-      this.editForm.value.imageUrl!,
-      this.editForm.value.note!,
-      this.editForm.value.interval!,
-      utcDate,
-      null,
-      null,
-      this.currentPlant.userId,
-      );*/
       console.log(modifiedPlant)
       console.log(new Date(this.editForm.value.lastNotification!).getDate());
 
@@ -216,6 +201,6 @@ export class PlantsEditComponent implements OnInit{
 
 
   goBack(){
-    this.router.navigate([`${this.currentUserId}/plants`])
+    this.router.navigate([`plants`])
   }
 }

@@ -75,6 +75,14 @@ namespace PlantsAPI.Data
                     DateOfCreation = DateTime.Now,
                     PostId = Guid.Parse("c1a1e629-7d42-4b6a-8fa1-6508f9c594ec"),
                     UserId = Guid.Parse("20526112-56fa-4e4a-8ae5-1d3603aa47e9")
+                },
+                new Reply
+                {
+                    Id = Guid.Parse("c7021f95-7069-469a-88f2-9642b9a9c260"),
+                    Content = "Thank you. This saved my cactuses life.",
+                    DateOfCreation = DateTime.Now,
+                    PostId = Guid.Parse("c1a1e629-7d42-4b6a-8fa1-6508f9c594ec"),
+                    UserId = Guid.Parse("7a02b8d4-570d-404f-946e-40b4524727ab")
                 }
             };
 

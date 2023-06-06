@@ -7,6 +7,7 @@ import { DataService } from 'src/app/data.service';
 import { Item } from 'src/app/models/Item';
 import { ItemType } from 'src/app/models/ItemType';
 import { SnackbarComponent } from 'src/app/snackbar/snackbar.component';
+import { UserService } from 'src/app/user.service';
 import { WebApiService } from 'src/app/webapi.service';
 
 @Component({
@@ -35,19 +36,13 @@ export class ItemAddComponent {
     private router: Router,
     private data: DataService,
     private snackBar: MatSnackBar,
-    private route: ActivatedRoute
-    ){}
+    private route: ActivatedRoute,
+    private userService: UserService
+    ) 
+    {this.currentUserId = userService.LoggedInUser()}
+    
 
   addItem(){
-
-    this.route.parent?.params.subscribe({
-      next: (params) => {
-        const id = params["userId"];
-        console.log("You are logged in with user: ",this.currentUserId),
-        this.currentUserId = id!;
-      },
-      error: (err) => this.openSnackBar("Something went wrong!")
-    });
 
     const newItem: Item = {
       id: "00000000-0000-0000-0000-000000000000",
@@ -67,7 +62,7 @@ export class ItemAddComponent {
       next: (res) => {
         //this.items.push(res),
        // this.newMessage(this.items),
-        this.router.navigate([`${this.currentUserId}/marketplace`]),
+        this.goToMarketPlace();
         this.openSnackBar("Successfully added item for sale!"); },
       error: (err) => {
         this.openSnackBar("Couldn't add item. Try again!"),

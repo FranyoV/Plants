@@ -10,6 +10,7 @@
         public string? ImageUrl { get; set; }
         public DateTime Date { get; set; }
         public string Username { get; set; }
+        public string Email { get;set; }
         public Guid UserId { get; set; }
         public bool Sold { get; set; }
 

@@ -22,11 +22,13 @@ namespace PlantsAPI.Repositories
 
         
         //only used by backend - helper method
-        public Task<Reply> GetReplyById(Guid replyId)
+        public async Task<Reply> GetReplyById(Guid replyId)
         {
             if (replyId == Guid.Empty) throw new ArgumentNullException(nameof(replyId));
-
-            var reply = dbSet.Where(r => r.Id == replyId).Include(u => u.User.Name).FirstAsync();
+           
+            Reply reply = new();
+            reply = await dbSet.Where(r => r.Id == replyId).Include(u => u.User.Name).FirstAsync();
+            
             return reply;
         }
 
@@ -71,15 +73,9 @@ namespace PlantsAPI.Repositories
         {
             if (userId == Guid.Empty) throw new ArgumentNullException(nameof(userId));
 
-            if (_userContext.HasAuthorization(userId))
-            {
-                List<Reply> result = await dbSet.Where(p => p.UserId == userId).ToListAsync();
-                return result.Count;
-            }
-            else
-            {
-                throw new UnauthorizedAccessException("The logged in user has no access.");
-            }
+            List<Reply> result = await dbSet.Where(r => r.UserId == userId).ToListAsync();
+            return result.Count;
+
         }
 
 

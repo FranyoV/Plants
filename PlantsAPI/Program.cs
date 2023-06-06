@@ -30,7 +30,7 @@ builder.Services.AddQuartz(q =>
 
         opts.ForJob(jobKey)
         .WithIdentity("SendMaintenanceEmailJob-trigger")
-        .WithCronSchedule("0 * * * * ?"));
+        .WithCronSchedule("0 10 * * * ?"));
 
 });
 
@@ -40,7 +40,7 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IUserContext, UserContext>();
 
 builder.Services.AddScoped<INotificationService, NotificationService>();
-//builder.Services.Configure<SendMaintenanceEmailJob>(builder.Configuration.GetSection("SendMaintenanceEmailJob"));
+builder.Services.Configure<SendMaintenanceEmailJob>(builder.Configuration.GetSection("SendMaintenanceEmailJob"));
 
 
 builder.Services.AddHttpContextAccessor();
@@ -50,7 +50,6 @@ builder.Services.AddControllers();
 builder.Services.AddControllers().AddJsonOptions(options =>
 { 
  options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-   
 });
 
 

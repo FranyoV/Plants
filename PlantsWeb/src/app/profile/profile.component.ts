@@ -7,6 +7,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { SnackbarComponent } from '../snackbar/snackbar.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UserInfoEditRequest } from '../models/UserInfoEditRequest';
+import { UserService } from '../user.service';
 Chart.register(...registerables);
 
 
@@ -49,23 +50,17 @@ export class ProfileComponent implements OnInit, OnChanges {
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     private snackBar: MatSnackBar,
-    private router: Router
-  ){}
+    private router: Router,
+    private userService : UserService
+  ){
+    this.currentUserId = userService.LoggedInUser();
+  }
 
   ngOnInit(): void {
-
-    this.route.parent?.params.subscribe({
-      next: (params) => {
-        const id = params["userId"];
-        this.currentUserId = id!;
-        this.getUserById();
-        this.getReplyCount();
-        this.getPlantCount();
-        this.getPlantCount();
-      },
-      error: (err) => this.openSnackBar("Something went wrong!")
-    });    
-
+    this.getUserById();
+    this.getReplyCount();
+    this.getPlantCount();
+    this.getPlantCount();
   }
 
 
@@ -175,7 +170,7 @@ export class ProfileComponent implements OnInit, OnChanges {
         responsive: false,
         plugins: {
           legend: {
-            position: 'top',
+            position: 'bottom',
           },
           title: {
             display: true,
@@ -194,7 +189,6 @@ export class ProfileComponent implements OnInit, OnChanges {
     chart.data.datasets[0].data[0] = this.postsCount;
     chart.data.datasets[0].data[1] = this.plantCount;
     chart.data.datasets[0].data[2] = this.repliesCount;
-
   }
 
   openSnackBar(message: string) {

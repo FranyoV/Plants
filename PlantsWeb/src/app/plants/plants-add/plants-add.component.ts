@@ -10,6 +10,7 @@ import { EventListenerOptions } from 'rxjs/internal/observable/fromEvent';
 import { DataService } from 'src/app/data.service';
 import { Plant } from 'src/app/models/Plant';
 import { SnackbarComponent } from 'src/app/snackbar/snackbar.component';
+import { UserService } from 'src/app/user.service';
 import { WebApiService } from 'src/app/webapi.service';
 @Component({
   selector: 'app-plants-add',
@@ -26,13 +27,14 @@ export class PlantsAddComponent implements OnInit{
   imagePath:string = '';
   url!:ArrayBuffer|null|string;
   fileName = '';
+  file! : File;
   
   uploadSub! : Subscription | null ;
 
   addForm = this.formBuilder.group({
     name : ['', [Validators.required, Validators.maxLength(50)]],
     description : "",
-    imageUrl: "" ,
+    imageUrl: File,
     interval: [{value: 0, disabled: true}, [Validators.required, Validators.min(1)]],
     note: [{value: '', disabled: true},[Validators.required]],
     lastNotification: [{value: formatDate( Date(), 'yyyy-MM-dd', 'en', '+0000'), disabled: true }, [Validators.required]]
@@ -45,30 +47,18 @@ export class PlantsAddComponent implements OnInit{
     private router: Router,
     private webApi: WebApiService,
     private snackBar: MatSnackBar,
-    private route : ActivatedRoute
-  ){}
+    private route : ActivatedRoute,
+    private userService : UserService
+    ){
+      this.currentUserId = this.userService.LoggedInUser();
+    }
+
 
 
   ngOnInit(){
     console.log( this.maintenance)
-    /*this.webApi.getMe().subscribe({
-      next: (res) => {
-        this.currentUserId = res, 
-        console.log("You are logged in with user: ",this.currentUserId),
-        this.getPlantOfUser();
-      },
-      error: (err) => {this.openSnackBar("something went wrong. Try again later!"),  console.error(err);
-      },
-    })*/
-    this.route.parent?.params.subscribe({
-      next: (params) => {
-        const id = params["userId"];
-        console.log("You are logged in with user: ",this.currentUserId),
-        this.currentUserId = id!;
-        this.getPlantOfUser();
-      },
-      error: (err) => this.openSnackBar("Something went wrong!")
-    });
+    this.getPlantOfUser();
+
   }
 
   onFileChanged(event : any ){
@@ -82,7 +72,8 @@ export class PlantsAddComponent implements OnInit{
         const formData = new FormData();
 
         formData.append("thumbnail", file);
-
+        console.log(formData.get("thumbnail"));
+        this.file = file
         //const upload$ = this.http.post("/api/thumbnail-upload", formData);
         const files = event.target.files;
         if (files.length === 0)
@@ -99,7 +90,9 @@ export class PlantsAddComponent implements OnInit{
         reader.readAsDataURL(files[0]); 
         reader.onload = (_event) => { 
             this.url = reader.result; 
+            //this.addForm.controls['imageUrl'].setValue(this.url)
         }
+        console.log(this.url)
         
     }
   }
@@ -118,7 +111,10 @@ export class PlantsAddComponent implements OnInit{
 
 
   addPlant(){
-    
+    console.log(this.url)
+    console.log("file: ", this.file)
+   // this.addForm.controls['imageUrl'].setValue(this.file);
+   
     let date = new Date(this.addForm.value.lastNotification!);
     let utcDate = new Date(
       date.getUTCFullYear(), 
@@ -138,7 +134,7 @@ export class PlantsAddComponent implements OnInit{
           "00000000-0000-0000-0000-000000000000",
           this.addForm.value.name!,
           this.addForm.value.description!,
-          this.addForm.value.imageUrl!,
+          this.file,
           this.addForm.value.note!,
           this.addForm.value.interval!,
           utcDate,
@@ -146,13 +142,14 @@ export class PlantsAddComponent implements OnInit{
           null,
           this.currentUserId
           );
+          console.log(newPlant);
       }else{
         //no maintenance
         newPlant = new Plant(
           "00000000-0000-0000-0000-000000000000",
           this.addForm.value.name!,
           this.addForm.value.description!,
-          this.addForm.value.imageUrl!,
+          this.file!,
           null,
           null,
           null,
@@ -211,6 +208,6 @@ export class PlantsAddComponent implements OnInit{
 
 
   goBack(){
-    this.router.navigate([`${this.currentUserId}/plants`])
+    this.router.navigate([`plants`])
   }
 }

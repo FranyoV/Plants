@@ -7,7 +7,7 @@ export class Plant {
         public id : string,
         public name : string,
         public description : string | null,
-        public imageUrl : string| null ,
+        public imageUrl : string| ArrayBuffer|null | File,
 
         //Maintenance data
         public note : string | null,

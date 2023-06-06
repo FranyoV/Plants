@@ -18,9 +18,9 @@ import { AuthGuardService } from './auth-guard.service';
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},  
-  {path: ':userId', component: HeaderComponent, canActivate: [AuthGuardService],
+  {path: '', component: HeaderComponent, canActivate: [AuthGuardService],
    children: [
-    {path: 'main', component: PostsListComponent},
+    {path: 'main', component: PostsListComponent },
     {path: 'plants', component: PlantsListComponent},
     {path: 'plants/:plantId', component: PlantsEditComponent},
     {path: 'plant/new', component: PlantsAddComponent},
@@ -29,7 +29,7 @@ const routes: Routes = [
     {path: 'posts/new', component: PostAddComponent},
     {path: 'marketplace', component: MarketplaceComponent},
     {path: 'item/new', component: ItemAddComponent},
-    {path: 'marketplace/:itemId', component: ItemEditComponent}
+    {path: 'items/:itemId', component: ItemEditComponent}
     ]
     //rerouting --> { path: '', redirectTo: 'component-one', pathMatch: 'full' },
   },

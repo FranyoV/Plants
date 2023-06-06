@@ -50,7 +50,7 @@ export class LoginComponent {
           this.currentUserId = res.userId,
           this.userLogin.emit(this.currentUserId);
           this.newMessage(res.userId);
-          this.router.navigate([`${this.currentUserId}/main`]);
+          this.router.navigate([`main`]);
         } else {
           if (res.status == LoginStatus.WrongPassword){
             this.openSnackBar("Wrong password!");

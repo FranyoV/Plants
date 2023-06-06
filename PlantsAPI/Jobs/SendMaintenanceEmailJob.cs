@@ -5,6 +5,7 @@ using Quartz;
 
 namespace PlantsAPI.Jobs
 {
+    [DisallowConcurrentExecution]
     public class SendMaintenanceEmailJob : IJob
     {
         private readonly INotificationService _notificationService;

@@ -129,10 +129,18 @@ namespace PlantsAPI.Repositories
 
                 foreach (var reply in repliesOfUserOrdered)
                 {
-                    var post = await _dbContext.Posts.Where(p => p.Id == reply.PostId).ToListAsync();
-                    if (post != null)
+                    var posts = await _dbContext.Posts.Where(p => p.Id == reply.PostId).ToListAsync();
+
+                    if (posts != null)
                     {
-                        postsWithUsersReplies.AddRange(post);
+                        foreach (var item in posts)
+                        {
+                            if (!postsWithUsersReplies.Contains(item))
+                            {
+                                postsWithUsersReplies.AddRange(posts);
+                            }
+                        }
+
                     }
                 }
 
@@ -163,8 +171,6 @@ namespace PlantsAPI.Repositories
                     }
                 }
                 //var postsInOrder = postDtos.OrderByDescending(x => x.DateOfCreation);
-
-
                 return postDtos;
             }
             return new List<PostDto>();
