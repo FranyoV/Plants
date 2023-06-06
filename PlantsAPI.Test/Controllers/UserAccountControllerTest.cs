@@ -59,7 +59,7 @@ namespace PlantsAPI.Test.Controllers
 
             var response = helper.Controller.Register(new RegisterRequest());
 
-            Assert.True((response?.Result as OkResult).StatusCode == (int)HttpStatusCode.OK);
+            Assert.True((response?.Result.Result as OkObjectResult).StatusCode == (int)HttpStatusCode.OK);
         }
 
         [Fact]
@@ -69,7 +69,7 @@ namespace PlantsAPI.Test.Controllers
 
             var response = helper.Controller.Register(new RegisterRequest());
 
-            Assert.True((response.Result as BadRequestResult).StatusCode == (int)HttpStatusCode.BadRequest);
+            Assert.True((response.Result.Result as BadRequestObjectResult).StatusCode == (int)HttpStatusCode.BadRequest);
         }
         #endregion
 

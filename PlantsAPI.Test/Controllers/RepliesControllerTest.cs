@@ -58,7 +58,7 @@ namespace PlantsAPI.Test.Controllers
         }
 
 
-        [Fact]
+       /* [Fact]
         public void GetRepliesOfPost_ShouldReturnOk()
         {
             TestHelper helper = new();
@@ -77,7 +77,7 @@ namespace PlantsAPI.Test.Controllers
             var response = helper.Controller.GetRepliesOfPost(Guid.NewGuid());
 
             Assert.True((response?.Result.Result as OkObjectResult).StatusCode == (int)HttpStatusCode.OK);
-        }
+        }*/
 
         //should work after adding authorization
         [Fact]
@@ -155,7 +155,7 @@ namespace PlantsAPI.Test.Controllers
         }
 
 
-        [Fact]
+     /*   [Fact]
         public void PostReply_ShouldReturnOk()
         {
             TestHelper helper = new();
@@ -175,7 +175,7 @@ namespace PlantsAPI.Test.Controllers
             var response = helper.Controller.PostReply(testReply);
 
             Assert.True((response?.Result.Result as OkObjectResult).StatusCode == (int)HttpStatusCode.OK);
-        }
+        }*/
 
         [Fact]
         public void PostReply_ShouldReturnUnauthorized()

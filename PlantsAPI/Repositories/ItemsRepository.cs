@@ -44,7 +44,8 @@ namespace PlantsAPI.Repositories
         {
             if (id == Guid.Empty) throw new ArgumentNullException(nameof(id));
 
-            var result = await dbSet.Where(i => i.Id == id).FirstAsync();
+            Item result = new();
+            result = await dbSet.Where(i => i.Id == id).FirstAsync();
 
             return result;
         }

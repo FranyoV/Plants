@@ -84,8 +84,6 @@ namespace PlantsAPI.Data
                     PostId = Guid.Parse("c1a1e629-7d42-4b6a-8fa1-6508f9c594ec"),
                     UserId = Guid.Parse("7a02b8d4-570d-404f-946e-40b4524727ab")
                 }
-
-
             };
 
             foreach (var reply in replies)
