@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PlantsAPI.Data;
 using PlantsAPI.Models;
 using PlantsAPI.Services;
+using System.Drawing;
 
 namespace PlantsAPI.Repositories
 {
@@ -12,7 +13,6 @@ namespace PlantsAPI.Repositories
         public PlantRepository(PlantsDbContext dbContext, IUserContext userContext) : base(dbContext, userContext)
         {
         }
-
 
         public async Task<IEnumerable<Plant>> GetPlants()
         {
@@ -74,28 +74,56 @@ namespace PlantsAPI.Repositories
         }
 
         //throws unathourized exception
-        public async Task<Plant> AddPlant(Plant plant)
+        public async Task<Plant> AddPlant(PlantDto request)
         {
-            if (plant == null) throw new ArgumentNullException(nameof(plant));
+            if (request == null) throw new ArgumentNullException(nameof(request));
 
-            if (_userContext.HasAuthorization(plant.UserId))
+            if (_userContext.HasAuthorization(request.UserId))
             {
-                plant.Id = Guid.NewGuid();
+                
+                Plant newPlant = new();
+                newPlant.Id = Guid.NewGuid();
+                newPlant.Name = request.Name;
+                newPlant.Description = request.Description;
+                newPlant.UserId = request.UserId;
 
-                if (plant.LastNotification.HasValue && plant.Interval.HasValue)
+                if (request.LastNotification.HasValue && request.Interval.HasValue)
                 {
 
-                    if (plant.LastNotification.Value.AddDays(plant.Interval.Value) < DateTime.Now)
+                    if (request.LastNotification.Value.AddDays(request.Interval.Value) < DateTime.Now)
                     {
-                        plant.NextNotification = DateTime.Now;
+                        newPlant.NextNotification = DateTime.Now;
                     }
                     else
                     {
-                        plant.NextNotification = plant.LastNotification.Value.AddDays(plant.Interval.Value);
+                        newPlant.NextNotification = request.LastNotification.Value.AddDays(request.Interval.Value);
                     }
-                }
 
-                var result = await dbSet.AddAsync(plant);
+                }
+                /*
+                if (image != null && image.Length > 0)
+                {
+                    byte[] imageByteArray = null;
+                    using (var readStream = image.OpenReadStream())
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        readStream.CopyTo(memoryStream);
+                        imageByteArray = memoryStream.ToArray();
+                    }
+                    newPlant.ImageUrl = imageByteArray;
+                }*/
+               /* if (request.ImageUrl != null)
+                {
+                    Image image;
+                    using (var ms = new MemoryStream())
+                    {
+                        request.ImageUrl.Save(ms, request.ImageUrl.RawFormat);
+                        newPlant.ImageUrl = ms.ToArray();
+                    }
+                    
+                }*/
+
+                var result = await dbSet.AddAsync(newPlant);
                 return result.Entity;
             }
             else

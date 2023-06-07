@@ -6,7 +6,7 @@ using PlantsAPI.Models;
 namespace PlantsAPI.Controllers
 {
     [Route("api/plants")]
-    [ApiController]
+   // [ApiController]
     [Authorize]
     public class PlantsController : ControllerBase
     {
@@ -81,14 +81,33 @@ namespace PlantsAPI.Controllers
 
         
         [HttpPost]
-        public async Task<ActionResult<Plant>> PostPlant([FromBody] Plant plant)
+        public async Task<ActionResult<Plant>> PostPlant([FromBody] PlantDto plant)
         {
             try
             {
-
+                
                     var newPlant = await unitOfWork.Plants.AddPlant(plant);
                     await unitOfWork.SaveChangesAsync();
                     return Ok(newPlant);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+
+        [HttpPost]
+        [Route("{plantId}/image")]
+        public async Task<ActionResult<Plant>> AddImage([FromForm] IFormFile image)
+        {
+            try
+            {
+                var planty = image;
+                var newPlant = await unitOfWork.Plants.GetPlants();
+                await unitOfWork.SaveChangesAsync();
+                return Ok(newPlant);
 
             }
             catch (Exception ex)

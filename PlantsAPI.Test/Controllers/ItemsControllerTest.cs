@@ -44,8 +44,8 @@ namespace PlantsAPI.Test.Controllers
             var response = helper.Controller.GetItems();
 
             Assert.True((response?.Result.Result as OkObjectResult).StatusCode == (int)HttpStatusCode.OK);
-        }*/
-
+        }
+    */
 
         [Fact]
         public void GetItems_ShouldReturnBadRequest()

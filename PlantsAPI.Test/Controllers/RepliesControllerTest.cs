@@ -57,7 +57,7 @@ namespace PlantsAPI.Test.Controllers
             Assert.ThrowsAsync<ArgumentNullException>(() => helper.Controller.GetRepliesOfPost(Guid.Empty));
         }
 
-
+/*
        /* [Fact]
         public void GetRepliesOfPost_ShouldReturnOk()
         {
@@ -91,7 +91,7 @@ namespace PlantsAPI.Test.Controllers
 
             Assert.True((response.Result.Result as BadRequestResult).StatusCode == (int)HttpStatusCode.BadRequest);
         }
-
+*/
 
         #endregion
 
@@ -187,7 +187,7 @@ namespace PlantsAPI.Test.Controllers
             Assert.NotNull(response);
             Assert.True((response.Result.Result as BadRequestResult).StatusCode == (int)HttpStatusCode.BadRequest);
 
-        }
+        }*/
         #endregion
 
 

@@ -3,7 +3,7 @@
   <h2>Marketplace</h2>
 
   
-    <div [align]="'end'">
+    <div [align]="'end'" class="add-button">
         <button (click)="goToAddItemPage()" mat-raised-button>Add item</button>
     </div>
    
@@ -61,7 +61,7 @@
         
             <!-- Row shown when there is no matching data. -->
             <tr class="mat-row" *matNoDataRow>
-              <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+              <td class="mat-cell" colspan="4">No items found.</td>
             </tr>
           </table>
         
@@ -69,13 +69,16 @@
         </div>
         
       </mat-tab>
+
       <mat-tab label="My items"> 
-        
-        <mat-form-field class="filter">
-          <mat-label>Filter</mat-label>
-          <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
-        </mat-form-field>
-        
+        <div class="my-items-filter">
+          <mat-form-field class="filter">
+            <mat-label>Filter</mat-label>
+            <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
+          </mat-form-field>
+          
+        </div>
+
         
         <div class="mat-elevation-z8">
           <table mat-table [dataSource]="dataSourceMyItems"  matSort>
@@ -123,7 +126,7 @@
         
             <!-- Row shown when there is no matching data. -->
             <tr class="mat-row" *matNoDataRow>
-              <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+              <td class="mat-cell" colspan="4">No items found.</td>
             </tr>
           </table>
         

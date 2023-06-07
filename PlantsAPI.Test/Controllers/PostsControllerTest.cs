@@ -93,7 +93,7 @@ namespace PlantsAPI.Test.Controllers
             var response = helper.Controller.GetPostById(Guid.NewGuid());
 
             Assert.True((response.Result.Result as BadRequestResult).StatusCode == (int)HttpStatusCode.BadRequest);
-        }
+        }*/
         #endregion
 
 

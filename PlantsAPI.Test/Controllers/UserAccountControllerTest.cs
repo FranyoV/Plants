@@ -40,10 +40,30 @@ namespace PlantsAPI.Test.Controllers
         }
 
 
+        [Fact]
+        public void Register_ShouldReturnOkWithNameTaken() 
+        {
+            TestHelper helper = new();
+
+            helper.mockAuthRepository.Setup(
+                x => x.UsernameTaken(It.IsAny<string>()))
+                .ReturnsAsync(true);
+
+            var response = helper.Controller.Register(new RegisterRequest());
+
+            Assert.True((response?.Result?.Result as OkObjectResult).StatusCode == (int)HttpStatusCode.OK);
+        }
+
+
         [Fact] 
         public void Register_ShouldReturnOk()
         {
             TestHelper helper = new();
+
+            helper.mockAuthRepository.Setup(
+                x => x.UsernameTaken(It.IsAny<string>()))
+                .ReturnsAsync(false);
+
 
             helper.mockUnitOfWork.Setup(
                 x => x.Auth.GenerateSalt(It.IsAny<int>()))

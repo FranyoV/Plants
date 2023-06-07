@@ -25,6 +25,8 @@ export class WebApiService {
   //todo: check localhost port on backend appsettings/launchsettings
   baseUrl: string = "https://localhost:7050";
   httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json'})};
+  httpOptions2 = { headers: new HttpHeaders({ 'Content-Type': 'multipart/form-data'})};
+
 
   constructor(public http: HttpClient) { }
 
@@ -86,9 +88,15 @@ export class WebApiService {
     return this.http.get<number>(url);
   }
 
-  addPlant(plant: Plant): Observable<Plant> {
+  addPlant(plant: PlantDto, image: FormData): Observable<Plant> {
     let url = `${this.baseUrl}/api/plants`;
     return this.http.post<Plant>(url, plant);
+    //////////////////////////////////////itt hogy adjam hozzá a tetű szart:)
+  }
+
+  addImage(file: FormData, plantId: string) : Observable<any>{
+    let url = `${this.baseUrl}/api/plants/${plantId}/image`;
+    return this.http.post<any>(url, file);
   }
 
   editPlant(id: string, plant: Plant): Observable<any> {

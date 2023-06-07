@@ -9,7 +9,7 @@ namespace PlantsAPI.Repositories
         Task<Plant> GetPlantById(Guid id);
         Task<IEnumerable<Plant>> GetPlantsOfUser(Guid userId);
         Task<int> GetPlantsCount(Guid userId);
-        Task<Plant> AddPlant(Plant plant);
+        Task<Plant> AddPlant(PlantDto plant);
         Task<Plant> EditPlant(Plant plant);
         Task<bool> DeletePlant(Guid id);
     }

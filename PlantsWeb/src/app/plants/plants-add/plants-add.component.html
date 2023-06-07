@@ -4,7 +4,7 @@
 
     <h2>Add plant</h2>  
       
-      <form [formGroup]="addForm" (ngSubmit)="addPlant()">
+      <form [formGroup]="addForm" (ngSubmit)="addPlant()" enctype="multipart/form-data">
         <div class="row">
             <div class=" col" >
                 <h3>Plant info:</h3>

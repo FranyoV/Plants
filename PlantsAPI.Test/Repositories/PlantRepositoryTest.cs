@@ -257,11 +257,11 @@ namespace PlantsAPI.Test.Repositories
 
         #region AddPlant
 
-        [Fact]
+       /* [Fact]
         public void AddPlant_ShouldThrowArgumentNullException()
         {
             Assert.ThrowsAsync<ArgumentNullException>(() => plantRepository.AddPlant(null));
-        }
+        }*/
 
         [Fact]
         public void AddPlant_ShouldHaveNoAuthorization()

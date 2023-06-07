@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs';
 import { EventListenerOptions } from 'rxjs/internal/observable/fromEvent';
 import { DataService } from 'src/app/data.service';
 import { Plant } from 'src/app/models/Plant';
+import { PlantDto } from 'src/app/models/PlantDto';
 import { SnackbarComponent } from 'src/app/snackbar/snackbar.component';
 import { UserService } from 'src/app/user.service';
 import { WebApiService } from 'src/app/webapi.service';
@@ -28,6 +29,7 @@ export class PlantsAddComponent implements OnInit{
   url!:ArrayBuffer|null|string;
   fileName = '';
   file! : File;
+  formData!: FormData;
   
   uploadSub! : Subscription | null ;
 
@@ -69,11 +71,11 @@ export class PlantsAddComponent implements OnInit{
 
         this.fileName = file.name;
 
-        const formData = new FormData();
+        this.formData = new FormData();
 
-        formData.append("thumbnail", file);
-        console.log(formData.get("thumbnail"));
-        this.file = file
+        this.formData.append("image", file);
+        console.log(this.formData.get("image"));
+        this.file = file;
         //const upload$ = this.http.post("/api/thumbnail-upload", formData);
         const files = event.target.files;
         if (files.length === 0)
@@ -127,33 +129,32 @@ export class PlantsAddComponent implements OnInit{
       console.log("date entered: ", date);
       console.log("converted to utc: ", utcDate);
 
-      let newPlant : Plant;
+      let newPlant : PlantDto;
       if (this.maintenance){
         //yes maintenance
-          newPlant = new Plant(
+          newPlant = new PlantDto(
           "00000000-0000-0000-0000-000000000000",
           this.addForm.value.name!,
           this.addForm.value.description!,
-          this.file,
+          null,
           this.addForm.value.note!,
           this.addForm.value.interval!,
           utcDate,
           null ,
-          null,
+          
           this.currentUserId
           );
           console.log(newPlant);
       }else{
         //no maintenance
-        newPlant = new Plant(
+        newPlant = new PlantDto(
           "00000000-0000-0000-0000-000000000000",
           this.addForm.value.name!,
           this.addForm.value.description!,
-          this.file!,
           null,
           null,
           null,
-          null ,
+          null,
           null,
           this.currentUserId
           );
@@ -164,8 +165,13 @@ export class PlantsAddComponent implements OnInit{
       if (newPlant == null){
         //snackbar -> unsuccesful add
       }else{
-        this.webApi.addPlant(newPlant).subscribe({
+        console.log("formdata: ", this.formData)
+        this.webApi.addPlant(newPlant, this.formData).subscribe({
           next: (res) => {
+            this.webApi.addImage(this.formData,res.id).subscribe({
+              next: (res) => {console.log("result: ", res)},
+            error: (err) => {this.openSnackBar("couldnt upload picture")},
+            }),
             this.plants.push(res), 
             this.newMessage(this.plants),
             this.router.navigate(['plants'])
