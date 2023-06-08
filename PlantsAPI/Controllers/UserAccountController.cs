@@ -23,13 +23,13 @@ namespace PlantsAPI.Controllers
             if (request == null) throw new ArgumentNullException(nameof(request));
             try
             {
-                if (await unitOfWork.Auth.UsernameTaken(request.Username))
+                if (await unitOfWork.UserAccounts.UsernameTaken(request.Username))
                 {
                     return Ok(new RegisterResponse() { state = RegisterStatus.USERNAMETAKEN});
                 }
 
-                string passwordSalt = unitOfWork.Auth.GenerateSalt(10);
-                string passwordHash = unitOfWork.Auth.CreatePasswordHash(request.Password, passwordSalt);
+                string passwordSalt = unitOfWork.UserAccounts.GenerateSalt(10);
+                string passwordHash = unitOfWork.UserAccounts.CreatePasswordHash(request.Password, passwordSalt);
 
                 User newUser = new();
                 newUser.Name = request.Username;
@@ -38,7 +38,7 @@ namespace PlantsAPI.Controllers
                 newUser.PasswordHash = passwordHash;
                 newUser.PasswordSalt = passwordSalt;
 
-                await unitOfWork.Auth.AddUser(newUser);
+                await unitOfWork.UserAccounts.AddUser(newUser);
                 await unitOfWork.SaveChangesAsync();
 
                 return Ok(new RegisterResponse() { state = RegisterStatus.SUCCESSFULL });
@@ -57,14 +57,14 @@ namespace PlantsAPI.Controllers
 
             try
             {
-                var user = await unitOfWork.Auth.GetUserByName(request.Username);
+                var user = await unitOfWork.UserAccounts.GetUserByName(request.Username);
 
                 if (user == null)
                 {
                     return Ok(new LoginResponse(LoginStatus.UserNotFound));
                 }
 
-                string passwordHash = unitOfWork.Auth.CreatePasswordHash(request.Password, user.PasswordSalt);
+                string passwordHash = unitOfWork.UserAccounts.CreatePasswordHash(request.Password, user.PasswordSalt);
 
                 if (string.Compare(passwordHash, user.PasswordHash, true) != 0)
                 {
@@ -75,7 +75,7 @@ namespace PlantsAPI.Controllers
                 {
                     Status = LoginStatus.Successfull,
                     UserId = user.Id,
-                    Token = unitOfWork.Auth.CreateToken(user)
+                    Token = unitOfWork.UserAccounts.CreateToken(user)
                 };
 
                 return Ok(response);
@@ -94,13 +94,31 @@ namespace PlantsAPI.Controllers
         {
             try
             {
-                var user = await unitOfWork.Auth.GetUserById(id);
+                var user = await unitOfWork.UserAccounts.GetUserById(id);
                 return Ok(user);
             }
             catch
             {
                 return BadRequest();
             }
+        }
+
+
+        [HttpPost]
+        [Route("{userId}/image")]
+        public async Task<ActionResult<UserDto>> AddImageToUser(IFormFile request, Guid userId)
+        {
+            try
+            {
+                var modifiedUser = await unitOfWork.UserAccounts.AddImageToUser(userId, request);
+                await unitOfWork.SaveChangesAsync();
+                return Ok(modifiedUser);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+
         }
 
 
@@ -111,7 +129,7 @@ namespace PlantsAPI.Controllers
         {
             try
             {
-                var modifiedUser = await unitOfWork.Auth.EditUserEmail(request);
+                var modifiedUser = await unitOfWork.UserAccounts.EditUserEmail(request);
                 await unitOfWork.SaveChangesAsync();
                 return Ok(modifiedUser);
 
@@ -120,7 +138,6 @@ namespace PlantsAPI.Controllers
             {
                 return BadRequest();
             }
-
         }
 
 
@@ -130,7 +147,7 @@ namespace PlantsAPI.Controllers
         {
             try
             {
-                var result = await unitOfWork.Auth.DeleteUser(id);
+                var result = await unitOfWork.UserAccounts.DeleteUser(id);
                 await unitOfWork.SaveChangesAsync();
                 return Ok(result);
             }

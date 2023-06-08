@@ -61,7 +61,7 @@ namespace PlantsAPI.Test.Repositories
                 Title = "My cactus is dying.",
                 Content = "Why can't I keep a cactus alive. They supposed to stay alive even in deserts.",
                 DateOfCreation = DateTime.Now,
-                ImageUrl = null,
+                ImageData = null,
                 UserId = Guid.Parse("7a02b8d4-570d-404f-946e-40b4524727ab"),
                 UserName = "Virág98",
 
@@ -98,7 +98,7 @@ namespace PlantsAPI.Test.Repositories
                 Title = "My cactus is dying.",
                 Content = "Why can't I keep a cactus alive. They supposed to stay alive even in deserts.",
                 DateOfCreation = DateTime.Now,
-                ImageUrl = null,
+                ImageData = null,
                 UserId = Guid.Parse("7a02b8d4-570d-404f-946e-40b4524727ab"),
                 UserName = "Virág98",
 
@@ -136,7 +136,7 @@ namespace PlantsAPI.Test.Repositories
                 Title = "My cactus is dying.",
                 Content = "Why can't I keep a cactus alive. They supposed to stay alive even in deserts.",
                 DateOfCreation = DateTime.Now,
-                ImageUrl = null,
+                ImageData = null,
                 UserId = Guid.Parse("7a02b8d4-570d-404f-946e-40b4524727ab"),
                 UserName = "Virág98",
 
@@ -200,7 +200,7 @@ namespace PlantsAPI.Test.Repositories
                 Title = "My cactus is dying.",
                 Content = "Why can't I keep a cactus alive. They supposed to stay alive even in deserts.",
                 DateOfCreation = DateTime.Now,
-                ImageUrl = null,
+                ImageData = null,
                 UserId = Guid.Parse("7a02b8d4-570d-404f-946e-40b4524727ab"),
                 UserName = "Virág98",
 

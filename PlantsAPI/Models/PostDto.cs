@@ -8,7 +8,7 @@ namespace PlantsAPI.Models
         public string Title { get; set; }
         public string Content { get; set; }
         public DateTime DateOfCreation { get; set; }
-        public string? ImageUrl { get; set; }
+        public byte[]? ImageData { get; set; }
 
         //userdata
         public string UserName { get; set; }

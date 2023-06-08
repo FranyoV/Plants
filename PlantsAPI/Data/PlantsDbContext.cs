@@ -16,8 +16,6 @@ namespace PlantsAPI.Data
         public virtual DbSet<Item> Items { get; set; } = null!;
        
 
-        //TODO: finish configuration of modelbuilder for all entities
-
         protected override void OnModelCreating(ModelBuilder modelbuilder)
         {
             base.OnModelCreating(modelbuilder);

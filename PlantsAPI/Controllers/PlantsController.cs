@@ -81,15 +81,13 @@ namespace PlantsAPI.Controllers
 
         
         [HttpPost]
-        public async Task<ActionResult<Plant>> PostPlant([FromBody] PlantDto plant)
+        public async Task<ActionResult<Plant>> PostPlant([FromBody] Plant plant)
         {
             try
-            {
-                
-                    var newPlant = await unitOfWork.Plants.AddPlant(plant);
-                    await unitOfWork.SaveChangesAsync();
-                    return Ok(newPlant);
-
+            {          
+                var newPlant = await unitOfWork.Plants.AddPlant(plant);
+                await unitOfWork.SaveChangesAsync();
+                return Ok(newPlant);
             }
             catch (Exception ex)
             {
@@ -100,13 +98,23 @@ namespace PlantsAPI.Controllers
 
         [HttpPost]
         [Route("{plantId}/image")]
-        public async Task<ActionResult<Plant>> AddImage([FromForm] IFormFile image)
+        public async Task<ActionResult<Plant>> AddImage([FromForm] IFormFile image, [FromRoute]Guid plantId)
         {
             try
             {
                 var planty = image;
-                var newPlant = await unitOfWork.Plants.GetPlants();
+                byte[] imageByteArray = null;
+                using (var readStream = image.OpenReadStream())
+                using (var memoryStream = new MemoryStream())
+                {
+                    readStream.CopyTo(memoryStream);
+                    imageByteArray = memoryStream.ToArray();
+                }
+                var todb = imageByteArray;
+
+                var newPlant = await unitOfWork.Plants.AddImageToPlant(plantId, todb);
                 await unitOfWork.SaveChangesAsync();
+
                 return Ok(newPlant);
 
             }

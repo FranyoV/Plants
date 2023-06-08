@@ -27,7 +27,7 @@ namespace PlantsAPI.Repositories
                     Type = item.Type,
                     Price = item.Price,
                     Description = item.Description,
-                    ImageUrl = item.ImageUrl,
+                    ImageData = item.ImageData,
                     Date = item.Date,
                     UserId = item.UserId,
                     Sold = item.Sold,
@@ -109,9 +109,9 @@ namespace PlantsAPI.Repositories
                 {
                     originalItem.Name = item.Name;
                     originalItem.Description = item.Description;
-                    originalItem.ImageUrl = item.ImageUrl;
+                    originalItem.ImageData = item.ImageData;
                     originalItem.Type = item.Type;
-                    originalItem.ImageUrl = item.ImageUrl;
+                    originalItem.ImageData = item.ImageData;
                     originalItem.Price = item.Price;
                 }
 

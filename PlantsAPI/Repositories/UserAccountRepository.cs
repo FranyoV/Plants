@@ -10,11 +10,11 @@ using System.Text;
 
 namespace PlantsAPI.Repositories
 {
-    public class AuthRepository : GenericRepository<User>, IAuthRepository
+    public class UserAccountRepository : GenericRepository<User>, IUserAccountRepository
     {
         private readonly IConfiguration configuration;
 
-        public AuthRepository(PlantsDbContext dbContext, IConfiguration configuration, IUserContext userContext) : base(dbContext, userContext)
+        public UserAccountRepository(PlantsDbContext dbContext, IConfiguration configuration, IUserContext userContext) : base(dbContext, userContext)
         {
             this.configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
@@ -25,8 +25,8 @@ namespace PlantsAPI.Repositories
             List<Claim> claims = new()
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.Name)
-                //new Claim(ClaimTypes.Role, "admin")
+                new Claim(ClaimTypes.Name, user.Name),
+                //new Claim(ClaimTypes.Role, "user")
             };
 
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
@@ -124,7 +124,7 @@ namespace PlantsAPI.Repositories
             return user;
         }
 
-
+        //should return bool
         //used in registration
         public async Task<User> AddUser(User user)
         {
@@ -135,6 +135,34 @@ namespace PlantsAPI.Repositories
         }
 
 
+        public async Task<UserDto> AddImageToUser(Guid id, IFormFile image)
+        {
+            var planty = image;
+            byte[] imageByteArray = null;
+            using (var readStream = image.OpenReadStream())
+            using (var memoryStream = new MemoryStream())
+            {
+                readStream.CopyTo(memoryStream);
+                imageByteArray = memoryStream.ToArray();
+            }
+            var todb = imageByteArray;
+
+            User user = new();
+            UserDto userDto = new();
+
+            if (todb != null)
+            {
+                user = await dbSet.Where(p => p.Id == id).FirstAsync();
+                user.ImageData = todb;
+                userDto.Name = user.Name;
+                userDto.Id = user.Id;
+                userDto.EmailAddress = user.EmailAddress;
+                userDto.ImageData = user.ImageData;
+            }
+            return userDto;
+        }
+
+        //SHOULD RETURN USERdTO
         //TODO for profil editing
         public async Task<User> EditUserEmail(UserInfoEditRequest request)
         {

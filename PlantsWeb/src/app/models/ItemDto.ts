@@ -1,5 +1,5 @@
+import { SafeUrl } from "@angular/platform-browser";
 import { ItemType } from "./ItemType";
-import { User } from "./User";
 
 export interface ItemDto {
         id : string,

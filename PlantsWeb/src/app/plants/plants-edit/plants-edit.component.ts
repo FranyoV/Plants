@@ -11,6 +11,7 @@ import { formatDate } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackbarComponent } from 'src/app/snackbar/snackbar.component';
 import { UserService } from 'src/app/user.service';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-plants-edit',
@@ -25,6 +26,7 @@ export class PlantsEditComponent implements OnInit{
   currentPlant!: Plant;
   currentUserId : string = '';
   plants: Plant[] = [];
+  image!: SafeUrl;
 
   fileName = '';
 
@@ -44,7 +46,8 @@ export class PlantsEditComponent implements OnInit{
     private route: ActivatedRoute,
     private webApi: WebApiService,
     private snackBar: MatSnackBar,
-    private userService : UserService
+    private userService : UserService,
+    private sanitizer: DomSanitizer
     ){
       this.currentUserId = this.userService.LoggedInUser();
     }
@@ -62,6 +65,9 @@ export class PlantsEditComponent implements OnInit{
       if(this.currentPlant == null){
         this.webApi.getPlantById(this.currentPlantId).subscribe({
           next: (result) => {
+            let objectURL = 'data:image/png;base64,' + result.imageUrl;
+            this.image = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+            
              this.currentPlant = result; 
              console.log("currentplant:", this.currentPlant);
              this.editForm.controls['name'].setValue(this.currentPlant.name);

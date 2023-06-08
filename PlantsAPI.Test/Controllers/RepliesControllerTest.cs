@@ -84,14 +84,12 @@ namespace PlantsAPI.Test.Controllers
         public void GetRepliesOfPost_ShouldReturnUnAuthorized()
         {
             TestHelper helper = new();
-  
-
-           
+            
             var response = helper.Controller.GetRepliesOfPost(Guid.NewGuid());
 
             Assert.True((response.Result.Result as BadRequestResult).StatusCode == (int)HttpStatusCode.BadRequest);
         }
-*/
+
 
         #endregion
 
@@ -187,7 +185,7 @@ namespace PlantsAPI.Test.Controllers
             Assert.NotNull(response);
             Assert.True((response.Result.Result as BadRequestResult).StatusCode == (int)HttpStatusCode.BadRequest);
 
-        }*/
+        }
         #endregion
 
 

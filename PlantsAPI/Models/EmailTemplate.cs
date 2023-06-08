@@ -4,6 +4,6 @@
     {
         NEWREPLY = 0,
         MAINTENANCE = 1,
-        ITEMINQUIRY = 2
+        
     }
 }

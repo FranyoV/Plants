@@ -74,7 +74,7 @@ namespace PlantsAPI.Repositories
         }
 
         //throws unathourized exception
-        public async Task<Plant> AddPlant(PlantDto request)
+        public async Task<Plant> AddPlant(Plant request)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
@@ -100,6 +100,8 @@ namespace PlantsAPI.Repositories
                     }
 
                 }
+
+                
                 /*
                 if (image != null && image.Length > 0)
                 {
@@ -153,7 +155,7 @@ namespace PlantsAPI.Repositories
 
                     originalPlant.Description = plant.Description;
 
-                    originalPlant.ImageUrl = plant.ImageUrl;
+                  //  originalPlant.ImageUrl = plant.ImageUrl;
 
 
                     if (plant.LastNotification != null)
@@ -189,6 +191,18 @@ namespace PlantsAPI.Repositories
 
         }
 
+        public async Task<Plant> AddImageToPlant(Guid id, byte[] image)
+        {
+            Plant plant = new();
+            if (image != null)
+            {
+                plant = await dbSet.Where(p => p.Id == id).FirstAsync();
+                plant.ImageData = image;
+            }
+            return plant;
+        }
+ 
+
 
         public async Task<bool> DeletePlant(Guid plantId)
         {
@@ -208,6 +222,15 @@ namespace PlantsAPI.Repositories
                 }
             }
             return false;
+        }
+
+
+        private Image ImageConverter(byte[] imageByteArray)
+        {
+            using (var ms = new MemoryStream(imageByteArray))
+            {
+                return Image.FromStream(ms);
+            }
         }
     }
 }

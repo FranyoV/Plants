@@ -48,7 +48,7 @@ export class PlantsListComponent implements OnInit, OnDestroy {
 
   getPlantsOfUser(){
     this.webApi.getPlantsOfUser(this.currentUserId).subscribe({
-      next: (result) => {this.plants = result},
+      next: (result) => {this.plants = result, console.log("result", result), console.log("this.plants ", this.plants)},
       error: (error) => {this.openSnackBar("Something went wrong. Try again!"), console.error('Getting plant for user failed.',error)}
     }) 
   }

@@ -18,7 +18,7 @@ namespace PlantsAPI.Test.Repositories
     {
         private readonly PlantsDbContext context;
         private readonly Mock<IUserContext> userContext;
-        private readonly Mock<IAuthRepository> mockAuthRepository;
+        private readonly Mock<IUserAccountRepository> mockAuthRepository;
         private readonly Mock<IConfiguration> configuration;
 
         public AuthRepositoryTest()
@@ -29,27 +29,27 @@ namespace PlantsAPI.Test.Repositories
             configuration = new Mock<IConfiguration>();
             context = new PlantsDbContext(dbOptions.Options);
             userContext = new Mock<IUserContext>();
-            mockAuthRepository = new Mock<IAuthRepository>();
+            mockAuthRepository = new Mock<IUserAccountRepository>();
         }
 
         [Fact]
         public void ContructorShouldCreateObject()
         {
-            Assert.NotNull(new AuthRepository(context, configuration.Object, userContext.Object));
+            Assert.NotNull(new UserAccountRepository(context, configuration.Object, userContext.Object));
         }
 
 
         [Fact]
         public void Contructor_ShouldThrowArgumentNullException_1()
         {
-            Assert.Throws<ArgumentNullException>(() => new AuthRepository(context, null, userContext.Object));
+            Assert.Throws<ArgumentNullException>(() => new UserAccountRepository(context, null, userContext.Object));
         }
 
 
         [Fact]
         public void Contructor_ShouldThrowArgumentNullException_2()
         {
-            Assert.Throws<ArgumentNullException>(() => new AuthRepository(context, configuration.Object, null));
+            Assert.Throws<ArgumentNullException>(() => new UserAccountRepository(context, configuration.Object, null));
         }
     }
 }

@@ -66,15 +66,15 @@ namespace PlantsAPI.Test.Controllers
 
 
             helper.mockUnitOfWork.Setup(
-                x => x.Auth.GenerateSalt(It.IsAny<int>()))
+                x => x.UserAccounts.GenerateSalt(It.IsAny<int>()))
                 .Returns(It.IsAny<string>());
 
             helper.mockUnitOfWork.Setup(
-                x => x.Auth.CreatePasswordHash(It.IsAny<string>(), It.IsAny<string>()))
+                x => x.UserAccounts.CreatePasswordHash(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(It.IsAny<string>());
 
             helper.mockUnitOfWork.Setup(
-                x => x.Auth.AddUser(It.IsAny<User>()));
+                x => x.UserAccounts.AddUser(It.IsAny<User>()));
                 
 
             var response = helper.Controller.Register(new RegisterRequest());
@@ -110,7 +110,7 @@ namespace PlantsAPI.Test.Controllers
             TestHelper helper = new();
 
             helper.mockUnitOfWork.Setup(
-                x => x.Auth.GetUserByName(It.IsAny<string>()))
+                x => x.UserAccounts.GetUserByName(It.IsAny<string>()))
                 .ReturnsAsync(It.IsAny<User>);
 
 
@@ -126,11 +126,11 @@ namespace PlantsAPI.Test.Controllers
             TestHelper helper = new();
 
             helper.mockUnitOfWork.Setup(
-                x => x.Auth.GetUserByName(It.IsAny<string>()))
+                x => x.UserAccounts.GetUserByName(It.IsAny<string>()))
                 .ReturnsAsync(It.IsAny<User>);
 
             helper.mockUnitOfWork.Setup(
-                x => x.Auth.CreatePasswordHash(It.IsAny<string>(), It.IsAny<string>()))
+                x => x.UserAccounts.CreatePasswordHash(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(It.IsAny<string>());
 
 
@@ -146,15 +146,15 @@ namespace PlantsAPI.Test.Controllers
             TestHelper helper = new();
 
             helper.mockUnitOfWork.Setup(
-                x => x.Auth.GetUserByName(It.IsAny<string>()))
+                x => x.UserAccounts.GetUserByName(It.IsAny<string>()))
                 .ReturnsAsync(It.IsAny<User>);
 
             helper.mockUnitOfWork.Setup(
-                x => x.Auth.CreatePasswordHash(It.IsAny<string>(), It.IsAny<string>()))
+                x => x.UserAccounts.CreatePasswordHash(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(It.IsAny<string>);
 
             helper.mockUnitOfWork.Setup(
-                x => x.Auth.CreateToken(It.IsAny<User>()))
+                x => x.UserAccounts.CreateToken(It.IsAny<User>()))
                 .Returns(It.IsAny<string>());
 
             var response = helper.Controller.Login(new LoginRequest());
@@ -193,7 +193,7 @@ namespace PlantsAPI.Test.Controllers
             TestHelper helper = new();
 
             helper.mockUnitOfWork.Setup(
-                x => x.Auth.GetUserById(It.IsAny<Guid>()))
+                x => x.UserAccounts.GetUserById(It.IsAny<Guid>()))
                 .ReturnsAsync(It.IsAny<UserDto>());
 
             var response = helper.Controller.GetUserById(Guid.NewGuid());
@@ -232,7 +232,7 @@ namespace PlantsAPI.Test.Controllers
             TestHelper helper = new();
 
             helper.mockUnitOfWork.Setup(
-                x => x.Auth.EditUserEmail(It.IsAny<UserInfoEditRequest>()))
+                x => x.UserAccounts.EditUserEmail(It.IsAny<UserInfoEditRequest>()))
                 .ReturnsAsync(It.IsAny<User>());
 
             var response = helper.Controller.EditUser(new UserInfoEditRequest());
@@ -271,7 +271,7 @@ namespace PlantsAPI.Test.Controllers
             TestHelper helper = new();
 
             helper.mockUnitOfWork.Setup(
-                x => x.Auth.DeleteUser(It.IsAny<Guid>()))
+                x => x.UserAccounts.DeleteUser(It.IsAny<Guid>()))
                 .ReturnsAsync(It.IsAny<bool>());
 
             var response = helper.Controller.DeleteUser(Guid.NewGuid());
@@ -296,13 +296,13 @@ namespace PlantsAPI.Test.Controllers
 
         private class TestHelper
         {
-            protected internal Mock<IAuthRepository> mockAuthRepository;
+            protected internal Mock<IUserAccountRepository> mockAuthRepository;
             protected internal UserAccountController Controller;
             protected internal Mock<IUnitOfWork> mockUnitOfWork;          
 
             public TestHelper()
             {
-                mockAuthRepository = new Mock<IAuthRepository>();
+                mockAuthRepository = new Mock<IUserAccountRepository>();
                 mockUnitOfWork = new Mock<IUnitOfWork>();
                 Controller = new(mockUnitOfWork.Object);
             }

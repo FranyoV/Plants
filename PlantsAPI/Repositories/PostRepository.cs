@@ -32,7 +32,7 @@ namespace PlantsAPI.Repositories
                         Title = post.Title,
                         Content = post.Content,
                         DateOfCreation = post.DateOfCreation,
-                        ImageUrl = post.ImageUrl,
+                        ImageData = post.ImageData,
                         UserName = user.Name,
                         UserId = post.UserId,
                         ReplyCount = replyCount,
@@ -62,7 +62,7 @@ namespace PlantsAPI.Repositories
                 Title = post.Title,
                 Content = post.Content,
                 DateOfCreation = post.DateOfCreation,
-                ImageUrl = post.ImageUrl,
+                ImageData = post.ImageData,
                 UserName = user.Name,
                 ReplyCount = 0
             };
@@ -96,7 +96,7 @@ namespace PlantsAPI.Repositories
                                 Title = post.Title,
                                 Content = post.Content,
                                 DateOfCreation = post.DateOfCreation,
-                                ImageUrl = post.ImageUrl,
+                                ImageData = post.ImageData,
                                 UserName = user.Name,
                                 UserId = post.UserId,
                                 ReplyCount = count
@@ -160,7 +160,7 @@ namespace PlantsAPI.Repositories
                                 Title = post.Title,
                                 Content = post.Content,
                                 DateOfCreation = post.DateOfCreation,
-                                ImageUrl = post.ImageUrl,
+                                ImageData = post.ImageData,
                                 UserName = user.Name,
                                 UserId = post.UserId,
                                 ReplyCount = count
@@ -258,5 +258,16 @@ namespace PlantsAPI.Repositories
         }
 
 
+
+        public async Task<Post> AddImageToPost(Guid id, byte[] image)
+        {
+            Post post = new();
+            if (image != null)
+            {
+                post = await dbSet.Where(p => p.Id == id).FirstAsync();
+               // post.ImageUrl = image;
+            }
+            return post;
+        }
     }
 }

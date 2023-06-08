@@ -9,7 +9,7 @@ namespace PlantsAPI.Configuration
         IPostRepository Posts { get; }   
         IReplyRepository Replies { get; }
         IItemsRepository Items { get; }
-        IAuthRepository Auth { get; }
+        IUserAccountRepository UserAccounts { get; }
 
         Task SaveChangesAsync();
         void Dispose();

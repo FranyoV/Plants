@@ -168,7 +168,7 @@ export class PlantsAddComponent implements OnInit{
         console.log("formdata: ", this.formData)
         this.webApi.addPlant(newPlant, this.formData).subscribe({
           next: (res) => {
-            this.webApi.addImage(this.formData,res.id).subscribe({
+            this.webApi.addImage(this.formData, res.id).subscribe({
               next: (res) => {console.log("result: ", res)},
             error: (err) => {this.openSnackBar("couldnt upload picture")},
             }),

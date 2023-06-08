@@ -12,7 +12,7 @@ namespace PlantsAPI.Models
 
        
         public string? Description { get; set; } 
-        public string? ImageUrl { get; set; }
+        public byte[]? ImageData { get; set; }
 
         public string? Note { get; set; }
         public int? Interval { get; set; }

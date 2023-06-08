@@ -61,6 +61,11 @@ export class WebApiService {
     return this.http.put(url, request, this.httpOptions);
   }
 
+  addImageToUser(file: FormData, userId: string) : Observable<any>{
+    let url = `${this.baseUrl}/api/account/${userId}/image`;
+    return this.http.post<any>(url, file);
+  }
+
   deleteUser(userId: string): Observable<User> {
     let url = `${this.baseUrl}/api/account/${userId}`;
     return this.http.delete<User> (url, this.httpOptions);
@@ -91,7 +96,6 @@ export class WebApiService {
   addPlant(plant: PlantDto, image: FormData): Observable<Plant> {
     let url = `${this.baseUrl}/api/plants`;
     return this.http.post<Plant>(url, plant);
-    //////////////////////////////////////itt hogy adjam hozzá a tetű szart:)
   }
 
   addImage(file: FormData, plantId: string) : Observable<any>{
@@ -136,6 +140,11 @@ export class WebApiService {
     return this.http.post<Item>(url, item);
   }
 
+  addImageToItem(file: FormData, itemId: string) : Observable<any>{
+    let url = `${this.baseUrl}/api/item/${itemId}/image`;
+    return this.http.post<any>(url, file);
+  }
+
   editItem(id: string, item: Item): Observable<any> {
     let url = `${this.baseUrl}/api/items/${id}`;
     return this.http.put(url, item, this.httpOptions);
@@ -177,10 +186,15 @@ export class WebApiService {
     return this.http.post<Post>(url, post, this.httpOptions);
   }
 
- /* updatePost(id: string, post: Post): Observable<any> {
+  addImageToPost(file: FormData, postId: string) : Observable<any>{
+    let url = `${this.baseUrl}/api/posts/${postId}/image`;
+    return this.http.post<any>(url, file);
+  }
+
+  updatePost(id: string, post: Post): Observable<any> {
     let url = `${this.baseUrl}/api/posts/${id}`;
     return this.http.put(url, post, this.httpOptions);
-  }*/
+  }
 
   deletePost(id: string): Observable<Post> {
     let url = `${this.baseUrl}/api/posts/${id}`;

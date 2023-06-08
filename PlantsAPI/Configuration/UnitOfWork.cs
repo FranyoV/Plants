@@ -15,7 +15,7 @@ namespace PlantsAPI.Configuration
         public IPostRepository Posts { get; private set; }
         public IReplyRepository Replies { get; private set; }
         public IItemsRepository Items { get; private set; }
-        public IAuthRepository Auth { get; private set; }
+        public IUserAccountRepository UserAccounts { get; private set; }
 
         public UnitOfWork(PlantsDbContext plantsDbContext, 
             IConfiguration configuration,
@@ -32,7 +32,7 @@ namespace PlantsAPI.Configuration
             this.Posts = new PostRepository(_dbContext, _userContext);
             this.Replies = new ReplyRepository(_dbContext, _userContext,  _notificationService );
             this.Items = new ItemsRepository(_dbContext, _userContext);
-            this.Auth = new AuthRepository(_dbContext,  _configuration, _userContext);
+            this.UserAccounts = new UserAccountRepository(_dbContext,  _configuration, _userContext);
         }
 
         public async Task SaveChangesAsync()
