@@ -123,21 +123,11 @@ namespace PlantsAPI.Controllers
         {
             try
             {
-                var planty = image;
-                byte[] imageByteArray = null;
-                using (var readStream = image.OpenReadStream())
-                using (var memoryStream = new MemoryStream())
-                {
-                    readStream.CopyTo(memoryStream);
-                    imageByteArray = memoryStream.ToArray();
-                }
-                var todb = imageByteArray;
-
-                Post newPost = new();
-               // var newPlant = await unitOfWork.Plants.AddImageToPost(postId, todb);
+                
+                Post post = await unitOfWork.Posts.AddImageToPost(postId, image);
                 await unitOfWork.SaveChangesAsync();
 
-                return Ok(newPost);
+                return Ok(post);
 
             }
             catch (Exception ex)

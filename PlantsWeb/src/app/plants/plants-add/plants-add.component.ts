@@ -76,7 +76,7 @@ export class PlantsAddComponent implements OnInit{
         this.formData.append("image", file);
         console.log(this.formData.get("image"));
         this.file = file;
-        //const upload$ = this.http.post("/api/thumbnail-upload", formData);
+        
         const files = event.target.files;
         if (files.length === 0)
             return;

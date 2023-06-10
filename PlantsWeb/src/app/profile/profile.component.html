@@ -3,11 +3,11 @@
     <br>
     <mat-card align-center>
         <mat-card-header>
-            <div mat-card-avatar class="card-header-image"></div>
+            <img mat-card-avatar [src]="this.currentUser.imageData" alt="../../assets/defaultprofilepic.png">
            
             <mat-card-title-group>
 
-                <mat-card-title >{{this.currentUser?.name}}</mat-card-title>
+                <mat-card-title >{{this.currentUser.name}}</mat-card-title>
     
                 <mat-card-actions >
                     <button mat-stroked-button color="warn" (click)="deleteUser()">Delete profile</button>
@@ -103,6 +103,31 @@
             
               </form>
         </div>
+
+        <mat-divider [vertical]="true"></mat-divider>
+
+        <div class="col">
+            <input  type="file" class="file-input"
+                  (change)="onFileChanged($event)" #fileUpload
+                   accept="image/png">
+                  
+
+            <div class="file-upload">
+                <button mat-raised-button type="button" class="upload-btn" color="secondary"
+                  (click)="fileUpload.click()">
+                    Upload image
+                </button>
+                {{fileName || "No file uploaded yet."}}
+                <button mat-icon-button type="button" class="cancel-upload" (click)="cancelUpload()" 
+                        ><mat-icon color="secondary">cancel</mat-icon></button>
+
+                        <img src="" alt="">
+                        <button *ngIf="this.fileName.length != 0" mat-raised-button (click)="addImage()" >Save</button>
+            </div>
+
+
+          </div>
+
        
        
     </div>

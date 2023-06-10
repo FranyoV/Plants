@@ -6,7 +6,7 @@ namespace PlantsAPI.Controllers
 {
     
     [Route("api/account")]
-    [ApiController]
+   // [ApiController]
     public class UserAccountController : ControllerBase
     {
         private readonly IUnitOfWork unitOfWork;
@@ -34,7 +34,6 @@ namespace PlantsAPI.Controllers
                 User newUser = new();
                 newUser.Name = request.Username;
                 newUser.EmailAddress = request.Email;
-                // newUser.ImageUrl = request.ImageUrl;
                 newUser.PasswordHash = passwordHash;
                 newUser.PasswordSalt = passwordSalt;
 
@@ -106,17 +105,18 @@ namespace PlantsAPI.Controllers
 
         [HttpPost]
         [Route("{userId}/image")]
-        public async Task<ActionResult<UserDto>> AddImageToUser(IFormFile request, Guid userId)
+        public async Task<ActionResult<UserDto>> AddImageToUser([FromForm]IFormFile image, [FromRoute] Guid userId)
         {
             try
             {
-                var modifiedUser = await unitOfWork.UserAccounts.AddImageToUser(userId, request);
+                UserDto modifiedUser = new();
+                modifiedUser = await unitOfWork.UserAccounts.AddImageToUser(userId, image);
                 await unitOfWork.SaveChangesAsync();
                 return Ok(modifiedUser);
             }
-            catch
+            catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex);
             }
 
         }
@@ -125,7 +125,7 @@ namespace PlantsAPI.Controllers
 
         [HttpPut]
         [Route("{id}")]
-        public async Task<ActionResult<User>> EditUser(UserInfoEditRequest request)
+        public async Task<ActionResult<UserDto>> EditUser(UserInfoEditRequest request)
         {
             try
             {
@@ -143,7 +143,7 @@ namespace PlantsAPI.Controllers
 
         [HttpDelete]
         [Route("{id}")]
-        public async Task<ActionResult<User>> DeleteUser(Guid id)
+        public async Task<ActionResult<bool>> DeleteUser(Guid id)
         {
             try
             {

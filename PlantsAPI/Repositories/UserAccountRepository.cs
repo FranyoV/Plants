@@ -26,7 +26,7 @@ namespace PlantsAPI.Repositories
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.Name),
-                //new Claim(ClaimTypes.Role, "user")
+                new Claim(ClaimTypes.Role, "user")
             };
 
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
@@ -34,7 +34,6 @@ namespace PlantsAPI.Repositories
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
 
-            //add issuer and other properties
             var token = new JwtSecurityToken(
                 claims: claims,
                 expires: DateTime.Now.AddDays(1),
@@ -88,6 +87,7 @@ namespace PlantsAPI.Repositories
                 Id = id,
                 Name = user.Name,
                 EmailAddress = user.EmailAddress,
+                ImageData= user.ImageData
             };
             return userDto;
         }
@@ -110,21 +110,10 @@ namespace PlantsAPI.Repositories
             User user = new();
             user = await dbSet.Where(u => u.Name == username).FirstOrDefaultAsync();
 
-            UserDto userDto = new();
-            if (user != null)
-            {
-                userDto = new UserDto()
-                {
-                    Id = user.Id,
-                    Name = user.Name,
-                    EmailAddress = user.EmailAddress,
-                };
-            }
-
             return user;
         }
 
-        //should return bool
+ 
         //used in registration
         public async Task<User> AddUser(User user)
         {
@@ -153,17 +142,19 @@ namespace PlantsAPI.Repositories
             if (todb != null)
             {
                 user = await dbSet.Where(p => p.Id == id).FirstAsync();
-                user.ImageData = todb;
-                userDto.Name = user.Name;
-                userDto.Id = user.Id;
-                userDto.EmailAddress = user.EmailAddress;
-                userDto.ImageData = user.ImageData;
+                if (user != null)
+                {
+                    user.ImageData = todb;
+                    userDto.Name = user.Name;
+                    userDto.Id = user.Id;
+                    userDto.EmailAddress = user.EmailAddress;
+                    userDto.ImageData = todb;
+                }
             }
             return userDto;
         }
 
         //SHOULD RETURN USERdTO
-        //TODO for profil editing
         public async Task<User> EditUserEmail(UserInfoEditRequest request)
         {
             if (request == null) throw new NotImplementedException(nameof(request));

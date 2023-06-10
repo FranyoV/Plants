@@ -48,6 +48,7 @@ import { ItemEditComponent } from './marketplace/item-edit/item-edit.component';
 import { SnackbarComponent } from './snackbar/snackbar.component';
 import { AuthInterceptor } from './auth.interceptor';
 import {AuthGuardService} from './auth-guard.service';
+import { PostEditComponent } from './posts/post-edit/post-edit.component';
 
 
 @NgModule({
@@ -69,7 +70,8 @@ import {AuthGuardService} from './auth-guard.service';
     ItemAddComponent,
     ItemDetailsComponent,
     ItemEditComponent,
-    SnackbarComponent
+    SnackbarComponent,
+    PostEditComponent
   ],
   imports: [
     BrowserModule,

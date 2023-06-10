@@ -56,6 +56,7 @@ namespace PlantsAPI.Repositories
                         UserId = reply.UserId,
                         Content = reply.Content,
                         Username = user.Name,
+                        ProfileImage = user.ImageData,
                         DateOfCreation = reply.DateOfCreation
                     };
                     replyDtos.Add(dto);
@@ -114,6 +115,7 @@ namespace PlantsAPI.Repositories
                         Content = reply.Content,
                         DateOfCreation = reply.DateOfCreation,
                         Username = user.Name,
+                        ProfileImage = user.ImageData
                     };
                    // return dto;
                 }

@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/data.service';
 import { MatSnackBar, MatSnackBarRef } from '@angular/material/snack-bar';
 import { SnackbarComponent } from 'src/app/snackbar/snackbar.component';
-
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { UserService } from 'src/app/user.service';
 
 @Component({
@@ -26,6 +26,7 @@ export class PostsListComponent implements OnInit, OnDestroy{
   pageSlice = this.posts.slice(0, 5);
 
   durationInSeconds = 5;
+image !: SafeUrl;
 
   constructor(
     private router : Router,
@@ -33,7 +34,8 @@ export class PostsListComponent implements OnInit, OnDestroy{
     private data : DataService,
     private snackBar: MatSnackBar,
     private route : ActivatedRoute,
-    private userService : UserService
+    private userService : UserService,
+    private sanitizer: DomSanitizer
   ){
     this.currentUserId = this.userService.LoggedInUser();
   }
@@ -52,34 +54,44 @@ export class PostsListComponent implements OnInit, OnDestroy{
 
 
   getPostByUser(){
-    console.log(this.currentUserId)
     this.webApi.getPostByUser(this.currentUserId).subscribe({
-      next: (res) => {this.postsOfUser = res},
+      next: (res) => {
+        this.postsOfUser = this.convertImages(res)},
       error: (err) => {this.openSnackBar("Something went wrong. Try again!")}
     })
   }
 
   getPostByUserReplies(){
-    console.log(this.currentUserId)
     this.webApi.getPostByUserReplies(this.currentUserId).subscribe({
-      next: (res) => {this.postsOfUserReplies = res},
+      next: (res) => {this.postsOfUserReplies = this.convertImages(res);},
       error: (err) => {this.openSnackBar("Something went wrong. Try again!")}
     })
   }
 
 
-  getReplyCount(){
-    console.log("im in")
-    this.posts.forEach(function () {
-      console.log("meh")
-    });
-  }
-
+  
   getPosts(){
     this.webApi.getPosts().subscribe({
-      next: (result) => { this.posts = result },
-      error: (error) => {console.error("Can't get posts from api.", error)}
-    })
+      next: (result) => { this.posts = this.convertImages(result); },
+        error: (error) => {console.error("Can't get posts from api.", error)}
+      })
+    }
+
+    
+    convertImages(posts : Post[]): Post[]{
+      posts.forEach(post => {
+        let objectURL = 'data:image/png;base64,' + post.imageData;
+        post.imageData = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+
+        objectURL = 'data:image/png;base64,' + post.imageData;
+        post.profileImage = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+        console.log(post.profileImage)
+    });
+    return posts;
+  }
+
+  goToEditPost(postId :string){
+    this.router.navigate([`edit/post/${postId}`]);
   }
 
   goToPostDetails(postId: string){

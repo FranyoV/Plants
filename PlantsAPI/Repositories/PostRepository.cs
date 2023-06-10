@@ -34,6 +34,7 @@ namespace PlantsAPI.Repositories
                         DateOfCreation = post.DateOfCreation,
                         ImageData = post.ImageData,
                         UserName = user.Name,
+                        ProfileImage = user.ImageData,
                         UserId = post.UserId,
                         ReplyCount = replyCount,
                     };
@@ -64,6 +65,7 @@ namespace PlantsAPI.Repositories
                 DateOfCreation = post.DateOfCreation,
                 ImageData = post.ImageData,
                 UserName = user.Name,
+                ProfileImage = user.ImageData,
                 ReplyCount = 0
             };
 
@@ -98,6 +100,7 @@ namespace PlantsAPI.Repositories
                                 DateOfCreation = post.DateOfCreation,
                                 ImageData = post.ImageData,
                                 UserName = user.Name,
+                                ProfileImage = user.ImageData,
                                 UserId = post.UserId,
                                 ReplyCount = count
                             };
@@ -162,6 +165,7 @@ namespace PlantsAPI.Repositories
                                 DateOfCreation = post.DateOfCreation,
                                 ImageData = post.ImageData,
                                 UserName = user.Name,
+                                ProfileImage = user.ImageData,
                                 UserId = post.UserId,
                                 ReplyCount = count
                             };
@@ -259,15 +263,26 @@ namespace PlantsAPI.Repositories
 
 
 
-        public async Task<Post> AddImageToPost(Guid id, byte[] image)
+        public async Task<Post> AddImageToPost(Guid id, IFormFile image)
         {
-            Post post = new();
+            var planty = image;
+            byte[] imageByteArray = null;
+            using (var readStream = image.OpenReadStream())
+            using (var memoryStream = new MemoryStream())
+            {
+                readStream.CopyTo(memoryStream);
+                imageByteArray = memoryStream.ToArray();
+            }
+            var todb = imageByteArray;
+
+            Post newPost = new();
+           
             if (image != null)
             {
-                post = await dbSet.Where(p => p.Id == id).FirstAsync();
-               // post.ImageUrl = image;
+                newPost = await dbSet.Where(p => p.Id == id).FirstAsync();
+                newPost.ImageData = todb;
             }
-            return post;
+            return newPost;
         }
     }
 }

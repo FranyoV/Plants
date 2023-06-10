@@ -14,6 +14,7 @@ import { MarketplaceComponent } from './marketplace/item-list/marketplace.compon
 import { ItemAddComponent } from './marketplace/item-add/item-add.component';
 import { ItemEditComponent } from './marketplace/item-edit/item-edit.component';
 import { AuthGuardService } from './auth-guard.service';
+import { PostEditComponent } from './posts/post-edit/post-edit.component';
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -26,6 +27,7 @@ const routes: Routes = [
     {path: 'plant/new', component: PlantsAddComponent},
     {path: 'profile', component: ProfileComponent},
     {path: 'post/:postId', component: PostDetailsComponent},
+    {path: 'edit/post/:postId', component: PostEditComponent},
     {path: 'posts/new', component: PostAddComponent},
     {path: 'marketplace', component: MarketplaceComponent},
     {path: 'item/new', component: ItemAddComponent},

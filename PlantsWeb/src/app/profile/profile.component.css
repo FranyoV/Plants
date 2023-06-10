@@ -3,20 +3,28 @@
 }
 
 .card-header-image {
-    background-image: url("../../assets/defaultprofilepic.png");
+   /* background-image: url("../../assets/defaultprofilepic.png");*/
     background-size: cover;  
     margin: 0rem;
   }
 
+img{
+  display:flex;
+  height:100%;
+  margin: 0 ;
+  color: black;
+  opacity: 1;
+  align-items: center;
+  
+}
+
 mat-card-header {
   display:flex;
-  
   margin-left: 1rem;
   margin-right: 1rem;
   align-items: center;
   padding: 0 1rem;
   opacity: 1;
-  /*padding-top: 0 !important;*/
 }
 
 mat-card-title {
@@ -26,7 +34,6 @@ mat-card-title {
   color: black;
   opacity: 1;
   align-items: center;
-
 }
 
 
@@ -47,7 +54,7 @@ button {
 
 
 canvas{
-  height: 225px;
+  height: 200px;
   margin: 0 auto;
   }
 
@@ -62,5 +69,15 @@ form {
 mat-card {
   box-shadow: inset;
   opacity: 0.95;
-  
+}
+
+.file-input {
+  display: none;
+}
+
+.file-upload {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }

@@ -65,7 +65,7 @@ export class PlantsEditComponent implements OnInit{
       if(this.currentPlant == null){
         this.webApi.getPlantById(this.currentPlantId).subscribe({
           next: (result) => {
-            let objectURL = 'data:image/png;base64,' + result.imageUrl;
+            let objectURL = 'data:image/png;base64,' + result.imageData;
             this.image = this.sanitizer.bypassSecurityTrustUrl(objectURL);
             
              this.currentPlant = result; 

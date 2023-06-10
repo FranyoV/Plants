@@ -15,6 +15,7 @@ import { UserInfoEditRequest } from './models/UserInfoEditRequest';
 import { AbstractControl } from '@angular/forms';
 import { ReplyDto } from './models/ReplyDto';
 import { ItemDto } from './models/ItemDto';
+import { UserDto } from './models/UserDto';
 
 @Injectable({
   providedIn: 'root'
@@ -51,9 +52,9 @@ export class WebApiService {
     return this.http.get(url, {responseType: 'text'});
   }
 
-  getUserById(id: string): Observable<User> {
+  getUserById(id: string): Observable<UserDto> {
     let url = `${this.baseUrl}/api/account/${id}`;
-    return this.http.get<User>(url);
+    return this.http.get<UserDto>(url);
   }
 
   editUserEmail( request:UserInfoEditRequest) : Observable<any>{

@@ -7,6 +7,7 @@
         public DateTime DateOfCreation { get; set; }
 
         public string Username { get; set; }
+        public byte[] ProfileImage { get; set; }
 
         public Guid PostId { get; set; }
 

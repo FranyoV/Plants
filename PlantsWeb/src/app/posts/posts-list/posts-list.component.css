@@ -31,10 +31,23 @@ mat-card-header {
   /*padding-top: 0 !important;*/
 }
 
+mat-card-content img{
+  max-width: 200px;
+}
+
+img{
+  display:flex;
+  height:100%;
+  margin: 0 ;
+  color: black;
+  opacity: 1;
+  align-items: center;
+  
+}
 
 
 .card-header-image {
-    background-image: url("../../../assets/defaultprofilepic.png");
+  
     background-size: cover;
     margin: 0rem;
   }

@@ -8,6 +8,9 @@ import { SnackbarComponent } from '../snackbar/snackbar.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UserInfoEditRequest } from '../models/UserInfoEditRequest';
 import { UserService } from '../user.service';
+import { UserDto } from '../models/UserDto';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+
 Chart.register(...registerables);
 
 
@@ -19,13 +22,12 @@ Chart.register(...registerables);
 export class ProfileComponent implements OnInit, OnChanges {
 
   currentUserId!: string;
-  currentUser!: User | undefined;
+  currentUser!: UserDto ;
   repliesCount: number = 1;
   postsCount: number = 1;
   plantCount: number = 1;
   chart!: Chart;
 
-  
   changeEmailForm = this.formBuilder.group({
     email : ['', [ Validators.required, Validators.email]],
     imageUrl: '' ,
@@ -44,6 +46,9 @@ export class ProfileComponent implements OnInit, OnChanges {
       Validators.maxLength(12),
       Validators.pattern('^[a-zA-Z]+$')]]
   })
+  fileName: string = "";
+  formData!: FormData ;
+  file!: File;
 
   constructor(
     private webApi: WebApiService,
@@ -51,7 +56,8 @@ export class ProfileComponent implements OnInit, OnChanges {
     private formBuilder: FormBuilder,
     private snackBar: MatSnackBar,
     private router: Router,
-    private userService : UserService
+    private userService : UserService,
+    private sanitizer: DomSanitizer
   ){
     this.currentUserId = userService.LoggedInUser();
   }
@@ -66,10 +72,13 @@ export class ProfileComponent implements OnInit, OnChanges {
 
   getUserById(){
     this.webApi.getUserById(this.currentUserId).subscribe({
-      next: (res) => { this.currentUser = res;
-        console.log(res)
-        console.log("frick ", this.currentUser)
-        this.changeEmailForm.controls['email'].setValue(this.currentUser.email);
+      next: (res) => {
+        console.log("res.imagedata: ", res.imageData);
+        this.currentUser = res;
+        let objectURL = 'data:image/png;base64,' + res.imageData;
+        this.currentUser.imageData = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+        console.log(this.currentUser.imageData);
+        this.changeEmailForm.controls['email'].setValue(this.currentUser.emailAddress);
         },
       error: (error) => {console.log("No user with this id.", error)}
     })
@@ -77,7 +86,6 @@ export class ProfileComponent implements OnInit, OnChanges {
 
   ngOnChanges(){
     this.renderMyChart();
-    console.log("nyeh")
   }
 
   changeEmail(){
@@ -86,10 +94,47 @@ export class ProfileComponent implements OnInit, OnChanges {
       this.changeEmailForm.value.email!,
       this.changeEmailForm.value.password!)
     ).subscribe({
-      next: (res) => {this.currentUser!.email = res.email},
+      next: (res) => {this.currentUser!.emailAddress = res.email},
       error: (err) => {this.openSnackBar("Something went wrong. Try again!")}
     })
   }
+
+
+  onFileChanged(event : any ){
+    const file:File = event.target.files[0];
+
+    if (file) {
+        this.fileName = file.name;
+        this.formData = new FormData();
+
+        this.formData.append("image", file);
+        console.log(this.formData.get("image"));
+        this.file = file;
+        const files = event.target.files;
+        if (files.length === 0)
+            return;
+    }
+  }
+
+  cancelUpload() {
+    this.fileName = '';
+    //this.formData = null;
+  }
+
+
+  addImage(){
+    console.log(this.formData);
+    this.webApi.addImageToUser(this.formData, this.currentUserId).subscribe({
+      next: (res) => {
+        
+        let objectURL = 'data:image/png;base64,' + res.imageData;
+        this.currentUser.imageData = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+        },
+        error:(err) => {console.log(err), this.openSnackBar("Something went wrong. Try again!")}
+    });
+    }
+  
+
 
   changePassword(){
 
@@ -111,21 +156,21 @@ export class ProfileComponent implements OnInit, OnChanges {
  
   getReplyCount(){
     this.webApi.getRepliesCount(this.currentUserId).subscribe({
-      next: (res) => { this.repliesCount = res, console.log(res), this.renderMyChart();},
+      next: (res) => { this.repliesCount = res, this.renderMyChart();},
       error: (err) => { console.error(err)}
     })
   }
 
   getPostCount(){
     this.webApi.getPostsCount(this.currentUserId).subscribe({
-      next: (res) => { this.postsCount = res, console.log(res), this.renderMyChart();},
+      next: (res) => { this.postsCount = res, this.renderMyChart();},
       error: (err) => { console.error(err)}
     })
   }
 
   getPlantCount(){
     this.webApi.getPlantsCount(this.currentUserId).subscribe({
-      next: (res) => { this.plantCount = res, console.log(res), this.renderMyChart();},
+      next: (res) => { this.plantCount = res, this.renderMyChart();},
       error: (err) => { console.error(err)}
     })
   }
@@ -134,7 +179,6 @@ export class ProfileComponent implements OnInit, OnChanges {
 
   renderMyChart(){
     let chartStatus = Chart.getChart('profileInfo');  
-    console.log(chartStatus);
 
     if (chartStatus != undefined ) {
       chartStatus.destroy();
@@ -151,7 +195,6 @@ export class ProfileComponent implements OnInit, OnChanges {
       labels: labels,
       datasets: [
         {
-          //label: 'My First Dataset',
           data: [this.postsCount, this.plantCount, this.repliesCount, 1],
           backgroundColor: [
             'rgb(255, 99, 132)',
@@ -180,7 +223,6 @@ export class ProfileComponent implements OnInit, OnChanges {
     },
   
     })
-    console.log(chartStatus);
     config.update();
   }
 

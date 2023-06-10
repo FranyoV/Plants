@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { Component } from '@angular/core';
+import { Validators, FormBuilder } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
+
 import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/data.service';
 import { Post } from 'src/app/models/Post';
@@ -10,12 +11,11 @@ import { UserService } from 'src/app/user.service';
 import { WebApiService } from 'src/app/webapi.service';
 
 @Component({
-  selector: 'app-post-add',
-  templateUrl: './post-add.component.html',
-  styleUrls: ['./post-add.component.css']
+  selector: 'app-post-edit',
+  templateUrl: './post-edit.component.html',
+  styleUrls: ['./post-edit.component.css']
 })
-export class PostAddComponent implements OnInit{
-
+export class PostEditComponent {
   posts: Post[] = [];
   currentUserId: string = "";
 
@@ -26,8 +26,6 @@ export class PostAddComponent implements OnInit{
     content : ['', [Validators.required]],
     imageUrl: [''],
   })
-  formData: FormData | null = null;
-  file!: File;
 
   get title() {
     return this.addPostForm.get('title');
@@ -80,14 +78,9 @@ export class PostAddComponent implements OnInit{
     else{
       this.webApi.addPost(newPost).subscribe({
         next: (res) => { 
-           this.webApi.addImageToPost(this.formData!, res.id).subscribe({
-            next: () => {this.openSnackBar("Image uploaded")},
-            error: () => {this.openSnackBar("Unsuccessful image upload")}
-           }),
-           
            this.posts.push(res),
            this.newMessage(this.posts),
-           this.router.navigate([`main`]);
+           this.router.navigate([`${this.currentUserId}/main`]);
            this.openSnackBar("New post created!"); },
         error: (err) => { 
           this.openSnackBar("Something went wrong!"), 
@@ -109,21 +102,13 @@ export class PostAddComponent implements OnInit{
         formData.append("thumbnail", file);
 
         //const upload$ = this.http.post("/api/thumbnail-upload", formData);
-        this.formData = new FormData();
 
-        this.formData.append("image", file);
-        console.log(this.formData.get("image"));
-        this.file = file;
-        //const upload$ = this.http.post("/api/thumbnail-upload", formData);
-        const files = event.target.files;
-        if (files.length === 0)
-            return;
         
     }
   }
   cancelUpload() {
-    this.fileName = '';
-    this.formData = null;
+    
+    this.reset();
   }
 
   reset() {
@@ -147,3 +132,4 @@ export class PostAddComponent implements OnInit{
     this.router.navigate([`main`]);
   }
 }
+

@@ -25,7 +25,7 @@
           
           <mat-card class="card width:fill">
             <mat-card-header>
-              <div mat-card-avatar class="card-header-image"></div>
+              <img mat-card-avatar [src]="post.imageData" alt="../../assets/defaultprofilepic.png">
 
                 <mat-card-title>{{post.userName}}</mat-card-title>
                 <mat-card-subtitle>{{post.dateOfCreation | date : 'medium'}}</mat-card-subtitle>
@@ -35,11 +35,17 @@
             <mat-card-content>
               <mat-card-title>{{ post.title }}</mat-card-title>
               <p>{{post.content}}</p>
+              <p>
+                <img [src]="post.imageData" alt="">
+              </p>
+              
               <p [align]="'end'">Number of comments on this post: {{post.replyCount}}</p>
+
             </mat-card-content>
 
             <mat-card-actions [align]="'end'">
               <button *ngIf="post.userId==currentUserId" (click)="deletePost(post.id)" mat-stroked-button color="warn">Delete</button>
+              <button *ngIf="post.userId==currentUserId" (click)="goToEditPost(post.id)" mat-stroked-button >Edit</button>
                 <button mat-stroked-button (click)="goToPostDetails(post.id)">See more details or leave a reply..</button>
               
             </mat-card-actions>
@@ -53,7 +59,7 @@
           
         <mat-card class="card width:fill">
           <mat-card-header>
-            <div mat-card-avatar class="card-header-image"></div>
+            <img mat-card-avatar [src]="post.imageData" alt="../../assets/defaultprofilepic.png">
                        
               <mat-card-title>{{post.userName}}</mat-card-title>
               <mat-card-subtitle>{{post.dateOfCreation | date : 'medium'}}</mat-card-subtitle>
@@ -63,13 +69,17 @@
           <mat-card-content>
             <mat-card-title>{{ post.title }}</mat-card-title>
             <p>{{post.content}}</p>
+            <p>
+              <img [src]="post.imageData" alt="">
+            </p>
             <p [align]="'end'">Number of comments on this post: {{post.replyCount}}</p>
 
           </mat-card-content>
 
           <mat-card-actions [align]="'end'">
             <button *ngIf="post.userId==currentUserId" (click)="deletePost(post.id)" mat-stroked-button color="warn">Delete</button>
-              <button mat-stroked-button (click)="goToPostDetails(post.id)">See more details or leave a reply..</button>
+            <button *ngIf="post.userId==currentUserId" (click)="goToEditPost(post.id)" mat-stroked-button >Edit</button>  
+            <button mat-stroked-button (click)="goToPostDetails(post.id)">See more details or leave a reply..</button>
             
           </mat-card-actions>
         </mat-card>
@@ -82,19 +92,24 @@
           
         <mat-card class="card width:fill">
           <mat-card-header>
-            <div mat-card-avatar class="card-header-image"></div>
+            <img mat-card-avatar [src]="post.imageData" alt="../../assets/defaultprofilepic.png">
               
           
-              <mat-card-title>{{post.userName}} </mat-card-title>
-              <mat-card-subtitle>{{post.dateOfCreation | date : 'medium'}}</mat-card-subtitle>
-              <!--mat-card-title-group>
-            </mat-card-title-group-->
+          <mat-card-title-group>   
+            <mat-card-title>{{post.userName}} </mat-card-title>
+            <mat-card-subtitle>{{post.dateOfCreation | date : 'medium'}}</mat-card-subtitle>
+          </mat-card-title-group>
+
+
  
           </mat-card-header>
 
           <mat-card-content>
             <mat-card-title>{{ post.title }}</mat-card-title>
             <p>{{post.content}}</p>
+            <p>
+              <img [src]="post.imageData" alt="">
+            </p>
             <p [align]="'end'">Number of comments on this post: {{post.replyCount}}</p>
 
           </mat-card-content>

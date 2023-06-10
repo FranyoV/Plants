@@ -153,7 +153,7 @@ namespace PlantsAPI.Test.Controllers
         }
 
 
-     /*   [Fact]
+        [Fact]
         public void PostReply_ShouldReturnOk()
         {
             TestHelper helper = new();
@@ -168,12 +168,12 @@ namespace PlantsAPI.Test.Controllers
 
             helper.mockUnitOfWork.Setup(
                 x => x.Replies.AddReply(It.IsAny<Reply>()))
-                .ReturnsAsync(new Reply());
+                .ReturnsAsync(new ReplyDto());
 
             var response = helper.Controller.PostReply(testReply);
 
             Assert.True((response?.Result.Result as OkObjectResult).StatusCode == (int)HttpStatusCode.OK);
-        }*/
+        }
 
         [Fact]
         public void PostReply_ShouldReturnUnauthorized()
