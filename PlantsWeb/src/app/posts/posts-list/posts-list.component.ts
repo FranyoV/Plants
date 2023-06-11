@@ -90,7 +90,8 @@ image !: SafeUrl;
   }
 
   goToEditPost(postId :string){
-    this.router.navigate([`edit/${postId}`]);
+    console.log("aaaaaaaaaaaaa")
+    this.router.navigate([`edit/post/${postId}`]);
   }
 
   goToPostDetails(postId: string){

@@ -69,43 +69,7 @@
         </div>
         <mat-divider [vertical]="true"></mat-divider>
 
-        <div class="col">
-            <form [formGroup]="changePasswordForm" class="d-flex justify-content-center align-items-center">
         
-                <h3>Change password</h3>
-        
-                <mat-form-field class="example-full-width">
-                    <mat-label>New password</mat-label>
-                    <input matInput type="text" 
-                    formControlName="newPassword"
-                    >
-                    <mat-error 
-                    *ngIf="changePasswordForm.get('newPassword')?.touched 
-                    && changePasswordForm.get('newPassword')?.errors?.['required']
-                    && changePasswordForm.get('newPassword')?.errors?.['maxlength']
-                    && changePasswordForm.get('newPassword')?.errors?.['minLength']
-                    && changePasswordForm.get('newPassword')?.errors?.['pattern']
-                    "></mat-error>
-                  </mat-form-field>
-                  
-                <mat-form-field class="example-full-width">
-                    <mat-label>Current password</mat-label>
-                    <input matInput  type="currentPassword"
-                    formControlName="currentPassword">
-                    <mat-error 
-                    *ngIf="changePasswordForm.get('currentPassword')?.touched 
-                    && changePasswordForm.get('currentPassword')?.errors?.['required']
-                    && changePasswordForm.get('currentPassword')?.errors?.['maxlength']
-                    && changePasswordForm.get('currentPassword')?.errors?.['minLength']
-                    && changePasswordForm.get('currentPassword')?.errors?.['pattern']
-                    "></mat-error>
-                </mat-form-field>
-                <button type="submit" [disabled]="changePasswordForm.invalid" mat-raised-button>Save</button>
-            
-              </form>
-        </div>
-
-        <mat-divider [vertical]="true"></mat-divider>
 
         <div class="col">
             <input  type="file" class="file-input"

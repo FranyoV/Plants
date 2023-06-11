@@ -16,9 +16,9 @@ import { WebApiService } from 'src/app/webapi.service';
   styleUrls: ['./post-edit.component.css']
 })
 export class PostEditComponent {
-  posts: Post[] = [];
+  post!: Post;
   currentUserId: string = "";
-
+  currentPostId: string = "";
   fileName = '';
 
   editPostForm = this.formBuilder.group({
@@ -52,11 +52,24 @@ export class PostEditComponent {
 
 
   ngOnInit(): void {
-    /*this.webApi.getPosts().subscribe({
-      next: (res) => { this.posts = res },
+    this.route.paramMap.subscribe( (params) => {
+      console.log(params)
+      const id = params.get("postId");
+      this.currentPostId = id!;
+    console.log(this.currentPostId)
+    })
+
+
+    this.webApi.getPostById(this.currentPostId).subscribe({
+      next: (res) => { this.post = res,
+        this.editPostForm.controls['title'].setValue(this.post.title!);
+        this.editPostForm.controls['content'].setValue(this.post.content!); },
       error: (err) => { console.error("Coutldn't get posts.", err)}
-    })*/
-  }
+    })
+
+      
+    }
+  
 
 
   editPost(){

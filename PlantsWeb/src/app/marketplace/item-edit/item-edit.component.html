@@ -1,13 +1,11 @@
 
-<div class="container d-flex justify-content-center align-items-center ">
+<div class="container">
 
 
     <form [formGroup]="editForm" (ngSubmit)="editItem()">
 
       <h2>Edit For Sale Item</h2>
-      <div class="row">
 
-      <div class="col">
       <mat-form-field appearance="outline" style="width:50vw">
         <mat-label>Name</mat-label>
         <input matInput
@@ -40,7 +38,7 @@
         formControlName="description"
         rows="2"></textarea>
       </mat-form-field>
-    </div>
+
 
       <div class="col">
         <input  type="file" class="file-input"
@@ -56,14 +54,12 @@
             {{fileName || "No file uploaded yet."}}
             <button mat-icon-button type="button" class="cancel-upload" (click)="cancelUpload()" 
                     ><mat-icon color="secondary">cancel</mat-icon></button>
-
-                    <img *ngIf="" src="" alt="">
     
         </div>
 
       </div>
-    </div>
-      <div class="buttonRow">
+    
+      <div class="button-row">
         <button mat-raised-button (click)="goToMarketPlace()">Cancel</button>
         <button type="submit" mat-raised-button>Save</button>
       </div>

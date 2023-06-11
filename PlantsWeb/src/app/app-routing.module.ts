@@ -27,7 +27,7 @@ const routes: Routes = [
     {path: 'plant/new', component: PlantsAddComponent},
     {path: 'profile', component: ProfileComponent},
     {path: 'post/:postId', component: PostDetailsComponent},
-    {path: 'edit/:postId', component: PostEditComponent},
+    {path: 'edit/post/:postId', component: PostEditComponent},
     {path: 'posts/new', component: PostAddComponent},
     {path: 'marketplace', component: MarketplaceComponent},
     {path: 'item/new', component: ItemAddComponent},

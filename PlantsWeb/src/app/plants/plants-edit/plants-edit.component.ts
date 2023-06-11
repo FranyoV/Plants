@@ -68,10 +68,9 @@ export class PlantsEditComponent implements OnInit{
         this.webApi.getPlantById(this.currentPlantId).subscribe({
           next: (result) => {
              this.currentPlant = result; 
-             console.log("currentplant:", this.currentPlant);
+             
              this.editForm.controls['name'].setValue(this.currentPlant.name);
              this.editForm.controls['description'].setValue(this.currentPlant.description);
-             //this.editForm.controls['imageUrl'].setValue(this.currentPlant.imageUrl ),
              this.editForm.controls['interval'].setValue(this.currentPlant.interval ),
              this.editForm.controls['lastNotification'].setValue(this.currentPlant.lastNotification?.toLocaleString()!),
              this.editForm.controls['note'].setValue(this.currentPlant.note)},
@@ -95,7 +94,7 @@ export class PlantsEditComponent implements OnInit{
 
     let modifiedPlant : Plant;
     if (this.maintenance){
-      //yes maintenance
+      //maintenance
       modifiedPlant = new Plant(
         this.currentPlantId,
         this.editForm.value.name!,

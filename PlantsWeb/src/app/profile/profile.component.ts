@@ -22,7 +22,7 @@ Chart.register(...registerables);
 export class ProfileComponent implements OnInit, OnChanges {
 
   currentUserId!: string;
-  currentUser!: UserDto ;
+  currentUser: UserDto = new UserDto ;
   repliesCount: number = 1;
   postsCount: number = 1;
   plantCount: number = 1;

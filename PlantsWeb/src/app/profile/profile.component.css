@@ -1,9 +1,5 @@
-.container {
-
-}
 
 .card-header-image {
-   /* background-image: url("../../assets/defaultprofilepic.png");*/
     background-size: cover;  
     margin: 0rem;
   }
