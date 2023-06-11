@@ -3,7 +3,7 @@ using PlantsAPI.Models;
 
 namespace PlantsAPI.Repositories
 {
-    public interface IPostRepository
+    public interface IPostRepository : IGenericRepository
     {
         Task<IEnumerable<PostDto>> GetPosts();
         Task<IEnumerable<PostDto>> GetPostsOfUser(Guid id);

@@ -12,7 +12,6 @@ namespace PlantsAPI.Repositories
         {
         }
 
-        //anonymousaccess
         public async Task<IEnumerable<PostDto>> GetPosts()
         {
             List<Post> posts = new();

@@ -3,7 +3,7 @@ using PlantsAPI.Models;
 
 namespace PlantsAPI.Repositories
 {
-    public interface IPlantRepository
+    public interface IPlantRepository : IGenericRepository
     {
         Task<IEnumerable<Plant>> GetPlants();
         Task<Plant> GetPlantById(Guid id);

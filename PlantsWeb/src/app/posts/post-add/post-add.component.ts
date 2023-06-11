@@ -80,15 +80,24 @@ export class PostAddComponent implements OnInit{
     else{
       this.webApi.addPost(newPost).subscribe({
         next: (res) => { 
-           this.webApi.addImageToPost(this.formData!, res.id).subscribe({
-            next: () => {this.openSnackBar("Image uploaded")},
-            error: () => {this.openSnackBar("Unsuccessful image upload")}
-           }),
-           
-           this.posts.push(res),
-           this.newMessage(this.posts),
-           this.router.navigate([`main`]);
-           this.openSnackBar("New post created!"); },
+          if (this.fileName.length > 0){
+            this.webApi.addImageToPost(this.formData!, res.id).subscribe({
+              next: () => {this.openSnackBar("Image uploaded.");
+              this.posts.push(res),
+              this.newMessage(this.posts),
+              this.router.navigate([`main`]);
+              this.openSnackBar("New post created!");},
+              error: () => {this.openSnackBar("Unsuccessful image upload")}
+             })
+
+             }else{
+              this.posts.push(res),
+             this.newMessage(this.posts),
+             this.router.navigate([`main`]);
+             this.openSnackBar("New post created!");
+             }
+            },
+          
         error: (err) => { 
           this.openSnackBar("Something went wrong!"), 
           console.error("Failed to create the new post", err)}
@@ -99,31 +108,25 @@ export class PostAddComponent implements OnInit{
   onFileChanged(event : any ){
     
     const file:File = event.target.files[0];
-
     if (file) {
 
         this.fileName = file.name;
 
-        const formData = new FormData();
-
-        formData.append("thumbnail", file);
-
-        //const upload$ = this.http.post("/api/thumbnail-upload", formData);
         this.formData = new FormData();
-
         this.formData.append("image", file);
-        console.log(this.formData.get("image"));
+
         this.file = file;
-        //const upload$ = this.http.post("/api/thumbnail-upload", formData);
-        const files = event.target.files;
-        if (files.length === 0)
+
+        const images = event.target.files;
+        if (images.length === 0)
             return;
         
     }
   }
+
+
   cancelUpload() {
     this.fileName = '';
-    this.formData = null;
   }
 
   reset() {

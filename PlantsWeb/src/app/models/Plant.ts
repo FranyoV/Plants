@@ -8,7 +8,7 @@ export class Plant {
         public id : string,
         public name : string,
         public description : string | null,
-        public imageData : string | null | SafeUrl,
+        public imageData :  null | SafeUrl,
 
         //Maintenance data
         public note : string | null,

@@ -57,7 +57,6 @@ export class PlantsListComponent implements OnInit, OnDestroy {
   }
 
   deletePlant(plantId: string){
-    this.openDialog("1000", '1000') ;
     this.webApi.deletePlant(plantId).subscribe({
       next: (result) => {
         const index = this.plants.findIndex(p => p.id == plantId);
@@ -68,7 +67,6 @@ export class PlantsListComponent implements OnInit, OnDestroy {
 
   convertImages(plants : Plant[]): Plant[]{
     plants.forEach(plant => {
-
       if (plant.imageData != undefined){
         let objectURL = 'data:image/png;base64,' + plant.imageData;
         plant.imageData = this.sanitizer.bypassSecurityTrustUrl(objectURL);

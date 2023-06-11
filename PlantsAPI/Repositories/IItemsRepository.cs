@@ -2,7 +2,7 @@
 
 namespace PlantsAPI.Repositories
 {
-    public interface IItemsRepository
+    public interface IItemsRepository : IGenericRepository
     {
         Task<IEnumerable<ItemDto>> GetItems();
         Task<Item> GetItemById(Guid id);

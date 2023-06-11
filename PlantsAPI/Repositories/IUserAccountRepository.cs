@@ -2,7 +2,7 @@
 
 namespace PlantsAPI.Repositories
 {
-    public interface IUserAccountRepository
+    public interface IUserAccountRepository : IGenericRepository
     {
         string CreateToken(User user);
         string GenerateSalt(int length);

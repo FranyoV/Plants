@@ -28,7 +28,6 @@ export class RegisterComponent {
     username: [
       '', 
       Validators.compose([Validators.required, Validators.minLength(5), Validators.maxLength(10)]),
-      //this.validateUsername,
   ],
     password: ['', [Validators.required, Validators.minLength(6)]],
     email: ['', [Validators.required, Validators.email]]
@@ -70,7 +69,6 @@ export class RegisterComponent {
             this.router.navigate(['login']);
           }
 
-            //
           },
           
         error: (err) => {this.openSnackBar("Something went wrong. Try again!")}

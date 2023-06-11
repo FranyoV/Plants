@@ -165,9 +165,7 @@ export class PlantsEditComponent implements OnInit{
   }
 
   showMaintenance(){
-    console.log("before: ", this.maintenance)
     this.maintenance = !this.maintenance;
-    console.log("after: ", this.maintenance)
     if(this.maintenance){
       this.editForm.controls['note'].enable();
       this.editForm.controls['lastNotification'].enable();
@@ -189,7 +187,6 @@ export class PlantsEditComponent implements OnInit{
         this.fileName = file.name;
         this.formData = new FormData();
         this.formData.append("image", file);
-        console.log(this.formData.get("image"));
         this.file = file;
         
         const images = event.target.files;
@@ -198,8 +195,7 @@ export class PlantsEditComponent implements OnInit{
     }
   }
 
-  cancelUpload() {
-    
+  cancelUpload() {  
     this.fileName = '';
   }
 

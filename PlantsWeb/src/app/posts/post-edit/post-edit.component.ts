@@ -65,10 +65,8 @@ export class PostEditComponent {
         this.editPostForm.controls['title'].setValue(this.post.title!);
         this.editPostForm.controls['content'].setValue(this.post.content!); },
       error: (err) => { console.error("Coutldn't get posts.", err)}
-    })
-
-      
-    }
+    })      
+  }
   
 
 
@@ -85,15 +83,11 @@ export class PostEditComponent {
       null
     )
 
-    if ( newPost == null ){
-      //snackbar
-    }
-    else{
+    if ( newPost != null ){
+
       this.webApi.updatePost(newPost.id, newPost).subscribe({
         next: (res) => { 
-          // this.posts.push(res),
-          // this.newMessage(this.posts),
-          // this.router.navigate([`${this.currentUserId}/main`]);
+           this.router.navigate([`${this.currentUserId}/main`]);
            this.openSnackBar("New post created!"); },
         error: (err) => { 
           this.openSnackBar("Something went wrong!"), 

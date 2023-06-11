@@ -144,13 +144,14 @@ export class PlantsAddComponent implements OnInit{
           next: (res) => {
             if (this.fileName.length > 0 || this.formData != undefined){
               this.webApi.addImage(this.formData, res.id).subscribe({
-                next: (res) => {console.log("result: ", res)},
-                error: (err) => {this.openSnackBar("couldnt upload picture")},
-              }),
+                next: (res) => {console.log("result: ", res),
               this.plants.push(res), 
               this.newMessage(this.plants),
               this.router.navigate(['plants'])
-              this.openSnackBar('Plant successfully created!');
+              this.openSnackBar('Plant successfully created!');},
+                error: (err) => {this.openSnackBar("Culdnt upload the image.")},
+              },)
+              
             }
             else {
               this.plants.push(res), 
