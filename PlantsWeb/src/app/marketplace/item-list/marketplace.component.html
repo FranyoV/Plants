@@ -17,41 +17,36 @@
         
         
         <div class="mat-elevation-z8">
-          <table mat-table [dataSource]="dataSource" matSort>
+          <table mat-table [dataSource]="this.dataSource" matSort >
         
             <!-- ID Column -->
             <ng-container matColumnDef="name">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header mat-sort sortActionDescription="Sort by name"> Name </th>
               <td mat-cell *matCellDef="let row"> {{row.name}} </td>
             </ng-container>
-        
-            <!-- Progress Column -->
-            <ng-container matColumnDef="type">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Type </th>
-              <td mat-cell *matCellDef="let row"> {{row.type}} </td>
-            </ng-container>
+      
         
             <!-- Name Column -->
             <ng-container matColumnDef="price">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Price </th>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by price"> Price </th>
               <td mat-cell *matCellDef="let row"> {{row.price}} Ft </td>
             </ng-container>
         
             <!-- Fruit Column -->
             <ng-container matColumnDef="username">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Usename </th>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by username"> Usename </th>
               <td mat-cell *matCellDef="let row"> {{row.username}} </td>
             </ng-container>
         
              <!-- Fruit Column -->
              <ng-container matColumnDef="date">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by date"> Date </th>
               <td mat-cell *matCellDef="let row"> {{row.date | date }} </td>
             </ng-container>
         
              <!-- Fruit Column -->
              <ng-container matColumnDef="details">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Details </th>
+              <th mat-header-cell *matHeaderCellDef > Details </th>
               <td mat-cell *matCellDef="let row"> 
                   <button mat-stroked-button (click)="openDialog(row)">...</button> </td>
             </ng-container>
@@ -130,11 +125,11 @@
             </tr>
           </table>
         
-          <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+          <!--mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator-->
         </div>
         
       </mat-tab>
-      <!--mat-tab label="Third"> Content 3 </mat-tab-->
+     
     </mat-tab-group>
     
 

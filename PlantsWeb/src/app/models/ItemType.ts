@@ -1,6 +1,6 @@
 export enum ItemType{
-    PLANT,
-    BOWL,
-    TOOL,
-    SOIL
+    PLANT = 0,
+    BOWL = 1,
+    TOOL = 2,
+    SOIL = 3
 }

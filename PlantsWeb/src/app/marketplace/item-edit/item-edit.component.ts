@@ -132,10 +132,12 @@ export class ItemEditComponent implements OnInit{
   addImage(image: FormData, itemId: string){
     
     this.webApi.addImageToItem(image, itemId).subscribe({
-      next: (res) => {this.openSnackBar("Item successfully edited.");
+      next: (res) => {
+      this.openSnackBar("Item successfully edited.");
       let index = this.items.findIndex(p => p.id = res.id);
       this.items.splice(index, 1, res);
-      this.newMessage(this.items)
+      console.log(this.items)
+      this.newMessage(this.items);
      },
       error: (err) => {this.openSnackBar("Something went wrong. Try again!")}
     })

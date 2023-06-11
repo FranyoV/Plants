@@ -46,11 +46,11 @@ export class ItemAddComponent {
     
 
   addItem(){
-
+    console.log(this.addForm.value.type)
     const newItem: Item = {
       id: "00000000-0000-0000-0000-000000000000",
       name: this.addForm.value.name!,
-      type: ItemType.BOWL,
+      type: parseInt(this.addForm.value.type!.toString()),
       price: Number(this.addForm.value.price!),
       description: this.addForm.value.description!,
       imageUrl: this.addForm.value.image!,

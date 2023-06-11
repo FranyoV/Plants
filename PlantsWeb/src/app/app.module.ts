@@ -100,8 +100,9 @@ import { PostEditComponent } from './posts/post-edit/post-edit.component';
     MatSnackBarModule,
     MatSlideToggleModule,
     MatIconModule,
+    MatSortModule,
     MatProgressBarModule,
-    MatSortModule
+    
   ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },AuthGuardService],
   bootstrap: [AppComponent]

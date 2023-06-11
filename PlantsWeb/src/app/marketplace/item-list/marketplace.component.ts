@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
-import {MatSort} from '@angular/material/sort';
+import {MatSort, Sort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import { ItemDetailsComponent } from '../item-details/item-details.component';
 import { Item } from 'src/app/models/Item';
@@ -14,7 +14,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ItemDto } from 'src/app/models/ItemDto';
 import { UserService } from 'src/app/user.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-
+import { ItemType } from 'src/app/models/ItemType';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
 
 @Component({
   selector: 'app-marketplace',
@@ -23,10 +24,10 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 })
 export class MarketplaceComponent  implements OnInit, AfterViewInit, OnDestroy {
 
-  displayedColumns: string[] = ['name', 'type', 'price', 'username', 'date', 'details'];
-  myDisplayedColumns: string[] = ['name', 'type', 'price', 'date', 'edit', 'delete'];
-  dataSource!: MatTableDataSource<ItemDto>;
-  dataSourceMyItems!: MatTableDataSource<Item>;
+  displayedColumns: string[] = ['name', 'price', 'username', 'date', 'details'];
+  myDisplayedColumns: string[] = ['name', 'price', 'date', 'edit', 'delete'];
+  dataSource: MatTableDataSource<ItemDto> = new MatTableDataSource<ItemDto>();
+  dataSourceMyItems: MatTableDataSource<Item> = new MatTableDataSource<Item>();
   animal: string = '';
   name: string = '';
   items: ItemDto[] = [];
@@ -34,8 +35,10 @@ export class MarketplaceComponent  implements OnInit, AfterViewInit, OnDestroy {
   subscription!: Subscription;
   currentUserId!: string;
 
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatSort) sort : MatSort = new MatSort();
+
 
   constructor(
     public dialog: MatDialog,
@@ -45,7 +48,8 @@ export class MarketplaceComponent  implements OnInit, AfterViewInit, OnDestroy {
     private route : ActivatedRoute,
     private snackBar : MatSnackBar,
     private userService: UserService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private _liveAnnouncer: LiveAnnouncer
     ) 
     {this.currentUserId = userService.LoggedInUser()}
 
@@ -57,32 +61,30 @@ export class MarketplaceComponent  implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscription = this.data.currentItemsMessage
-    .subscribe( message => this.items = message ) ;
-
+    .subscribe( message => this.items = message ) ; 
   }
 
   ngAfterViewInit() {
-    this.getItems();
-    this.getMyItems();
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
-
-  getItems(){
     this.webApi.getItems().subscribe({
       next: (res) => {
         this.items = this.convertImages(res),
-        this.dataSource = new MatTableDataSource(this.items);},
+        this.dataSource = new MatTableDataSource<ItemDto>(this.items);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;},
       error: (err) => {console.error(err)}
     })
-  }
-
-  getMyItems(){
+    
     this.webApi.getItemsOfUser(this.currentUserId).subscribe({
-      next: (res) => { this.dataSourceMyItems = new MatTableDataSource(res)},
+      next: (res) => { 
+        this.dataSourceMyItems = new MatTableDataSource<Item>(res);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;;},
       error: (err) => { console.error(err)}
     })
+
+
   }
+
 
   convertImages(items : ItemDto[]): ItemDto[]{
     items.forEach(item => {
@@ -90,11 +92,10 @@ export class MarketplaceComponent  implements OnInit, AfterViewInit, OnDestroy {
         let objectURL = 'data:image/png;base64,' + item.imageData;
         item.imageData = this.sanitizer.bypassSecurityTrustUrl(objectURL);
       }
-      
+    });
+    return items;
+  }
 
-  });
-  return items;
-}
 
   openDialog(item: ItemDto): void {
 
@@ -134,8 +135,12 @@ export class MarketplaceComponent  implements OnInit, AfterViewInit, OnDestroy {
       next: (res) => {
         this.openSnackBar("Item successfully deleted!");
         const index = this.myItems.findIndex(i => i.id == res.id);
+        console.log(index)
         this.myItems.splice(index, 1);
-        this.dataSourceMyItems._renderChangesSubscription;
+        this.dataSource._updateChangeSubscription();
+        this.ngAfterViewInit();
+        this.dataSourceMyItems._updateChangeSubscription();
+        this.ngAfterViewInit();
       },
       error: (err) => {this.openSnackBar("Couldn't delete item!")}
     })
