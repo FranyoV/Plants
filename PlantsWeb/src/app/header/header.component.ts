@@ -22,18 +22,7 @@ export class HeaderComponent implements OnInit{
   ){this.currentUserId = userService.LoggedInUser();}
 
   ngOnInit(): void {
-    /*this.webApi.getMe().subscribe({
-      next: (res) => {
-        this.currentUserId = res, console.log("You are logged in with user: ",this.currentUserId);
-      },
-      error: (err) => {this.openSnackBar("Something went wrong. Try again!")}
-      })*/
-    /*  this.route.paramMap.subscribe( (params) => {
-        const id = params.get("userId");
-        this.currentUserId = id!;
-
-      } )*/
-      console.log(this.currentUserId);
+      console.log("Your currently logged in with userId: ",this.currentUserId);
   }
 
   openSnackBar(message: string) {

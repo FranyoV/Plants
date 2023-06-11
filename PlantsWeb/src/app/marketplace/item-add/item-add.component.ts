@@ -69,7 +69,6 @@ export class ItemAddComponent {
           this.items.push(res),
           this.newMessage(this.items)
         }
-
         this.goToMarketPlace();
         this.openSnackBar("Successfully added item for sale!"); },
       error: (err) => {
@@ -116,19 +115,15 @@ export class ItemAddComponent {
         this.formData = new FormData();
 
         this.formData.append("image", file);
-        console.log(this.formData.get("image"));
         this.file = file;
-        const files = event.target.files;
-        if (files.length === 0)
+
+        const images = event.target.files;
+        if (images.length === 0)
             return;
     }
   }
   cancelUpload() {
-    
-    this.reset();
-  }
-
-  reset() {
     this.fileName = '';
   }
+
 }

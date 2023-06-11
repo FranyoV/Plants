@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DataService } from 'src/app/data.service';
 import { Item } from 'src/app/models/Item';
 import { ItemDto } from 'src/app/models/ItemDto';
 import { ItemType } from 'src/app/models/ItemType';
+import { SnackbarComponent } from 'src/app/snackbar/snackbar.component';
 import { UserService } from 'src/app/user.service';
 import { WebApiService } from 'src/app/webapi.service';
 
@@ -24,6 +26,7 @@ export class ItemEditComponent implements OnInit{
     sold: [true, [Validators.required]]
   })
 
+
   items: ItemDto[] = [];
   currentItemId: string = '';
   currentItem!: Item;
@@ -39,7 +42,8 @@ export class ItemEditComponent implements OnInit{
     private router: Router,
     private data: DataService,
     private route: ActivatedRoute,
-    private userService: UserService
+    private userService: UserService,
+    private snackBar: MatSnackBar,
     ) 
     {this.currentUserId = userService.LoggedInUser()}
     
@@ -98,7 +102,7 @@ export class ItemEditComponent implements OnInit{
 
           this.router.navigate(['marketplace']);},
             
-          error: (error) => {console.error('Adding failed', error)}
+          error: (error) => {this.openSnackBar('Adding failed. Try again.')}
         });
       }
   }
@@ -122,24 +126,30 @@ export class ItemEditComponent implements OnInit{
 
   cancelUpload() {
     this.fileName = '';
-    //this.formData = null;
   }
 
 
   addImage(image: FormData, itemId: string){
     
     this.webApi.addImageToItem(image, itemId).subscribe({
-      next: (res) => {console.log("Succesful image upload");
+      next: (res) => {this.openSnackBar("Item successfully edited.");
       let index = this.items.findIndex(p => p.id = res.id);
       this.items.splice(index, 1, res);
       this.newMessage(this.items)
      },
-      error: (err) => {console.error(err)}
+      error: (err) => {this.openSnackBar("Something went wrong. Try again!")}
     })
   }
 
   newMessage(updatedItems : ItemDto[]) {
     this.data.changeItemsMessage(updatedItems);
+  }
+
+  openSnackBar(message: string) {
+    this.snackBar.openFromComponent(SnackbarComponent, {
+      data: message,
+      duration: 3 * 1000,
+    });
   }
 
   goToMarketPlace(){
