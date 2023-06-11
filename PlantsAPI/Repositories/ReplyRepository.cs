@@ -14,14 +14,7 @@ namespace PlantsAPI.Repositories
             this.notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
         }
 
-        /*
-        public async Task<IEnumerable<Reply>> GetReplies()
-        {
-            return await dbSet.ToListAsync();
-        }*/
 
-        
-        //only used by backend - helper method
         public async Task<Reply> GetReplyById(Guid replyId)
         {
             if (replyId == Guid.Empty) throw new ArgumentNullException(nameof(replyId));
@@ -33,7 +26,6 @@ namespace PlantsAPI.Repositories
         }
 
 
-        //anonymous access
         public async Task<IEnumerable<ReplyDto>> GetRepliesOfPost(Guid postId)
         {
             if (postId == Guid.Empty) throw new ArgumentNullException(nameof(postId));
@@ -68,8 +60,6 @@ namespace PlantsAPI.Repositories
             return repliesInOrder; 
         }
 
-
-        //throw error
         public async Task<int> GetRepliesCount(Guid userId)
         {
             if (userId == Guid.Empty) throw new ArgumentNullException(nameof(userId));
@@ -94,19 +84,30 @@ namespace PlantsAPI.Repositories
                 if (added != null)
                 {
                     Post post = await _dbContext.Posts.Where(p => p.Id == reply.PostId).FirstAsync();
-                    EmailData emailData = new()
+                    User user = await _dbContext.Users.Where(u => u.Id == post.UserId).FirstAsync();
+                    try
+                    {
+                        EmailData emailData = new()
+                        {
+
+                            Recipicent = user.EmailAddress,
+                            Subject = "New Reply",
+                            DataName = post.Title,
+                            Url = "http://localhost:4200/post/" + post.Id,
+                            Body = "",
+
+
+                        };
+
+                        notificationService.SendEmail(emailData, EmailTemplate.NEWREPLY);
+                    }
+                    catch (Exception ex)
                     {
 
-                        Recipicent = "ryann.rempel@ethereal.email",
-                        Subject = "New Reply",
-                        DataName = post.Title,
-                        Url = "http://localhost:4200/post/" + post.Id,
-                        Body = "2dl víz"
-                    };
+                    }
+                  
 
-                    notificationService.SendEmail(emailData, EmailTemplate.NEWREPLY);
-
-                    User user = await _dbContext.Users.Where(p => p.Id == reply.UserId).FirstAsync();
+                    User user1 = await _dbContext.Users.Where(p => p.Id == reply.UserId).FirstAsync();
                     dto = new()
                     {
                         Id = reply.Id,
@@ -114,10 +115,10 @@ namespace PlantsAPI.Repositories
                         PostId = reply.PostId,
                         Content = reply.Content,
                         DateOfCreation = reply.DateOfCreation,
-                        Username = user.Name,
-                        ProfileImage = user.ImageData
+                        Username = user1.Name,
+                        ProfileImage = user1.ImageData
                     };
-                   // return dto;
+            
                 }
 
                 return dto;

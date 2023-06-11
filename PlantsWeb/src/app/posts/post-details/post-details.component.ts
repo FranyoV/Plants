@@ -78,12 +78,10 @@ export class PostDetailsComponent implements OnInit {
 
     this.webApi.addReplies(newReply).subscribe({
       next: (res) => { 
-        
         this.replies.push(res) ,
         this.openSnackBar("Reply successfully added!")
         this.addReplyForm.controls['content'].setValue('');
         this.addReplyForm.controls['content'].markAsUntouched();
-        //sthis.addReplyForm.controls['content'].setValue('');
       },
       error: (error ) => {
         this.openSnackBar("Couldn't add reply. Try again!"),

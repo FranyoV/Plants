@@ -17,23 +17,8 @@ namespace PlantsAPI.Controllers
             this.unitOfWork = unitOFWork ?? throw new ArgumentNullException(nameof(unitOFWork));
         }
 
-        //TODO AUTHORIZATION
-       /* [HttpGet]
-        public async Task<ActionResult<IEnumerable<Reply>>> GetReplies()
-        {
-            try
-            {
-                var replies = await unitOfWork.Replies.GetReplies();
-                return Ok(replies);
-            }
-            catch
-            {
-                return BadRequest();
-            }
-
-        }*/
        
-        //TODO AUTHORIZATION
+ 
         [HttpGet]
         [Route("{id}")]
         public async Task<ActionResult<Reply>> GetReplyById(Guid id)
@@ -49,7 +34,7 @@ namespace PlantsAPI.Controllers
             }
         }
 
-        //TODO AUTHORIZATION
+
         [HttpGet]
         [Route("post/{postid}")]
         public async Task<ActionResult<IEnumerable<ReplyDto>>> GetRepliesOfPost([FromRoute] Guid postid) 
@@ -97,27 +82,7 @@ namespace PlantsAPI.Controllers
             }
         }
 
-        /*
-        [HttpPut]
-        [Route("{id}")]
-        public async Task<ActionResult<Reply>> PutReply(Reply reply)
-        {
-            try
-            {
-
-                    var modifiedReply = await unitOfWork.Replies.EditReply(reply);
-                    await unitOfWork.SaveChangesAsync();
-                    return Ok(modifiedReply);
-
-            }
-            catch
-            {
-                return BadRequest();
-            }
-
-        }*/
-
-        //TODO AUTHORIZATION
+   
         [HttpDelete]
         [Route("{id}")]
         public async Task<ActionResult<bool>> DeleteReply(Guid id)
