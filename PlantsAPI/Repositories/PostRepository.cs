@@ -46,7 +46,7 @@ namespace PlantsAPI.Repositories
             return postsInOrder;
         }
 
-        //anonymous allowed
+
         public async Task<PostDto> GetPostById(Guid postId)
         {
             if (postId == Guid.Empty) throw new ArgumentNullException(nameof(postId));
@@ -72,7 +72,7 @@ namespace PlantsAPI.Repositories
 
         }
 
-        //üres lista
+     
         public async Task<IEnumerable<PostDto>> GetPostsOfUser(Guid id)
         {
             if (id == Guid.Empty) throw new ArgumentNullException(nameof(id));
@@ -115,7 +115,7 @@ namespace PlantsAPI.Repositories
 
         }
 
-        //üres lista
+       
         public async Task<IEnumerable<PostDto>> GetPostsByUserReplies(Guid userId)
         {
             if ( userId == Guid.Empty ) throw new ArgumentNullException(nameof(userId));
@@ -173,7 +173,7 @@ namespace PlantsAPI.Repositories
                         }
                     }
                 }
-                //var postsInOrder = postDtos.OrderByDescending(x => x.DateOfCreation);
+               
                 return postDtos;
             }
             return new List<PostDto>();
@@ -196,7 +196,7 @@ namespace PlantsAPI.Repositories
         }
 
 
-        //throw exception
+    
         public async Task<Post> AddPost(Post post)
         {
             if (post == null) throw new ArgumentNullException(nameof(post));
@@ -213,32 +213,32 @@ namespace PlantsAPI.Repositories
         }
 
 
-        //NOT USED
+
+        public async Task<Post> EditPost(Post post)
+        {
+            if (post == null) throw new ArgumentNullException(nameof(post));
+
+            if (_userContext.HasAuthorization(post.UserId))
+            {
+                var originalPost = await dbSet.FirstAsync(p => p.Id == post.Id);
+
+                if (originalPost != null)
+                {
+                    originalPost.Title = post.Title;
+                    originalPost.Content = post.Content;
+                    originalPost.DateOfCreation = post.DateOfCreation;
+                    originalPost.ImageData = post.ImageData;
+                }
+
+                return originalPost;
+            }
+            else
+            {
+                throw new UnauthorizedAccessException();
+            }
+        }
+
         
-        //public async Task<Post> EditPost(Post post)
-        //{
-        //    if (post == null) throw new ArgumentNullException(nameof(post));
-
-        //    if ( _userContext.HasAuthorization(post.UserId) )
-        //    {
-        //        var originalPost = await dbSet.FirstAsync(p => p.Id == post.Id);
-
-        //        if (originalPost != null)
-        //        {
-        //            originalPost.Title = post.Title;
-        //            originalPost.Content = post.Content;
-        //            originalPost.DateOfCreation = post.DateOfCreation;
-        //        }
-
-        //        return originalPost;
-        //    }
-        //    else
-        //    {
-        //        throw new UnauthorizedAccessException();
-        //    }
-        //}
-
-        //return false
         public async Task<bool> DeletePost(Guid postId)
         {
             if (postId == Guid.Empty) throw new ArgumentNullException(nameof(postId));

@@ -12,7 +12,7 @@ namespace PlantsAPI.Repositories
         Task<PostDto> GetPostById(Guid id);
         Task<Post> AddPost(Post post);
         Task<Post> AddImageToPost(Guid id, IFormFile image);
-        //Task<Post> EditPost(Post post);
+        Task<Post> EditPost(Post post);
         Task<bool> DeletePost(Guid postId);
     }
 }

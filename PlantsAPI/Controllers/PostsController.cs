@@ -136,22 +136,22 @@ namespace PlantsAPI.Controllers
             }
         }
 
-        //[HttpPut]
-        //[Route("{id}")]
-        //public async Task<ActionResult<Post>> PutPost([FromBody] Post post, [FromQuery] Guid id)
-        //{
-        //    try
-        //    {
+        [HttpPut]
+        [Route("{postId}")]
+        public async Task<ActionResult<Post>> PutPost([FromBody] Post post, [FromRoute] Guid postId)
+        {
+            try
+            {
 
-        //            var modifiedPost = await unitOfWork.Posts.EditPost(post);
-        //            await unitOfWork.SaveChangesAsync();
-        //            return Ok(modifiedPost);
-        //    }
-        //    catch
-        //    { 
-        //        return BadRequest(); 
-        //    }
-        //}
+                var modifiedPost = await unitOfWork.Posts.EditPost(post);
+                await unitOfWork.SaveChangesAsync();
+                return Ok(modifiedPost);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
 
 
         [HttpDelete]

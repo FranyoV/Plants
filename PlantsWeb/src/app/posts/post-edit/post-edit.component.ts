@@ -19,7 +19,11 @@ export class PostEditComponent {
   post!: Post;
   currentUserId: string = "";
   currentPostId: string = "";
+  posts: Post[] = [];
+  
   fileName = '';
+  file! : File;
+  formData!: FormData;
 
   editPostForm = this.formBuilder.group({
     title : ['', [Validators.required, Validators.maxLength(50)]],
@@ -52,6 +56,8 @@ export class PostEditComponent {
 
 
   ngOnInit(): void {
+    this.data.currentPostsMessage.subscribe( message => this.posts = message );
+
     this.route.paramMap.subscribe( (params) => {
       console.log(params)
       const id = params.get("postId");
@@ -72,11 +78,11 @@ export class PostEditComponent {
 
   editPost(){
     const newPost: Post = new Post(
-      "00000000-0000-0000-0000-000000000000",
+      this.currentPostId,
       this.editPostForm.value.title!,
       this.editPostForm.value.content!,
-      this.editPostForm.value.imageData!,
-      new Date(),
+      this.post.imageData!,
+      this.post.dateOfCreation,
       this.currentUserId,
       null,
       null,
@@ -84,42 +90,57 @@ export class PostEditComponent {
     )
 
     if ( newPost != null ){
-
-      this.webApi.updatePost(newPost.id, newPost).subscribe({
+      this.webApi.updatePost(this.currentPostId, newPost).subscribe({
         next: (res) => { 
-           this.router.navigate([`${this.currentUserId}/main`]);
-           this.openSnackBar("New post created!"); },
+          if (this.fileName.length > 0){
+            this.addImage(res);
+          }
+          else{
+            let index = this.posts.findIndex(p => p.id = res.id);
+            this.posts.splice(index, 1, res);
+            this.newMessage(this.posts), 
+            this.router.navigate([`main`]);
+            this.openSnackBar("Post successfully edited!"); 
+          }
+        },
         error: (err) => { 
           this.openSnackBar("Something went wrong!"), 
-          console.error("Failed to create the new post", err)}
+          console.error("Failed edit post.", err)}
       })
     }
   }
 
   onFileChanged(event : any ){
-    
     const file:File = event.target.files[0];
 
     if (file) {
-
         this.fileName = file.name;
-
-        const formData = new FormData();
-
-        formData.append("thumbnail", file);
-
-        //const upload$ = this.http.post("/api/thumbnail-upload", formData);
-
+        this.formData = new FormData();
+        this.formData.append("image", file);
+        this.file = file;
         
+        const images = event.target.files;
+        if (images.length === 0)
+            return;
     }
   }
   cancelUpload() {
-    
-    this.reset();
+    this.fileName = '';
   }
 
-  reset() {
-    this.fileName = '';
+
+  addImage(post : Post){
+    this.webApi.addImageToPost(this.formData, this.currentPostId).subscribe({
+      next: (res) => {
+        let index = this.posts.findIndex(p => p.id = post.id);
+        this.posts.splice(index, 1, res);
+        
+        this.newMessage(this.posts), 
+        this.router.navigate(['main'])
+        this.openSnackBar("Post successfully edited!")
+      },
+      error: (err) => {this.openSnackBar("Image upload was unsuccessful. Try again.")}
+    })
   }
 
 

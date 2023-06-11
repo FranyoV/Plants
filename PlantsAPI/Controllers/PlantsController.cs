@@ -6,7 +6,7 @@ using PlantsAPI.Models;
 namespace PlantsAPI.Controllers
 {
     [Route("api/plants")]
-   // [ApiController]
+    [ApiController]
     [Authorize]
     public class PlantsController : ControllerBase
     {
@@ -18,17 +18,6 @@ namespace PlantsAPI.Controllers
         }
 
 
-        //TODO AUTHORIZATION
-        /* [HttpGet]
-         public async Task<ActionResult<IEnumerable<Plant>>> GetPlants()
-         {
-
-             var plants = await unitOfWork.Plants.GetPlants();
-             return Ok(plants);
-         }*/
-
-        
-        //TODO AUTHORIZATION
         [HttpGet]
         [Route("{id}")]
         public async Task<ActionResult<Plant>> GetPlantById(Guid id)

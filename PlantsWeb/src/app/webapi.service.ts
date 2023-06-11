@@ -192,8 +192,8 @@ export class WebApiService {
     return this.http.post<any>(url, file);
   }
 
-  updatePost(id: string, post: Post): Observable<any> {
-    let url = `${this.baseUrl}/api/posts/${id}`;
+  updatePost(postId: string, post: Post): Observable<any> {
+    let url = `${this.baseUrl}/api/posts/${postId}`;
     return this.http.put(url, post, this.httpOptions);
   }
 

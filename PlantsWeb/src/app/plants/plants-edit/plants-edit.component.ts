@@ -13,6 +13,7 @@ import { SnackbarComponent } from 'src/app/snackbar/snackbar.component';
 import { UserService } from 'src/app/user.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { PlantDto } from 'src/app/models/PlantDto';
+import { resolve } from 'chart.js/dist/helpers/helpers.options';
 
 @Component({
   selector: 'app-plants-edit',
@@ -127,7 +128,14 @@ export class PlantsEditComponent implements OnInit{
         this.webApi.editPlant(this.currentPlantId, modifiedPlant).subscribe({
           next: (result) => {  
             if (this.fileName.length > 0  || this.formData != undefined){
-              this.addImage(result);}
+              this.addImage(result);
+            }else{
+              let index = this.plants.findIndex(p => p.id = result.id);
+              this.plants.splice(index, 1, result);
+              this.newMessage(this.plants), 
+              this.router.navigate(['plants'])
+              this.openSnackBar("Successfully edited plant!")
+            }
           },
           error: (error) => {
             this.openSnackBar("Couldn't edit plant. Try again!"),
