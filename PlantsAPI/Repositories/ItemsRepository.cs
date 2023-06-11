@@ -121,8 +121,47 @@ namespace PlantsAPI.Repositories
             {
                 throw new UnauthorizedAccessException();
             }
-
         }
+
+
+        public async Task<ItemDto> AddImageToItem(Guid id, IFormFile image)
+        {
+            
+            byte[] imageByteArray = null;
+            using (var readStream = image.OpenReadStream())
+            using (var memoryStream = new MemoryStream())
+            {
+                readStream.CopyTo(memoryStream);
+                imageByteArray = memoryStream.ToArray();
+            }
+            var todb = imageByteArray;
+
+            
+            ItemDto dto = new ItemDto();
+
+            if (image != null)
+            {
+                Item item = await dbSet.Where(p => p.Id == id).Include(x => x.User).FirstAsync();
+                if (item != null)
+                {
+                    item.ImageData = todb;
+                    dto.Id = item.Id;
+                    dto.Name = item.Name;
+                    dto.UserId = item.UserId;
+                    dto.Price = item.Price;
+                    dto.Type = item.Type;
+                    dto.ImageData = item.ImageData;
+                    dto.Date = item.Date;
+                    dto.Username = item.User.Name;
+                    dto.Email = item.User.EmailAddress;
+                    dto.Sold = item.Sold;
+
+                }
+
+            }
+            return dto;
+        }
+
 
         public async Task<bool> DeleteItem(Guid itemId)
         {

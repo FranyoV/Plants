@@ -67,8 +67,6 @@ image !: SafeUrl;
       error: (err) => {this.openSnackBar("Something went wrong. Try again!")}
     })
   }
-
-
   
   getPosts(){
     this.webApi.getPosts().subscribe({
@@ -78,20 +76,21 @@ image !: SafeUrl;
     }
 
     
-    convertImages(posts : Post[]): Post[]{
+  convertImages(posts : Post[]): Post[]{
       posts.forEach(post => {
         let objectURL = 'data:image/png;base64,' + post.imageData;
         post.imageData = this.sanitizer.bypassSecurityTrustUrl(objectURL);
 
-        objectURL = 'data:image/png;base64,' + post.imageData;
-        post.profileImage = this.sanitizer.bypassSecurityTrustUrl(objectURL);
-        console.log(post.profileImage)
+        if (post.profileImage != undefined){
+          objectURL = 'data:image/png;base64,' + post.profileImage;
+          post.profileImage = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+        }  
     });
     return posts;
   }
 
   goToEditPost(postId :string){
-    this.router.navigate([`edit/post/${postId}`]);
+    this.router.navigate([`edit/${postId}`]);
   }
 
   goToPostDetails(postId: string){

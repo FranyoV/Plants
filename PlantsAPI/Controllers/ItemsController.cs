@@ -113,7 +113,25 @@ namespace PlantsAPI.Controllers
             }
         }
 
-        //TODO AUTHORIZATION
+
+        [HttpPost]
+        [Route("{itemId}/image")]
+        public async Task<ActionResult<ItemDto>> AddImage([FromForm] IFormFile image, [FromRoute] Guid itemId)
+        {
+            try
+            {
+                ItemDto item = await unitOfWork.Items.AddImageToItem(itemId, image);
+                await unitOfWork.SaveChangesAsync();
+                return Ok(item);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+
+
         [HttpDelete]
         [Route("{id}")]
         public async Task<ActionResult<bool>> DeleteItem(Guid id)

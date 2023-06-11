@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DataService } from 'src/app/data.service';
 import { Item } from 'src/app/models/Item';
+import { ItemDto } from 'src/app/models/ItemDto';
 import { ItemType } from 'src/app/models/ItemType';
 import { SnackbarComponent } from 'src/app/snackbar/snackbar.component';
 import { UserService } from 'src/app/user.service';
@@ -17,10 +18,8 @@ import { WebApiService } from 'src/app/webapi.service';
 })
 export class ItemAddComponent {
 
-  items: Item[] = [];
+  items: ItemDto[] = [];
   currentUserId! : string;
-
-  fileName = '';
 
   addForm = this.formBuilder.group({
     name : ['', [Validators.required, Validators.maxLength(50)]],
@@ -29,6 +28,10 @@ export class ItemAddComponent {
     description : [''],
     image: ['']
   })
+  
+  fileName: string = "";
+  formData!: FormData ;
+  file!: File;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -60,8 +63,13 @@ export class ItemAddComponent {
 
     this.webApi.addItem(newItem).subscribe({
       next: (res) => {
-        //this.items.push(res),
-       // this.newMessage(this.items),
+        if (this.fileName.length > 0 || this.formData != undefined || this.formData != null){
+          this.addImage(this.formData, res.id);
+        }else{
+          this.items.push(res),
+          this.newMessage(this.items)
+        }
+
         this.goToMarketPlace();
         this.openSnackBar("Successfully added item for sale!"); },
       error: (err) => {
@@ -71,10 +79,23 @@ export class ItemAddComponent {
     
     
   }
+  currentItemId(formData: any, currentItemId: any) {
+    throw new Error('Method not implemented.');
+  }
 
- /* newMessage(updatedItems : ItemDto[]) {
+  newMessage(updatedItems : ItemDto[]) {
     this.data.changeItemsMessage(updatedItems);
-  }*/
+  }
+
+  addImage(image: FormData, itemId: string){
+    console.log("adding image to item")
+    this.webApi.addImageToItem(image, itemId).subscribe({
+      next: (res) => {console.log("succesful image upload"),         
+      this.items.push(res),
+      this.newMessage(this.items)},
+      error: (err) => {console.error(err)}
+    })
+  }
 
   goToMarketPlace(){
     this.router.navigate(['/marketplace']);
@@ -88,20 +109,18 @@ export class ItemAddComponent {
   }
 
   onFileChanged(event : any ){
-    
     const file:File = event.target.files[0];
 
     if (file) {
-
         this.fileName = file.name;
+        this.formData = new FormData();
 
-        const formData = new FormData();
-
-        formData.append("thumbnail", file);
-
-        //const upload$ = this.http.post("/api/thumbnail-upload", formData);
-
-        
+        this.formData.append("image", file);
+        console.log(this.formData.get("image"));
+        this.file = file;
+        const files = event.target.files;
+        if (files.length === 0)
+            return;
     }
   }
   cancelUpload() {

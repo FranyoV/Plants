@@ -15,8 +15,9 @@
           <mat-card-header>
             <mat-card-title-group>
               <mat-card-title>{{plant.name}}</mat-card-title>
+              <img mat-card-avatar *ngIf="plant.imageData != null" [src]="plant.imageData" alt="?">
+              <img mat-card-avatar *ngIf="plant.imageData == null" src="assets/plant-icon.avif" alt="">
               
-              <img mat-card-sm-image src="assets/plant-icon.avif" >
             </mat-card-title-group>
           </mat-card-header>
           <mat-card-content>

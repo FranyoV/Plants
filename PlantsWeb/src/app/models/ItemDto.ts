@@ -7,7 +7,7 @@ export interface ItemDto {
         type: ItemType,
         price: number,
         description : string | null,
-        imageUrl : string | null,
+        imageData : string | null | SafeUrl,
         date: Date | null,
         sold: boolean,
         username: string,

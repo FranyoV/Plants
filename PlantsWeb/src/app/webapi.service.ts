@@ -136,19 +136,19 @@ export class WebApiService {
     return this.http.get<number>(url);
   }
 
-  addItem(item: Item): Observable<Item> {
+  addItem(item: Item): Observable<ItemDto> {
     let url = `${this.baseUrl}/api/items`;
-    return this.http.post<Item>(url, item);
+    return this.http.post<ItemDto>(url, item);
   }
 
   addImageToItem(file: FormData, itemId: string) : Observable<any>{
-    let url = `${this.baseUrl}/api/item/${itemId}/image`;
+    let url = `${this.baseUrl}/api/items/${itemId}/image`;
     return this.http.post<any>(url, file);
   }
 
-  editItem(id: string, item: Item): Observable<any> {
+  editItem(id: string, item: Item): Observable<ItemDto> {
     let url = `${this.baseUrl}/api/items/${id}`;
-    return this.http.put(url, item, this.httpOptions);
+    return this.http.put<ItemDto>(url, item, this.httpOptions);
   }
 
   deleteItem(id: string): Observable<Item> {

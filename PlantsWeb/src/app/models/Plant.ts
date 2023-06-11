@@ -1,3 +1,4 @@
+import { SafeUrl } from "@angular/platform-browser";
 import { User } from "./User";
 
 export class Plant {
@@ -7,7 +8,7 @@ export class Plant {
         public id : string,
         public name : string,
         public description : string | null,
-        public imageData : string | ArrayBuffer|null | File,
+        public imageData : string | null | SafeUrl,
 
         //Maintenance data
         public note : string | null,

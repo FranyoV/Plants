@@ -13,6 +13,7 @@ import { SnackbarComponent } from 'src/app/snackbar/snackbar.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ItemDto } from 'src/app/models/ItemDto';
 import { UserService } from 'src/app/user.service';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 
 @Component({
@@ -21,6 +22,7 @@ import { UserService } from 'src/app/user.service';
   styleUrls: ['./marketplace.component.css']
 })
 export class MarketplaceComponent  implements OnInit, AfterViewInit, OnDestroy {
+
   displayedColumns: string[] = ['name', 'type', 'price', 'username', 'date', 'details'];
   myDisplayedColumns: string[] = ['name', 'type', 'price', 'date', 'edit', 'delete'];
   dataSource!: MatTableDataSource<ItemDto>;
@@ -42,7 +44,8 @@ export class MarketplaceComponent  implements OnInit, AfterViewInit, OnDestroy {
     private data : DataService,
     private route : ActivatedRoute,
     private snackBar : MatSnackBar,
-    private userService: UserService
+    private userService: UserService,
+    private sanitizer: DomSanitizer
     ) 
     {this.currentUserId = userService.LoggedInUser()}
 
@@ -56,8 +59,6 @@ export class MarketplaceComponent  implements OnInit, AfterViewInit, OnDestroy {
     this.subscription = this.data.currentItemsMessage
     .subscribe( message => this.items = message ) ;
 
-
-      
   }
 
   ngAfterViewInit() {
@@ -67,11 +68,10 @@ export class MarketplaceComponent  implements OnInit, AfterViewInit, OnDestroy {
     this.dataSource.sort = this.sort;
   }
 
-
-
   getItems(){
     this.webApi.getItems().subscribe({
-      next: (res) => {this.items = res, console.log(res),
+      next: (res) => {
+        this.items = this.convertImages(res),
         this.dataSource = new MatTableDataSource(this.items);},
       error: (err) => {console.error(err)}
     })
@@ -84,7 +84,17 @@ export class MarketplaceComponent  implements OnInit, AfterViewInit, OnDestroy {
     })
   }
 
+  convertImages(items : ItemDto[]): ItemDto[]{
+    items.forEach(item => {
+      if (item.imageData != undefined){
+        let objectURL = 'data:image/png;base64,' + item.imageData;
+        item.imageData = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+      }
+      
 
+  });
+  return items;
+}
 
   openDialog(item: ItemDto): void {
 
@@ -96,7 +106,8 @@ export class MarketplaceComponent  implements OnInit, AfterViewInit, OnDestroy {
         date: item.date,
         price: item.price,
         username: item.username,
-        email: item.email
+        email: item.email,
+        imageData: item.imageData
       },
     });
 

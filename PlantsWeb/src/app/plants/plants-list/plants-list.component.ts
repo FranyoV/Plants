@@ -12,6 +12,8 @@ import { DialogComponent } from 'src/app/plants/plants-list/dialog/dialog.compon
 import { SnackbarComponent } from 'src/app/snackbar/snackbar.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UserService } from 'src/app/user.service';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { PlantDto } from 'src/app/models/PlantDto';
 
 @Component({
   selector: 'app-plants',
@@ -33,7 +35,8 @@ export class PlantsListComponent implements OnInit, OnDestroy {
     private dialog : MatDialog,
     private snackBar : MatSnackBar,
     private route : ActivatedRoute,
-    private userService : UserService
+    private userService : UserService,
+    private sanitizer: DomSanitizer
     ){
       this.currentUserId = this.userService.LoggedInUser();
     }
@@ -48,7 +51,7 @@ export class PlantsListComponent implements OnInit, OnDestroy {
 
   getPlantsOfUser(){
     this.webApi.getPlantsOfUser(this.currentUserId).subscribe({
-      next: (result) => {this.plants = result, console.log("result", result), console.log("this.plants ", this.plants)},
+      next: (result) => {this.plants = this.convertImages(result)},
       error: (error) => {this.openSnackBar("Something went wrong. Try again!"), console.error('Getting plant for user failed.',error)}
     }) 
   }
@@ -61,6 +64,18 @@ export class PlantsListComponent implements OnInit, OnDestroy {
         this.plants.splice(index, 1)}
     })
   }
+
+
+  convertImages(plants : Plant[]): Plant[]{
+    plants.forEach(plant => {
+
+      if (plant.imageData != undefined){
+        let objectURL = 'data:image/png;base64,' + plant.imageData;
+        plant.imageData = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+      }  
+  });
+  return plants;
+}
 
 
   openDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {

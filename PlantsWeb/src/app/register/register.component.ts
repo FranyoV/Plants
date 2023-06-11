@@ -62,14 +62,15 @@ export class RegisterComponent {
     this.webApi.register(person).subscribe(
       {
         next: (res : RegisterResponse) => {
-          if (res.status  == RegisterStatus.SUCCESSFULL){
-            this.openSnackBar("New account registered successfully.")
-          }
-          else{
+          if (res.status  == RegisterStatus.UNSUCCESSFULL){
             this.openSnackBar("Username is taken. Try another.")
           }
+          else{
+            this.openSnackBar("New account registered successfully.");
+            this.router.navigate(['login']);
+          }
 
-            //this.router.navigate(['login']);
+            //
           },
           
         error: (err) => {this.openSnackBar("Something went wrong. Try again!")}

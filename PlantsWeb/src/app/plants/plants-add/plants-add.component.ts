@@ -25,8 +25,6 @@ export class PlantsAddComponent implements OnInit{
   plants: Plant[] = [];
   subscription!: Subscription;
   
-  imagePath:string = '';
-  url!:ArrayBuffer|null|string;
   fileName = '';
   file! : File;
   formData!: FormData;
@@ -64,7 +62,6 @@ export class PlantsAddComponent implements OnInit{
   }
 
   onFileChanged(event : any ){
-    
     const file:File = event.target.files[0];
 
     if (file) {
@@ -77,31 +74,13 @@ export class PlantsAddComponent implements OnInit{
         console.log(this.formData.get("image"));
         this.file = file;
         
-        const files = event.target.files;
-        if (files.length === 0)
+        const images = event.target.files;
+        if (images.length === 0)
             return;
-    
-        const mimeType = files[0].type;
-        if (mimeType.match(/image\/*/) == null) {
-            this.openSnackBar("Only images are supported.");
-            return;
-        }
-    
-        const reader = new FileReader();
-        this.imagePath = files;
-        reader.readAsDataURL(files[0]); 
-        reader.onload = (_event) => { 
-            this.url = reader.result; 
-            //this.addForm.controls['imageUrl'].setValue(this.url)
-        }
-        console.log(this.url)
-        
     }
   }
   cancelUpload() {
-    this.fileName = '';
-    this.url = '';
-    
+    this.fileName = ''; 
   }
 
   getPlantOfUser(){
@@ -113,9 +92,7 @@ export class PlantsAddComponent implements OnInit{
 
 
   addPlant(){
-    console.log(this.url)
-    console.log("file: ", this.file)
-   // this.addForm.controls['imageUrl'].setValue(this.file);
+
    
     let date = new Date(this.addForm.value.lastNotification!);
     let utcDate = new Date(
@@ -161,17 +138,27 @@ export class PlantsAddComponent implements OnInit{
       }
      
 
-      console.log(newPlant);
-      if (newPlant == null){
-        //snackbar -> unsuccesful add
-      }else{
+      if (newPlant != null){
         console.log("formdata: ", this.formData)
         this.webApi.addPlant(newPlant, this.formData).subscribe({
           next: (res) => {
-            this.webApi.addImage(this.formData, res.id).subscribe({
-              next: (res) => {console.log("result: ", res)},
-            error: (err) => {this.openSnackBar("couldnt upload picture")},
-            }),
+            if (this.fileName.length > 0 || this.formData != undefined){
+              this.webApi.addImage(this.formData, res.id).subscribe({
+                next: (res) => {console.log("result: ", res)},
+                error: (err) => {this.openSnackBar("couldnt upload picture")},
+              }),
+              this.plants.push(res), 
+              this.newMessage(this.plants),
+              this.router.navigate(['plants'])
+              this.openSnackBar('Plant successfully created!');
+            }
+            else {
+              this.plants.push(res), 
+              this.newMessage(this.plants),
+              this.router.navigate(['plants'])
+              this.openSnackBar('Plant successfully created!')
+            }
+
             this.plants.push(res), 
             this.newMessage(this.plants),
             this.router.navigate(['plants'])
@@ -183,6 +170,9 @@ export class PlantsAddComponent implements OnInit{
       }
      
   }
+
+
+
 
   newMessage(updatedPlants : Plant[]) {
     this.data.changePlantsMessage(updatedPlants);

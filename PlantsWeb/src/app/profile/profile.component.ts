@@ -46,6 +46,7 @@ export class ProfileComponent implements OnInit, OnChanges {
       Validators.maxLength(12),
       Validators.pattern('^[a-zA-Z]+$')]]
   })
+
   fileName: string = "";
   formData!: FormData ;
   file!: File;
@@ -75,8 +76,11 @@ export class ProfileComponent implements OnInit, OnChanges {
       next: (res) => {
         console.log("res.imagedata: ", res.imageData);
         this.currentUser = res;
-        let objectURL = 'data:image/png;base64,' + res.imageData;
-        this.currentUser.imageData = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+        if (res.imageData != undefined){
+          let objectURL = 'data:image/png;base64,' + res.imageData;
+          this.currentUser.imageData = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+        }
+
         console.log(this.currentUser.imageData);
         this.changeEmailForm.controls['email'].setValue(this.currentUser.emailAddress);
         },
@@ -108,17 +112,16 @@ export class ProfileComponent implements OnInit, OnChanges {
         this.formData = new FormData();
 
         this.formData.append("image", file);
-        console.log(this.formData.get("image"));
+        
         this.file = file;
-        const files = event.target.files;
-        if (files.length === 0)
+        const images = event.target.files;
+        if (images.length === 0)
             return;
     }
   }
 
   cancelUpload() {
     this.fileName = '';
-    //this.formData = null;
   }
 
 
@@ -174,8 +177,6 @@ export class ProfileComponent implements OnInit, OnChanges {
       error: (err) => { console.error(err)}
     })
   }
-
-
 
   renderMyChart(){
     let chartStatus = Chart.getChart('profileInfo');  

@@ -21,18 +21,18 @@ export class PostEditComponent {
 
   fileName = '';
 
-  addPostForm = this.formBuilder.group({
+  editPostForm = this.formBuilder.group({
     title : ['', [Validators.required, Validators.maxLength(50)]],
     content : ['', [Validators.required]],
-    imageUrl: [''],
+    imageData: [''],
   })
 
   get title() {
-    return this.addPostForm.get('title');
+    return this.editPostForm.get('title');
   }
 
   get content() {
-    return this.addPostForm.get('content');
+    return this.editPostForm.get('content');
   }
 
   
@@ -52,19 +52,19 @@ export class PostEditComponent {
 
 
   ngOnInit(): void {
-    this.webApi.getPosts().subscribe({
+    /*this.webApi.getPosts().subscribe({
       next: (res) => { this.posts = res },
       error: (err) => { console.error("Coutldn't get posts.", err)}
-    })
+    })*/
   }
 
 
-  addPost(){
+  editPost(){
     const newPost: Post = new Post(
       "00000000-0000-0000-0000-000000000000",
-      this.addPostForm.value.title!,
-      this.addPostForm.value.content!,
-      this.addPostForm.value.imageUrl!,
+      this.editPostForm.value.title!,
+      this.editPostForm.value.content!,
+      this.editPostForm.value.imageData!,
       new Date(),
       this.currentUserId,
       null,
@@ -76,11 +76,11 @@ export class PostEditComponent {
       //snackbar
     }
     else{
-      this.webApi.addPost(newPost).subscribe({
+      this.webApi.updatePost(newPost.id, newPost).subscribe({
         next: (res) => { 
-           this.posts.push(res),
-           this.newMessage(this.posts),
-           this.router.navigate([`${this.currentUserId}/main`]);
+          // this.posts.push(res),
+          // this.newMessage(this.posts),
+          // this.router.navigate([`${this.currentUserId}/main`]);
            this.openSnackBar("New post created!"); },
         error: (err) => { 
           this.openSnackBar("Something went wrong!"), 

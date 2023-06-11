@@ -12,6 +12,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackbarComponent } from 'src/app/snackbar/snackbar.component';
 import { UserService } from 'src/app/user.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { PlantDto } from 'src/app/models/PlantDto';
 
 @Component({
   selector: 'app-plants-edit',
@@ -26,9 +27,10 @@ export class PlantsEditComponent implements OnInit{
   currentPlant!: Plant;
   currentUserId : string = '';
   plants: Plant[] = [];
-  image!: SafeUrl;
 
   fileName = '';
+  file! : File;
+  formData!: FormData;
 
   editForm = this.formBuilder.group({
     name : ['', [Validators.required, Validators.maxLength(50)]],
@@ -65,9 +67,6 @@ export class PlantsEditComponent implements OnInit{
       if(this.currentPlant == null){
         this.webApi.getPlantById(this.currentPlantId).subscribe({
           next: (result) => {
-            let objectURL = 'data:image/png;base64,' + result.imageData;
-            this.image = this.sanitizer.bypassSecurityTrustUrl(objectURL);
-            
              this.currentPlant = result; 
              console.log("currentplant:", this.currentPlant);
              this.editForm.controls['name'].setValue(this.currentPlant.name);
@@ -124,24 +123,13 @@ export class PlantsEditComponent implements OnInit{
         this.currentPlant.userId
         );
     }
-   
-      console.log(modifiedPlant)
-      console.log(new Date(this.editForm.value.lastNotification!).getDate());
 
-      if (modifiedPlant == null){
-        //snackbar -> unsuccesful add
-      }else{
-       
+      if (modifiedPlant != null){     
         this.webApi.editPlant(this.currentPlantId, modifiedPlant).subscribe({
           next: (result) => {  
-           
-            let index = this.plants.findIndex(p => p.id = result.id);
-            this.plants.splice(index, 1, result);
-            
-            this.newMessage(this.plants), 
-            this.router.navigate(['plants'])
-            this.openSnackBar("Successfully edited plant!");},
-            
+            if (this.fileName.length > 0  || this.formData != undefined){
+              this.addImage(result);}
+          },
           error: (error) => {
             this.openSnackBar("Couldn't edit plant. Try again!"),
             console.error('Editing failed', error)}
@@ -149,6 +137,22 @@ export class PlantsEditComponent implements OnInit{
 
       }
   }
+
+
+    addImage(plant : Plant){
+      this.webApi.addImage(this.formData, plant.id).subscribe({
+        next: (res) => {
+          let index = this.plants.findIndex(p => p.id = plant.id);
+          this.plants.splice(index, 1, plant);
+          
+          this.newMessage(this.plants), 
+          this.router.navigate(['plants'])
+          this.openSnackBar("Successfully edited plant!")
+        },
+        error: (err) => {this.openSnackBar("Image upload was unsuccessful. Try again.")}
+      })
+    }
+
 
   newMessage(updatedPlants : Plant[]) {
     this.data.changePlantsMessage(updatedPlants);
@@ -180,28 +184,23 @@ export class PlantsEditComponent implements OnInit{
 
   
   onFileChanged(event : any ){
-    
     const file:File = event.target.files[0];
 
     if (file) {
-
         this.fileName = file.name;
-
-        const formData = new FormData();
-
-        formData.append("thumbnail", file);
-
-        //const upload$ = this.http.post("/api/thumbnail-upload", formData);
-
+        this.formData = new FormData();
+        this.formData.append("image", file);
+        console.log(this.formData.get("image"));
+        this.file = file;
         
+        const images = event.target.files;
+        if (images.length === 0)
+            return;
     }
   }
+
   cancelUpload() {
     
-    this.reset();
-  }
-
-  reset() {
     this.fileName = '';
   }
 

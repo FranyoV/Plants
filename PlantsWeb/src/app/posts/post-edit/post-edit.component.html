@@ -4,7 +4,7 @@
   
       <h2>Add Post</h2>
   
-        <form [formGroup]="addPostForm" (ngSubmit)="addPost()">
+        <form [formGroup]="editPostForm" (ngSubmit)="editPost()">
                   
   
               <mat-form-field  appearance="outline">
@@ -52,19 +52,10 @@
                             ><mat-icon color="secondary">cancel</mat-icon></button>
                 </div>
               </div>
-              <!--mat-form-field appearance="outline">
-                <mat-label>Image</mat-label>
-                <input 
-                type="text" 
-                formControlName="imageUrl"
-                id="UploadImage" 
-                placeholder="imageurlvagyvalami"
-                matInput>
-              </mat-form-field-->
-            
+
             <div class="button-row" [align]="'end'">
               <button mat-raised-button type="button" (click)="goBack()" >Cancel</button>
-              <button mat-raised-button [disabled]="addPostForm.invalid" type="submit" >Save</button>
+              <button mat-raised-button [disabled]="editPostForm.invalid" type="submit" >Save</button>
               
             </div>
 
